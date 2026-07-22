@@ -382,7 +382,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               src="/romain-face.jpeg"
               alt="Romain Bour"
               style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }}
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
             />
             <div>
               <p style={{ fontWeight: 700, fontSize: 14, color: '#0B1929' }}>Romain Bour</p>
