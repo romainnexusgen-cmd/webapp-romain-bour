@@ -75,7 +75,7 @@ function extractCriteres(data: Record<string, unknown>, key: string): Critere[] 
 
 export default async function ResultatsPage({ params }: { params: { id: string } }) {
   const { data, error } = await supabase
-    .from('database-analyse-profile')
+    .from('linkedin_audits')
     .select('*')
     .eq('id', params.id)
     .single()
