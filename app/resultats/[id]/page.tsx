@@ -69,7 +69,8 @@ function extractCriteres(data: Record<string, unknown>, key: string): Critere[] 
   return criteres
 }
 
-export default async function ResultatsPage({ params }: { params: { id: string } }) {
+export default async function ResultatsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = createClient(
     'https://zgbymaqorbmpmbhbfiya.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnYnltYXFvcmJtcG1iaGJmaXlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzM0MTksImV4cCI6MjA5NzcwOTQxOX0.9Y6ymjUY2kY7w1sb4lLUYzabKLhmh-4Y9J_tufNG3PI'
@@ -77,7 +78,7 @@ export default async function ResultatsPage({ params }: { params: { id: string }
   const { data, error } = await supabase
     .from('linkedin_audits')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (error || !data) return notFound()
