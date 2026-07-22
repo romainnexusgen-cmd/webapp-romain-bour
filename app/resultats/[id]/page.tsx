@@ -79,27 +79,27 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .header-logo { display: flex; align-items: center; gap: 10px; }
         .header-logo-dot { width: 30px; height: 30px; border-radius: 8px; background: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white; }
         .header-name { color: white; font-weight: 700; font-size: 15px; }
-        .header-tag { color: rgba(255,255,255,0.35); font-size: 13px; }
+        .header-tag { color: rgba(255,255,255,0.6); font-size: 13px; }
 
         /* Hero */
         .hero { background: #0D1B2A; padding: 56px 24px 64px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
         .hero-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 18px; border: 2px solid rgba(37,99,235,0.6); box-shadow: 0 0 0 6px rgba(37,99,235,0.12); }
         .hero-name { color: #fff; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
-        .hero-date { color: rgba(255,255,255,0.35); font-size: 13px; }
+        .hero-date { color: rgba(255,255,255,0.6); font-size: 13px; }
 
         /* Wrapper */
         .content { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 24px; }
 
         /* Score global */
         .score-card { background: #0D1B2A; border-radius: 20px; padding: 32px; }
-        .score-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 24px; }
+        .score-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 24px; }
         .score-main { display: flex; align-items: center; gap: 24px; margin-bottom: 20px; }
         .score-circle { width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
         .score-number { font-size: 28px; font-weight: 900; color: white; line-height: 1; }
-        .score-denom { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; }
+        .score-denom { font-size: 11px; color: rgba(255,255,255,0.65); font-weight: 600; }
         .score-right { flex: 1; }
         .score-title { color: white; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-        .score-sub { color: rgba(255,255,255,0.45); font-size: 13px; line-height: 1.6; }
+        .score-sub { color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.6; }
         .score-bar-track { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; margin-top: 16px; }
         .score-bar-fill { height: 100%; border-radius: 100px; }
 
@@ -133,13 +133,13 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .critere-feedback strong { color: #0D1B2A; font-weight: 600; }
         .section-footer { padding: 14px 24px; background: #FAFAF9; display: flex; align-items: center; gap: 14px; border-top: 1px solid #F0EDE6; }
         .section-footer-bar-track { flex: 1; height: 5px; background: #EEEBE5; border-radius: 100px; overflow: hidden; }
-        .section-footer-label { font-size: 12px; font-weight: 700; color: #6B7A99; white-space: nowrap; }
+        .section-footer-label { font-size: 12px; font-weight: 700; color: #4B5563; white-space: nowrap; }
 
         /* CTA */
         .cta-card { background: #0D1B2A; border-radius: 20px; padding: 48px 40px; text-align: center; }
         .cta-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2563EB; margin-bottom: 16px; }
         .cta-title { color: white; font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 14px; letter-spacing: -0.3px; }
-        .cta-sub { color: rgba(255,255,255,0.45); font-size: 14px; line-height: 1.7; max-width: 420px; margin: 0 auto 32px; }
+        .cta-sub { color: rgba(255,255,255,0.72); font-size: 14px; line-height: 1.7; max-width: 420px; margin: 0 auto 32px; }
         .cta-btn { display: inline-block; background: #2563EB; color: white; font-weight: 700; font-size: 15px; padding: 15px 36px; border-radius: 12px; text-decoration: none; box-shadow: 0 6px 24px rgba(37,99,235,0.4); transition: all 0.2s; }
 
         /* Footer */
@@ -149,7 +149,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .footer-name { font-size: 14px; font-weight: 700; color: #0D1B2A; margin-bottom: 3px; }
         .footer-sub { font-size: 12px; color: #6B7A99; margin-bottom: 4px; }
         .footer-link { font-size: 12px; color: #2563EB; font-weight: 600; text-decoration: none; }
-        .footer-right { font-size: 11px; color: #B0A99A; }
+        .footer-right { font-size: 11px; color: #6B7A99; }
       `}</style>
 
       <div className="page">
