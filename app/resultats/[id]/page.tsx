@@ -1,51 +1,45 @@
 import { createClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation'
 
-function getColor(points: number, max: number): { bar: string; badge: string; text: string } {
-  const pct = points / max
-  if (pct >= 0.65) return { bar: '#22C55E', badge: '#DCFCE7', text: '#15803D' }
-  if (pct >= 0.4)  return { bar: '#F59E0B', badge: '#FEF3C7', text: '#92400E' }
-  return { bar: '#EF4444', badge: '#FEE2E2', text: '#991B1B' }
+function getColor(pct: number) {
+  if (pct >= 0.65) return { main: '#16A34A', light: '#F0FDF4', border: '#BBF7D0', text: '#15803D' }
+  if (pct >= 0.4)  return { main: '#D97706', light: '#FFFBEB', border: '#FDE68A', text: '#92400E' }
+  return               { main: '#DC2626', light: '#FFF1F2', border: '#FECDD3', text: '#991B1B' }
 }
 
-function getGlobalLabel(pct: number) {
-  if (pct >= 70) return { label: 'Profil bien optimisé', color: '#22C55E', sub: 'Quelques ajustements ciblés peuvent encore faire la différence.' }
-  if (pct >= 50) return { label: 'Profil avec du potentiel', color: '#F59E0B', sub: 'Tu perds probablement des opportunités. Plusieurs points clés manquent de clarté.' }
-  if (pct >= 30) return { label: 'Profil en dessous du standard', color: '#F97316', sub: 'La majorité des personnes qui te découvrent ne comprennent pas ce que tu fais.' }
-  return { label: 'Profil très en dessous du standard', color: '#EF4444', sub: 'Il est urgent de corriger ton profil pour débloquer des leads.' }
+function getGlobalTier(pct: number) {
+  if (pct >= 70) return { label: 'Profil solide', desc: 'Ton profil convertit. Quelques ajustements ciblés peuvent encore amplifier tes résultats.', emoji: '🟢' }
+  if (pct >= 50) return { label: 'Profil avec du potentiel', desc: 'La base est là, mais tu perds des opportunités. Des points clés freinent ta visibilité.', emoji: '🟡' }
+  if (pct >= 30) return { label: 'Profil en dessous du standard', desc: 'La majorité des visiteurs ne comprennent pas ce que tu fais ni pourquoi te choisir.', emoji: '🟠' }
+  return              { label: 'Profil à reconstruire', desc: 'Ton profil te coûte des opportunités chaque jour. Il est urgent d\'agir.', emoji: '🔴' }
 }
 
-interface Critere {
-  titre: string
-  points_obtenus: number
-  points_maximum: number
-  explication: string
-}
+interface Critere { titre: string; points_obtenus: number; points_maximum: number; explication: string }
 
 const SECTIONS = [
-  { label: 'Photo de profil',             key: 'photo',       max: 15, icon: '📸' },
-  { label: 'Bannière',                    key: 'banner',      max: 15, icon: '🖼️' },
-  { label: 'Titre du profil',             key: 'headline',    max: 15, icon: '✍️' },
-  { label: 'Section À propos',            key: 'about',       max: 15, icon: '💬' },
-  { label: 'Espace Sélection',            key: 'selection',   max: 15, icon: '⭐' },
-  { label: 'Contenu',                     key: 'contenu',     max: 10, icon: '📝' },
-  { label: 'Expériences professionnelles',key: 'experiences', max: 5,  icon: '💼' },
-  { label: 'Crédibilité & preuves',       key: 'cred',        max: 10, icon: '🏆' },
+  { label: 'Photo de profil',              key: 'photo',       max: 15, icon: '📸' },
+  { label: 'Bannière',                     key: 'banner',      max: 15, icon: '🖼️' },
+  { label: 'Titre du profil',              key: 'headline',    max: 15, icon: '✍️' },
+  { label: 'Section À propos',             key: 'about',       max: 15, icon: '💬' },
+  { label: 'Espace Sélection',             key: 'selection',   max: 15, icon: '⭐' },
+  { label: 'Contenu',                      key: 'contenu',     max: 10, icon: '📝' },
+  { label: 'Expériences professionnelles', key: 'experiences', max: 5,  icon: '💼' },
+  { label: 'Crédibilité & preuves',        key: 'cred',        max: 10, icon: '🏆' },
 ]
 
 function extractCriteres(data: Record<string, unknown>, key: string): Critere[] {
-  const criteres: Critere[] = []
+  const out: Critere[] = []
   let i = 1
   while (data[`${key}_critere_${i}_titre`]) {
-    criteres.push({
-      titre:           data[`${key}_critere_${i}_titre`] as string,
-      points_obtenus:  Number(data[`${key}_critere_${i}_points_obtenus`]) || 0,
-      points_maximum:  Number(data[`${key}_critere_${i}_points_maximum`]) || 0,
-      explication:     data[`${key}_critere_${i}_explication`] as string || '',
+    out.push({
+      titre:          data[`${key}_critere_${i}_titre`] as string,
+      points_obtenus: Number(data[`${key}_critere_${i}_points_obtenus`]) || 0,
+      points_maximum: Number(data[`${key}_critere_${i}_points_maximum`]) || 0,
+      explication:    data[`${key}_critere_${i}_explication`] as string || '',
     })
     i++
   }
-  return criteres
+  return out
 }
 
 export default async function ResultatsPage({ params }: { params: Promise<{ id: string }> }) {
@@ -54,241 +48,288 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
     'https://zgbymaqorbmpmbhbfiya.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpnYnltYXFvcmJtcG1iaGJmaXlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzM0MTksImV4cCI6MjA5NzcwOTQxOX0.9Y6ymjUY2kY7w1sb4lLUYzabKLhmh-4Y9J_tufNG3PI'
   )
-  const { data, error } = await supabase
-    .from('linkedin_audits')
-    .select('*')
-    .eq('id', id)
-    .single()
-
+  const { data, error } = await supabase.from('linkedin_audits').select('*').eq('id', id).single()
   if (error || !data) return notFound()
 
   const globalScore = Number(data.global_total_points) || 0
   const globalMax   = Number(data.global_total_maximum) || 100
   const globalPct   = Math.round((globalScore / globalMax) * 100)
-  const { label: globalLabel, color: globalColor, sub: globalSub } = getGlobalLabel(globalPct)
+  const tier        = getGlobalTier(globalPct)
+  const globalColor = getColor(globalPct / 100)
 
   return (
     <>
       <style>{`
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F6F5F3; }
-        .page { background: #F6F5F3; min-height: 100vh; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #F4F3F0; color: #111827; -webkit-font-smoothing: antialiased; }
 
-        /* Header */
-        .header { background: #0D1B2A; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
-        .header-logo { display: flex; align-items: center; gap: 10px; }
-        .header-logo-dot { width: 30px; height: 30px; border-radius: 8px; background: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: white; }
-        .header-name { color: white; font-weight: 700; font-size: 15px; }
-        .header-tag { color: rgba(255,255,255,0.6); font-size: 13px; }
+        /* NAV */
+        .nav { position: sticky; top: 0; z-index: 10; background: rgba(15,31,53,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.07); padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-brand { display: flex; align-items: center; gap: 10px; }
+        .nav-dot { width: 28px; height: 28px; border-radius: 7px; background: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: white; }
+        .nav-name { color: white; font-size: 14px; font-weight: 700; }
+        .nav-pill { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
 
-        /* Hero */
-        .hero { background: #0D1B2A; padding: 24px 40px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .hero-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; display: block; flex-shrink: 0; border: 2px solid rgba(37,99,235,0.5); }
-        .hero-name { color: #fff; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 3px; }
-        .hero-date { color: rgba(255,255,255,0.6); font-size: 13px; }
+        /* HERO */
+        .hero { background: #0F1F35; padding: 64px 24px 72px; text-align: center; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(37,99,235,0.25) 0%, transparent 70%); pointer-events: none; }
+        .hero-inner { position: relative; z-index: 1; }
+        .hero-avatar-wrap { position: relative; display: inline-block; margin-bottom: 20px; }
+        .hero-avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; display: block; border: 3px solid rgba(255,255,255,0.15); box-shadow: 0 0 0 6px rgba(37,99,235,0.15), 0 20px 60px rgba(0,0,0,0.4); }
+        .hero-name { color: white; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+        .hero-meta { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 36px; }
 
-        /* Wrapper */
-        .content { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 24px; }
+        /* SCORE DIAL */
+        .score-dial-wrap { display: inline-flex; flex-direction: column; align-items: center; gap: 0; }
+        .score-dial { position: relative; width: 160px; height: 160px; margin-bottom: 16px; }
+        .score-dial svg { transform: rotate(-90deg); }
+        .score-dial-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 10; }
+        .score-dial-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+        .score-dial-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .score-num { font-size: 44px; font-weight: 900; color: white; line-height: 1; letter-spacing: -2px; }
+        .score-denom { font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 2px; }
+        .score-tier-label { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+        .score-tier-desc { color: rgba(255,255,255,0.6); font-size: 13px; max-width: 380px; line-height: 1.65; }
 
-        /* Score global */
-        .score-card { background: #0D1B2A; border-radius: 20px; padding: 32px; }
-        .score-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 24px; }
-        .score-main { display: flex; align-items: center; gap: 24px; margin-bottom: 20px; }
-        .score-circle { width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
-        .score-number { font-size: 28px; font-weight: 900; color: white; line-height: 1; }
-        .score-denom { font-size: 11px; color: rgba(255,255,255,0.65); font-weight: 600; }
-        .score-right { flex: 1; }
-        .score-title { color: white; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-        .score-sub { color: rgba(255,255,255,0.7); font-size: 13px; line-height: 1.6; }
-        .score-bar-track { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; margin-top: 16px; }
-        .score-bar-fill { height: 100%; border-radius: 100px; }
+        /* CONTENT */
+        .content { max-width: 740px; margin: 0 auto; padding: 40px 20px 80px; display: flex; flex-direction: column; gap: 20px; }
 
-        /* Tableau */
-        .table-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04); }
-        .table-head { padding: 22px 28px 18px; border-bottom: 1px solid #F0EDE6; }
-        .table-head h2 { font-size: 16px; font-weight: 800; color: #0D1B2A; }
-        .table-row { display: flex; align-items: center; gap: 16px; padding: 14px 28px; border-bottom: 1px solid #F7F5F2; }
-        .table-row:last-child { border-bottom: none; }
-        .table-icon { font-size: 15px; flex-shrink: 0; }
-        .table-name { flex: 1; font-size: 14px; font-weight: 600; color: #1A2535; }
-        .table-pts { font-size: 13px; font-weight: 700; color: #0D1B2A; white-space: nowrap; min-width: 44px; text-align: right; }
-        .table-bar-track { width: 100px; height: 5px; background: #F0EDE6; border-radius: 100px; overflow: hidden; flex-shrink: 0; }
-        .table-bar-fill { height: 100%; border-radius: 100px; }
+        /* GRID RECAP */
+        .recap-card { background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04); }
+        .recap-title { font-size: 13px; font-weight: 700; color: #374151; padding: 20px 24px 16px; border-bottom: 1px solid #F3F4F6; }
+        .recap-grid { display: grid; grid-template-columns: 1fr 1fr; }
+        .recap-item { padding: 16px 20px; border-bottom: 1px solid #F3F4F6; border-right: 1px solid #F3F4F6; }
+        .recap-item:nth-child(even) { border-right: none; }
+        .recap-item:nth-last-child(-n+2) { border-bottom: none; }
+        .recap-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .recap-item-label { font-size: 12px; font-weight: 600; color: #374151; display: flex; align-items: center; gap: 6px; }
+        .recap-item-pts { font-size: 12px; font-weight: 700; }
+        .recap-bar-track { height: 4px; background: #F3F4F6; border-radius: 100px; overflow: hidden; }
+        .recap-bar-fill { height: 100%; border-radius: 100px; }
 
-        /* Section détail */
-        .section-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04); }
-        .section-header { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F0EDE6; }
-        .section-header-left { display: flex; align-items: center; gap: 10px; }
-        .section-icon { font-size: 18px; }
-        .section-title { font-size: 15px; font-weight: 800; color: #0D1B2A; }
-        .section-badge { font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 8px; background: #0D1B2A; color: white; }
-        .section-image { width: 100%; height: 140px; object-fit: cover; display: block; }
-        .section-image-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; display: block; margin: 20px auto 8px; border: 2px solid #F0EDE6; }
-        .critere { padding: 18px 24px; border-bottom: 1px solid #F7F5F2; }
+        /* SECTION CARD */
+        .section-card { background: white; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04); }
+        .section-hd { padding: 20px 24px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #F3F4F6; }
+        .section-icon-wrap { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .section-hd-info { flex: 1; }
+        .section-hd-name { font-size: 15px; font-weight: 800; color: #111827; margin-bottom: 2px; }
+        .section-hd-sub { font-size: 12px; color: #6B7280; }
+        .section-score-badge { font-size: 14px; font-weight: 800; padding: 6px 14px; border-radius: 10px; }
+        .section-banner { width: 100%; height: 140px; object-fit: cover; display: block; }
+        .section-avatar-wrap { padding: 24px 0 8px; display: flex; justify-content: center; }
+        .section-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #F3F4F6; }
+
+        /* CRITERES */
+        .critere { padding: 18px 24px; border-bottom: 1px solid #F9FAFB; }
         .critere:last-of-type { border-bottom: none; }
-        .critere-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
-        .critere-titre { font-size: 13px; font-weight: 700; color: #0D1B2A; line-height: 1.4; }
-        .critere-badge { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
-        .critere-feedback { font-size: 13px; color: #6B7A99; line-height: 1.65; }
-        .critere-feedback strong { color: #0D1B2A; font-weight: 600; }
-        .section-footer { padding: 14px 24px; background: #FAFAF9; display: flex; align-items: center; gap: 14px; border-top: 1px solid #F0EDE6; }
-        .section-footer-bar-track { flex: 1; height: 5px; background: #EEEBE5; border-radius: 100px; overflow: hidden; }
-        .section-footer-label { font-size: 12px; font-weight: 700; color: #4B5563; white-space: nowrap; }
+        .critere-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+        .critere-name { font-size: 13px; font-weight: 700; color: #111827; line-height: 1.45; }
+        .critere-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+        .critere-bar-track { height: 3px; background: #F3F4F6; border-radius: 100px; overflow: hidden; margin-bottom: 10px; }
+        .critere-bar-fill { height: 100%; border-radius: 100px; }
+        .critere-feedback { font-size: 13px; color: #4B5563; line-height: 1.65; padding: 10px 14px; border-radius: 8px; background: #F9FAFB; border-left: 3px solid #E5E7EB; }
+
+        /* SECTION FOOTER */
+        .section-ft { padding: 14px 24px; background: #FAFAFA; border-top: 1px solid #F3F4F6; display: flex; align-items: center; gap: 12px; }
+        .section-ft-track { flex: 1; height: 4px; background: #EEECEC; border-radius: 100px; overflow: hidden; }
+        .section-ft-fill { height: 100%; border-radius: 100px; }
+        .section-ft-label { font-size: 11px; font-weight: 700; color: #6B7280; white-space: nowrap; }
 
         /* CTA */
-        .cta-card { background: #0D1B2A; border-radius: 20px; padding: 48px 40px; text-align: center; }
-        .cta-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2563EB; margin-bottom: 16px; }
-        .cta-title { color: white; font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 14px; letter-spacing: -0.3px; }
-        .cta-sub { color: rgba(255,255,255,0.72); font-size: 14px; line-height: 1.7; max-width: 420px; margin: 0 auto 32px; }
-        .cta-btn { display: inline-block; background: #2563EB; color: white; font-weight: 700; font-size: 15px; padding: 15px 36px; border-radius: 12px; text-decoration: none; box-shadow: 0 6px 24px rgba(37,99,235,0.4); transition: all 0.2s; }
+        .cta { background: #0F1F35; border-radius: 20px; padding: 52px 40px; text-align: center; position: relative; overflow: hidden; }
+        .cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(37,99,235,0.2) 0%, transparent 70%); pointer-events: none; }
+        .cta-inner { position: relative; z-index: 1; }
+        .cta-eyebrow { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #60A5FA; background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; }
+        .cta-title { color: white; font-size: 26px; font-weight: 800; line-height: 1.3; margin-bottom: 14px; letter-spacing: -0.4px; }
+        .cta-sub { color: rgba(255,255,255,0.65); font-size: 14px; line-height: 1.75; max-width: 420px; margin: 0 auto 32px; }
+        .cta-btn { display: inline-flex; align-items: center; gap: 8px; background: #2563EB; color: white; font-weight: 700; font-size: 15px; padding: 15px 32px; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 20px rgba(37,99,235,0.45), 0 1px 3px rgba(37,99,235,0.3); }
 
-        /* Footer */
-        .footer { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; border-top: 1px solid #E8E4DC; }
-        .footer-left { display: flex; align-items: center; gap: 14px; }
-        .footer-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
-        .footer-name { font-size: 14px; font-weight: 700; color: #0D1B2A; margin-bottom: 3px; }
-        .footer-sub { font-size: 12px; color: #6B7A99; margin-bottom: 4px; }
-        .footer-link { font-size: 12px; color: #2563EB; font-weight: 600; text-decoration: none; }
-        .footer-right { font-size: 11px; color: #6B7A99; }
+        /* FOOTER */
+        .page-footer { display: flex; align-items: center; gap: 16px; padding-top: 28px; border-top: 1px solid #E5E3DE; }
+        .pf-avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .pf-name { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 3px; }
+        .pf-sub { font-size: 12px; color: #6B7280; margin-bottom: 5px; }
+        .pf-link { font-size: 12px; color: #2563EB; font-weight: 600; text-decoration: none; }
+        .pf-right { margin-left: auto; font-size: 11px; color: #9CA3AF; }
+
+        @media (max-width: 600px) {
+          .recap-grid { grid-template-columns: 1fr; }
+          .recap-item:nth-child(even) { border-right: none; }
+          .recap-item { border-right: none; }
+          .cta { padding: 40px 24px; }
+          .cta-title { font-size: 22px; }
+          .hero { padding: 48px 20px 56px; }
+          .score-num { font-size: 36px; }
+        }
       `}</style>
 
-      <div className="page">
-
-        {/* Header */}
-        <div className="header">
-          <div className="header-logo">
-            <div className="header-logo-dot">R</div>
-            <span className="header-name">Romain Bour</span>
-          </div>
-          <span className="header-tag">Analyse de profil LinkedIn</span>
+      {/* NAV */}
+      <nav className="nav">
+        <div className="nav-brand">
+          <div className="nav-dot">R</div>
+          <span className="nav-name">Romain Bour</span>
         </div>
+        <span className="nav-pill">Analyse LinkedIn</span>
+      </nav>
 
-        {/* Hero */}
-        <div className="hero">
+      {/* HERO */}
+      <div className="hero">
+        <div className="hero-inner">
           {data.photo_url && (
-            <img className="hero-avatar" src={data.photo_url} alt={`${data.first_name} ${data.last_name}`} />
+            <div className="hero-avatar-wrap">
+              <img className="hero-avatar" src={data.photo_url} alt={`${data.first_name} ${data.last_name}`} />
+            </div>
           )}
-          <div>
-            <h1 className="hero-name">{data.first_name} {data.last_name}</h1>
-            <p className="hero-date">Analyse générée le {new Date(data.analyzed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-          </div>
-        </div>
+          <h1 className="hero-name">{data.first_name} {data.last_name}</h1>
+          <p className="hero-meta">
+            Analyse générée le {new Date(data.analyzed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </p>
 
-        <div className="content">
-
-          {/* Score global */}
-          <div className="score-card">
-            <p className="score-label">Score global du profil</p>
-            <div className="score-main">
-              <div className="score-circle" style={{ background: `${globalColor}18`, border: `2px solid ${globalColor}40` }}>
-                <span className="score-number" style={{ color: globalColor }}>{globalPct}</span>
+          {/* Score dial SVG */}
+          <div className="score-dial-wrap">
+            <div className="score-dial">
+              {(() => {
+                const r = 68
+                const circ = 2 * Math.PI * r
+                const offset = circ - (globalPct / 100) * circ
+                return (
+                  <svg width="160" height="160" viewBox="0 0 160 160">
+                    <circle className="score-dial-track" cx="80" cy="80" r={r} />
+                    <circle
+                      className="score-dial-fill"
+                      cx="80" cy="80" r={r}
+                      stroke={globalColor.main}
+                      strokeDasharray={circ}
+                      strokeDashoffset={offset}
+                    />
+                  </svg>
+                )
+              })()}
+              <div className="score-dial-text">
+                <span className="score-num" style={{ color: globalColor.main }}>{globalPct}</span>
                 <span className="score-denom">/100</span>
               </div>
-              <div className="score-right">
-                <p className="score-title" style={{ color: globalColor }}>{globalLabel}</p>
-                <p className="score-sub">{globalSub}</p>
-              </div>
             </div>
-            <div className="score-bar-track">
-              <div className="score-bar-fill" style={{ width: `${globalPct}%`, background: globalColor }} />
-            </div>
+            <p className="score-tier-label" style={{ color: globalColor.main }}>{tier.label}</p>
+            <p className="score-tier-desc">{tier.desc}</p>
           </div>
+        </div>
+      </div>
 
-          {/* Tableau récap */}
-          <div className="table-card">
-            <div className="table-head"><h2>Détail du score</h2></div>
-            {SECTIONS.map((section) => {
-              const pts = Number(data[`${section.key}_total_points`]) || 0
-              const max = Number(data[`${section.key}_total_maximum`]) || section.max
-              const { bar } = getColor(pts, max)
+      <div className="content">
+
+        {/* GRILLE RECAP */}
+        <div className="recap-card">
+          <p className="recap-title">Résumé par catégorie</p>
+          <div className="recap-grid">
+            {SECTIONS.map((s) => {
+              const pts = Number(data[`${s.key}_total_points`]) || 0
+              const max = Number(data[`${s.key}_total_maximum`]) || s.max
+              const col = getColor(pts / max)
               return (
-                <div key={section.key} className="table-row">
-                  <span className="table-icon">{section.icon}</span>
-                  <span className="table-name">{section.label}</span>
-                  <span className="table-pts">{pts}/{max}</span>
-                  <div className="table-bar-track">
-                    <div className="table-bar-fill" style={{ width: `${(pts / max) * 100}%`, background: bar }} />
+                <div key={s.key} className="recap-item">
+                  <div className="recap-item-top">
+                    <span className="recap-item-label">{s.icon} {s.label}</span>
+                    <span className="recap-item-pts" style={{ color: col.text }}>{pts}/{max}</span>
+                  </div>
+                  <div className="recap-bar-track">
+                    <div className="recap-bar-fill" style={{ width: `${(pts/max)*100}%`, background: col.main }} />
                   </div>
                 </div>
               )
             })}
           </div>
+        </div>
 
-          {/* Sections détaillées */}
-          {SECTIONS.map((section) => {
-            const pts = Number(data[`${section.key}_total_points`]) || 0
-            const max = Number(data[`${section.key}_total_maximum`]) || section.max
-            const { bar } = getColor(pts, max)
-            const criteres = extractCriteres(data, section.key)
-            const bannerUrl = section.key === 'banner' ? data.cover_url : null
-            const photoUrl  = section.key === 'photo'  ? data.photo_url  : null
+        {/* SECTIONS DÉTAILLÉES */}
+        {SECTIONS.map((s) => {
+          const pts      = Number(data[`${s.key}_total_points`]) || 0
+          const max      = Number(data[`${s.key}_total_maximum`]) || s.max
+          const col      = getColor(pts / max)
+          const criteres = extractCriteres(data, s.key)
+          const bannerUrl = s.key === 'banner' ? data.cover_url  : null
+          const photoUrl  = s.key === 'photo'  ? data.photo_url  : null
 
-            return (
-              <div key={section.key} className="section-card">
-                <div className="section-header">
-                  <div className="section-header-left">
-                    <span className="section-icon">{section.icon}</span>
-                    <h2 className="section-title">{section.label}</h2>
-                  </div>
-                  <span className="section-badge">{pts}/{max}</span>
+          return (
+            <div key={s.key} className="section-card">
+              <div className="section-hd">
+                <div className="section-icon-wrap" style={{ background: col.light, border: `1px solid ${col.border}` }}>
+                  {s.icon}
                 </div>
-
-                {bannerUrl && <img className="section-image" src={bannerUrl} alt="Bannière" />}
-                {photoUrl  && <img className="section-image-avatar" src={photoUrl} alt="Photo de profil" />}
-
-                {criteres.map((crit, i) => {
-                  const { badge, text } = getColor(crit.points_obtenus, crit.points_maximum)
-                  return (
-                    <div key={i} className="critere">
-                      <div className="critere-top">
-                        <p className="critere-titre">{crit.titre}</p>
-                        <span className="critere-badge" style={{ background: badge, color: text }}>
-                          {crit.points_obtenus}/{crit.points_maximum}
-                        </span>
-                      </div>
-                      {crit.explication && (
-                        <p className="critere-feedback">
-                          <strong>Feedback —</strong> {crit.explication}
-                        </p>
-                      )}
-                    </div>
-                  )
-                })}
-
-                <div className="section-footer">
-                  <div className="section-footer-bar-track">
-                    <div className="score-bar-fill" style={{ width: `${(pts / max) * 100}%`, height: '100%', background: bar, borderRadius: 100 }} />
-                  </div>
-                  <span className="section-footer-label">{pts}/{max} pts</span>
+                <div className="section-hd-info">
+                  <p className="section-hd-name">{s.label}</p>
+                  <p className="section-hd-sub">{criteres.length} critère{criteres.length > 1 ? 's' : ''} analysé{criteres.length > 1 ? 's' : ''}</p>
                 </div>
+                <span className="section-score-badge" style={{ background: col.light, color: col.text, border: `1px solid ${col.border}` }}>
+                  {pts}/{max}
+                </span>
               </div>
-            )
-          })}
 
-          {/* CTA */}
-          <div className="cta-card">
-            <p className="cta-eyebrow">Prochaine étape</p>
-            <h2 className="cta-title">Tu sais maintenant ce qui<br />freine ton profil LinkedIn.</h2>
-            <p className="cta-sub">La vraie question : tu passes à l'action, ou tu restes bloqué au diagnostic ? Booke un appel et transformons ton profil en levier d'opportunités.</p>
-            <a className="cta-btn" href="https://www.romainbour.com/waitingroom" target="_blank">
-              Booker un appel →
-            </a>
-          </div>
+              {bannerUrl && <img className="section-banner" src={bannerUrl} alt="Bannière LinkedIn" />}
+              {photoUrl  && (
+                <div className="section-avatar-wrap">
+                  <img className="section-avatar" src={photoUrl} alt="Photo de profil" />
+                </div>
+              )}
 
-          {/* Footer */}
-          <div className="footer">
-            <div className="footer-left">
-              <img className="footer-avatar" src="/romain-face.jpeg" alt="Romain Bour" />
-              <div>
-                <p className="footer-name">Romain Bour</p>
-                <p className="footer-sub">J'aide les indépendants à transformer leurs 3 likes en 10 clients.</p>
-                <a className="footer-link" href="https://www.linkedin.com/in/romainbour/" target="_blank">Me contacter sur LinkedIn</a>
+              {criteres.map((c, i) => {
+                const cc = getColor(c.points_obtenus / c.points_maximum)
+                return (
+                  <div key={i} className="critere">
+                    <div className="critere-hd">
+                      <p className="critere-name">{c.titre}</p>
+                      <span className="critere-badge" style={{ background: cc.light, color: cc.text, border: `1px solid ${cc.border}` }}>
+                        {c.points_obtenus}/{c.points_maximum}
+                      </span>
+                    </div>
+                    <div className="critere-bar-track">
+                      <div className="critere-bar-fill" style={{ width: `${(c.points_obtenus/c.points_maximum)*100}%`, background: cc.main }} />
+                    </div>
+                    {c.explication && (
+                      <div className="critere-feedback" style={{ borderLeftColor: cc.main }}>
+                        {c.explication}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+
+              <div className="section-ft">
+                <div className="section-ft-track">
+                  <div className="section-ft-fill" style={{ width: `${(pts/max)*100}%`, background: col.main }} />
+                </div>
+                <span className="section-ft-label" style={{ color: col.text }}>{pts}/{max} pts</span>
               </div>
             </div>
-            <p className="footer-right">Optin.ia</p>
-          </div>
+          )
+        })}
 
+        {/* CTA */}
+        <div className="cta">
+          <div className="cta-inner">
+            <span className="cta-eyebrow">Prochaine étape</span>
+            <h2 className="cta-title">Tu sais ce qui freine ton profil.<br />Passons à l'action.</h2>
+            <p className="cta-sub">
+              Un diagnostic, c'est utile. Mais sans plan d'action, ça reste du bruit.
+              Booke un appel de 30 min et on transforme ton profil en levier de business.
+            </p>
+            <a className="cta-btn" href="https://www.romainbour.com/waitingroom" target="_blank">
+              Booker un appel gratuit →
+            </a>
+          </div>
         </div>
+
+        {/* PAGE FOOTER */}
+        <div className="page-footer">
+          <img className="pf-avatar" src="/romain-face.jpeg" alt="Romain Bour" />
+          <div>
+            <p className="pf-name">Romain Bour</p>
+            <p className="pf-sub">Expert branding LinkedIn pour dirigeants B2B</p>
+            <a className="pf-link" href="https://www.linkedin.com/in/romainbour/" target="_blank">Suivre sur LinkedIn →</a>
+          </div>
+          <span className="pf-right">Optin.ia</span>
+        </div>
+
       </div>
     </>
   )
