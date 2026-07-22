@@ -82,9 +82,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .header-tag { color: rgba(255,255,255,0.6); font-size: 13px; }
 
         /* Hero */
-        .hero { background: #0D1B2A; padding: 56px 24px 64px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
-        .hero-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 18px; border: 2px solid rgba(37,99,235,0.6); box-shadow: 0 0 0 6px rgba(37,99,235,0.12); }
-        .hero-name { color: #fff; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+        .hero { background: #0D1B2A; padding: 24px 40px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .hero-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; display: block; flex-shrink: 0; border: 2px solid rgba(37,99,235,0.5); }
+        .hero-name { color: #fff; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 3px; }
         .hero-date { color: rgba(255,255,255,0.6); font-size: 13px; }
 
         /* Wrapper */
@@ -168,10 +168,10 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           {data.photo_url && (
             <img className="hero-avatar" src={data.photo_url} alt={`${data.first_name} ${data.last_name}`} />
           )}
-          <h1 className="hero-name">{data.first_name} {data.last_name}</h1>
-          <p className="hero-date">
-            Analyse générée le {new Date(data.analyzed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-          </p>
+          <div>
+            <h1 className="hero-name">{data.first_name} {data.last_name}</h1>
+            <p className="hero-date">Analyse générée le {new Date(data.analyzed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+          </div>
         </div>
 
         <div className="content">
