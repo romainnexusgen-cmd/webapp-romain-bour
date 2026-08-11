@@ -303,9 +303,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           height: 100%;
           background: linear-gradient(to bottom,
             rgba(255,255,255,0) 0%,
-            rgba(255,255,255,0.5) 25%,
-            rgba(255,255,255,0.92) 55%,
-            rgba(255,255,255,0.98) 100%
+            rgba(255,255,255,0.7) 30%,
+            rgba(255,255,255,0.97) 60%,
+            rgba(255,255,255,1) 100%
           );
           display: flex;
           flex-direction: column;
@@ -327,12 +327,17 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         }
         .gate-lock-badge {
           display: flex; align-items: center; gap: 8px;
-          background: #0F172A;
+          background: linear-gradient(135deg, #1D4ED8, #3B82F6);
           color: white;
-          font-size: 12px; font-weight: 700;
-          padding: 9px 18px; border-radius: 100px;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+          font-size: 13px; font-weight: 700;
+          padding: 12px 22px; border-radius: 100px;
+          box-shadow: 0 4px 24px rgba(59,130,246,0.45);
           letter-spacing: -0.1px;
+          animation: badge-pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes badge-pulse {
+          0%, 100% { box-shadow: 0 4px 24px rgba(59,130,246,0.45); transform: scale(1); }
+          50% { box-shadow: 0 6px 32px rgba(59,130,246,0.65); transform: scale(1.03); }
         }
 
         /* section card gate — full card blur */
@@ -353,15 +358,18 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           position: absolute; inset: 0;
           background: linear-gradient(to bottom,
             rgba(255,255,255,0) 0%,
-            rgba(255,255,255,0.65) 35%,
-            rgba(255,255,255,0.97) 70%,
+            rgba(255,255,255,0.75) 30%,
+            rgba(255,255,255,0.97) 65%,
             rgba(255,255,255,1) 100%
           );
-          display: flex; align-items: flex-end; justify-content: center;
-          padding-bottom: 16px;
+          display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+          padding-bottom: 20px; gap: 8px;
           cursor: pointer;
           transition: opacity 0.4s ease;
           z-index: 2;
+        }
+        .sec-card-gate-hint {
+          font-size: 12px; color: #94A3B8; font-weight: 500;
         }
         .sec-card-gated.unlocked .sec-card-gate-mask {
           opacity: 0; pointer-events: none;
@@ -924,7 +932,11 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               body: JSON.stringify({ auditId: AUDIT_ID, q1: answers.q1, q2: answers.q2, q3: answers.q3 })
             }).catch(function() {});
             closeModal();
-            unlockContent(ans3, true);
+            /* Accompagné → ouvre Calendly immédiatement */
+            if (ans3 === 'accompagne') {
+              window.open('https://calendly.com/romain-visibility/callmemaybe', '_blank');
+            }
+            unlockContent(ans3, ans3 !== 'accompagne');
           }
 
           function unlockContent(ans3, animate) {
@@ -1098,7 +1110,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                       <rect x="3" y="7" width="10" height="8" rx="2"/>
                       <path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>
                     </svg>
-                    Voir les {quickWins.length - 1} autres priorités
+                    Débloquer {quickWins.length - 1} priorité{quickWins.length - 1 > 1 ? 's' : ''} supplémentaire{quickWins.length - 1 > 1 ? 's' : ''}
                   </div>
                 </div>
               </div>
@@ -1232,8 +1244,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                     <rect x="3" y="7" width="10" height="8" rx="2"/>
                     <path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>
                   </svg>
-                  Débloque l'analyse détaillée
+                  Voir l'analyse complète
                 </div>
+                <p className="sec-card-gate-hint">Réponds à 3 questions pour débloquer</p>
               </div>
             </div>
           )
