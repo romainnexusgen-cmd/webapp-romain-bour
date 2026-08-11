@@ -450,11 +450,21 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .crit-mini-fill  { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 0.7s ease; }
         .crit-name { font-size: 13px; font-weight: 600; color: #1E293B; flex: 1; line-height: 1.45; }
         .crit-pts { font-size: 12px; font-weight: 700; flex-shrink: 0; }
-        .crit-chev {
-          width: 16px; height: 16px; color: #CBD5E1; flex-shrink: 0;
-          transition: transform 0.25s, color 0.15s;
+        .crit-chev-wrap {
+          display: flex; align-items: center; gap: 4px;
+          flex-shrink: 0;
+          color: #94A3B8; font-size: 11px; font-weight: 600;
+          transition: color 0.15s;
         }
-        .crit.open .crit-chev { transform: rotate(180deg); color: #64748B; }
+        .crit:hover .crit-chev-wrap { color: #3B82F6; }
+        .crit.open .crit-chev-wrap { color: #3B82F6; }
+        .crit-chev-label { white-space: nowrap; }
+        .crit.open .crit-chev-label { display: none; }
+        .crit-chev {
+          width: 14px; height: 14px; flex-shrink: 0;
+          transition: transform 0.25s;
+        }
+        .crit.open .crit-chev { transform: rotate(180deg); }
 
         .crit-body { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1); }
         .crit-body-inner {
@@ -1210,9 +1220,12 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                           <span className="crit-name">{cr.titre}</span>
                           <span className="crit-pts" style={{ color: cc.text }}>{cr.pts}/{cr.max}</span>
                           {cr.explication && (
-                            <svg className="crit-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                              <path d="M4 6l4 4 4-4"/>
-                            </svg>
+                            <div className="crit-chev-wrap">
+                              <span className="crit-chev-label">Voir</span>
+                              <svg className="crit-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                                <path d="M4 6l4 4 4-4"/>
+                              </svg>
+                            </div>
                           )}
                         </div>
                         {cr.explication && (
@@ -1306,10 +1319,10 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                   <path d="M4 10l4.5 4.5 7.5-8"/>
                 </svg>
               </div>
-              <h2 className="result-nl-title">Tu es sur la liste avant-première.</h2>
+              <h2 className="result-nl-title">Rejoins la newsletter.</h2>
               <p className="result-nl-sub">
-                Je t'enverrai les stratégies qui font vraiment la différence dès le lancement de ma newsletter LinkedIn.
-                En attendant, retrouve mes analyses et conseils chaque semaine directement sur LinkedIn.
+                Chaque semaine, les stratégies concrètes pour faire de ton profil LinkedIn un vrai levier de business — sans devenir influenceur.
+                Tu seras parmi les premiers à recevoir le premier numéro.
               </p>
               <a className="result-btn-li" href="https://www.linkedin.com/in/romainbour/" target="_blank" rel="noreferrer">
                 Suivre sur LinkedIn
