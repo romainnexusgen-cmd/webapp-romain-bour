@@ -188,6 +188,21 @@ export default function HomePage() {
 
   return (
     <>
+      {/* ── Nav bar ── */}
+      <nav className="nav-bar">
+        <a href="/" className="nav-logo">
+          <div className="nav-logo-mark">O</div>
+          <span className="nav-logo-text">optin<span>.ia</span></span>
+        </a>
+        <div className="nav-badge-nav" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22C55E', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', fontWeight: 500 }}>+700 profils analysés</span>
+          </div>
+          <a href="#formulaire" className="nav-cta-small">Analyser mon profil →</a>
+        </div>
+      </nav>
+
       {/* Canvas animé global — couvre toute la page en fixed */}
       <canvas ref={canvasRef} aria-hidden style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0 }} />
 
@@ -195,6 +210,41 @@ export default function HomePage() {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background: #040C16; }
+
+        .nav-bar {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 0 40px; height: 60px;
+          background: rgba(4,12,22,0.72);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .nav-logo {
+          display: flex; align-items: center; gap: 10px; text-decoration: none;
+        }
+        .nav-logo-mark {
+          width: 30px; height: 30px; border-radius: 8px;
+          background: linear-gradient(135deg, #1D4ED8 0%, #2979FF 60%, #60A5FA 100%);
+          display: flex; align-items: center; justify-content: center;
+          box-shadow: 0 0 18px rgba(41,121,255,0.4);
+          font-size: 14px; font-weight: 900; color: #fff; letter-spacing: -0.5px;
+          font-family: 'Inter', sans-serif;
+        }
+        .nav-logo-text {
+          font-size: 16px; font-weight: 800; letter-spacing: -0.5px; color: #fff;
+        }
+        .nav-logo-text span { color: #2979FF; }
+        .nav-cta-small {
+          display: inline-flex; align-items: center; gap: 6px;
+          background: rgba(41,121,255,0.12); border: 1px solid rgba(41,121,255,0.28);
+          color: #60A5FA; font-weight: 700; font-size: 13px;
+          padding: 7px 16px; border-radius: 8px; text-decoration: none;
+          font-family: 'Inter', sans-serif;
+          transition: background 0.15s, border-color 0.15s;
+        }
+        .nav-cta-small:hover { background: rgba(41,121,255,0.2); border-color: rgba(41,121,255,0.5); }
+        @media (max-width: 640px) { .nav-bar { padding: 0 20px; } .nav-badge-nav { display: none !important; } }
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(40px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -312,7 +362,7 @@ export default function HomePage() {
         background: 'transparent',
         minHeight: '100vh',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
-        padding: '60px 0 0',
+        padding: '80px 0 0',
         position: 'relative', overflow: 'hidden',
       }}>
         {/* ── Dot grid ── */}
@@ -327,9 +377,10 @@ export default function HomePage() {
         {/* ── Contenu texte ── */}
         <div style={{ textAlign: 'center', padding: '0 32px', marginBottom: '32px', position: 'relative', zIndex: 2 }}>
 
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '5px 12px', background: 'rgba(41,121,255,0.08)', border: '1px solid rgba(41,121,255,0.18)', borderRadius: '9999px', marginBottom: '20px' }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2979FF', display: 'inline-block', animation: 'blink 2.5s infinite', flexShrink: 0 }} />
-            <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.09em', textTransform: 'uppercase' }}>Analyse gratuite · Experts &amp; dirigeants B2B</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '6px 14px 6px 8px', background: 'rgba(41,121,255,0.08)', border: '1px solid rgba(41,121,255,0.2)', borderRadius: '9999px', marginBottom: '24px' }}>
+            <span style={{ background: 'linear-gradient(135deg,#1D4ED8,#2979FF)', borderRadius: '9999px', padding: '2px 9px', fontSize: '10px', fontWeight: 800, color: '#fff', letterSpacing: '0.04em' }}>Optin.ia</span>
+            <span style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.12)' }} />
+            <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em' }}>Audit LinkedIn gratuit · Experts B2B</span>
           </div>
 
           <h1 style={{
@@ -699,12 +750,19 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ background: 'transparent', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '22px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '11px' }}>
-          <img src="/romain-face.jpeg" alt="Romain Bour" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
-          <div>
-            <p style={{ fontWeight: 700, fontSize: '12px', color: '#fff' }}>Romain Bour</p>
-            <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.22)', marginTop: '2px' }}>Expert Branding B2B · +90 dirigeants accompagnés</p>
+      <footer style={{ background: 'transparent', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '28px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: 'linear-gradient(135deg,#1D4ED8,#2979FF)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900, color: '#fff' }}>O</div>
+            <span style={{ fontSize: '13px', fontWeight: 800, color: 'rgba(255,255,255,0.6)', letterSpacing: '-0.3px' }}>optin<span style={{ color: '#2979FF' }}>.ia</span></span>
+          </div>
+          <span style={{ width: '1px', height: '16px', background: 'rgba(255,255,255,0.08)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+            <img src="/romain-face.jpeg" alt="Romain Bour" style={{ width: '26px', height: '26px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+            <div>
+              <p style={{ fontWeight: 600, fontSize: '11px', color: 'rgba(255,255,255,0.5)', lineHeight: 1 }}>Créé par <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 700 }}>Romain Bour</span></p>
+              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', marginTop: '2px' }}>Expert Branding B2B · +90 dirigeants</p>
+            </div>
           </div>
         </div>
         <a href="https://www.linkedin.com/in/romainbour/" target="_blank" style={{ color: 'rgba(255,255,255,0.2)', fontSize: '12px', textDecoration: 'none', fontWeight: 500, transition: 'color 0.15s' }} onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.2)')}>LinkedIn →</a>
