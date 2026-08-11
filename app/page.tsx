@@ -269,6 +269,12 @@ export default function HomePage() {
           .form-box    { width: 100% !important; }
           .mock-layout { flex-direction: column !important; }
           .mock-right  { display: none !important; }
+          .grid-temoignages { grid-template-columns: 1fr !important; }
+          .grid-score       { grid-template-columns: 1fr !important; }
+          .grid-dashboard   { grid-template-columns: repeat(2, 1fr) !important; }
+          .hero-stats       { display: none !important; }
+          .section-padding  { padding: 64px 24px !important; }
+          .hero-cta-row     { flex-direction: column !important; align-items: flex-start !important; }
         }
       `}</style>
 
@@ -314,9 +320,9 @@ export default function HomePage() {
             Ton profil ne le montre pas encore.
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+          <div className="hero-cta-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
             <a href="#formulaire" className="hero-cta">Voir mon score LinkedIn →</a>
-            <div style={{ display: 'flex', gap: '20px', paddingLeft: '4px', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="hero-stats" style={{ display: 'flex', gap: '20px', paddingLeft: '4px', borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
               {[{ n: '+700', l: 'profils' }, { n: '8', l: 'critères' }, { n: '5 min', l: 'résultat' }].map(s => (
                 <div key={s.n} style={{ textAlign: 'center' }}>
                   <div style={{ color: '#fff', fontSize: '15px', fontWeight: 800, letterSpacing: '-0.5px' }}>{s.n}</div>
@@ -367,7 +373,7 @@ export default function HomePage() {
             </div>
 
             {/* grille 4×2 — cartes métriques */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
+            <div className="grid-dashboard" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
               {CRITERES.map((c, i) => {
                 const size = 52
                 const stroke = 4
@@ -425,7 +431,7 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           APERÇU DU RAPPORT
       ═══════════════════════════════ */}
-      <section style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
+      <section className="section-padding" style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
           {/* Header */}
@@ -438,7 +444,7 @@ export default function HomePage() {
           </div>
 
           {/* Layout 2 colonnes — score + barres */}
-          <div ref={scoreRef} style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: '24px', alignItems: 'stretch' }}>
+          <div ref={scoreRef} className="grid-score" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: '24px', alignItems: 'stretch' }}>
 
             {/* Colonne gauche — score global + exemple analyse */}
             <div className="reveal" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -517,7 +523,7 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           TEMOIGNAGES
       ═══════════════════════════════ */}
-      <section style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
+      <section className="section-padding" style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '64px' }}>
@@ -528,7 +534,7 @@ export default function HomePage() {
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>Des experts B2B qui ont voulu savoir où ils en étaient.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+          <div className="grid-temoignages" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
             {TEMOIGNAGES.map((t, i) => {
               const isHovered = hoveredCard === i
               return (
@@ -584,7 +590,7 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           FORMULAIRE
       ═══════════════════════════════ */}
-      <section id="formulaire" style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
+      <section id="formulaire" className="section-padding" style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="form-inner reveal" style={{ display: 'flex', gap: '80px', alignItems: 'flex-start' }}>
             <div style={{ flex: 1 }}>
