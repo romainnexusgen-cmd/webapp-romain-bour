@@ -27,7 +27,6 @@ const SECTIONS = [
   { label: 'Crédibilité & preuves',        key: 'cred',        max: 10, desc: 'Recommandations et social proof' },
 ]
 
-// Minimal SVG icons — 16×16, 1.5px stroke
 const ICONS: Record<string, string> = {
   photo:       `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3.5" width="14" height="10" rx="2"/><circle cx="8" cy="8.5" r="2.3"/><path d="M5.5 3.5l.9-2h3.2l.9 2"/></svg>`,
   banner:      `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="2" width="14" height="12" rx="2"/><path d="M1 10.5l3.5-3.5 2.5 2.5 2-2 5 5"/><circle cx="11.5" cy="5.5" r="1.3"/></svg>`,
@@ -79,6 +78,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
     .sort((a, b) => (a.pts / a.max) - (b.pts / b.max))
     .slice(0, 3)
 
+  const auditId = id
+
   return (
     <>
       <style>{`
@@ -91,6 +92,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           color: #0F172A;
           -webkit-font-smoothing: antialiased;
           line-height: 1.5;
+          padding-bottom: 80px;
         }
 
         /* ── NAV ── */
@@ -152,7 +154,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         }
         .hero-date { font-size: 12px; color: rgba(255,255,255,0.32); margin-bottom: 44px; letter-spacing: 0.01em; }
 
-        /* score reveal */
         .score-num-row {
           display: flex; align-items: baseline; justify-content: center; gap: 2px;
           margin-bottom: 4px;
@@ -170,7 +171,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           align-self: flex-end; margin-bottom: 10px;
         }
 
-        /* tier badge */
         .score-tier {
           display: inline-flex; align-items: center; gap: 5px;
           font-size: 12px; font-weight: 600; letter-spacing: 0.01em;
@@ -182,7 +182,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .score-tier.visible { opacity: 1; transform: translateY(0); }
         .score-tier-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
-        /* gauge */
         .gauge { width: 100%; }
         .gauge-track {
           width: 100%; height: 10px; border-radius: 100px;
@@ -210,9 +209,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .gauge-label { font-size: 9px; font-weight: 600; letter-spacing: 0.05em; color: rgba(255,255,255,0.2); }
 
         /* ── LAYOUT ── */
-        .wrap { max-width: 720px; margin: 0 auto; padding: 36px 16px 80px; display: flex; flex-direction: column; gap: 16px; }
+        .wrap { max-width: 720px; margin: 0 auto; padding: 36px 16px 40px; display: flex; flex-direction: column; gap: 16px; }
 
-        /* ── QUICK WINS — NEW DESIGN ── */
+        /* ── QUICK WINS ── */
         .qw {
           background: white;
           border-radius: 16px;
@@ -233,7 +232,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .qw-hd-title { font-size: 16px; font-weight: 800; color: #0F172A; letter-spacing: -0.3px; }
         .qw-hd-sub { font-size: 13px; color: #94A3B8; margin-top: 2px; }
 
-        /* each win row */
         .qw-row {
           border-bottom: 1px solid #F1F1EF; cursor: pointer;
           transition: background 0.15s;
@@ -246,7 +244,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           padding: 20px 24px;
           display: flex; align-items: flex-start; gap: 18px;
         }
-        /* big ghost number */
         .qw-idx {
           font-size: 42px; font-weight: 900; letter-spacing: -3px; line-height: 1;
           color: #F1F1EF; flex-shrink: 0; width: 48px; text-align: center;
@@ -263,7 +260,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .qw-title { font-size: 14px; font-weight: 700; color: #0F172A; line-height: 1.5; margin-bottom: 4px; }
         .qw-preview { font-size: 13px; color: #94A3B8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
-        /* chevron */
         .qw-chevron {
           width: 20px; height: 20px; flex-shrink: 0; margin-top: 6px;
           color: #CBD5E1;
@@ -271,7 +267,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         }
         .qw-row.open .qw-chevron { transform: rotate(180deg); color: #64748B; }
 
-        /* accordion body */
         .qw-body {
           max-height: 0; overflow: hidden;
           transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -287,6 +282,93 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           border-left: 3px solid #CBD5E1;
         }
         .qw-row.open .qw-body-text { border-left-color: currentColor; }
+
+        /* ── GATING ── */
+        .gated-zone {
+          position: relative;
+          overflow: hidden;
+        }
+        .gated-zone .gate-content {
+          transition: filter 0.5s ease, opacity 0.5s ease;
+        }
+        .gated-zone.locked .gate-content {
+          filter: blur(7px);
+          pointer-events: none;
+          user-select: none;
+          opacity: 0.7;
+        }
+        .gate-mask {
+          position: absolute;
+          bottom: 0; left: 0; right: 0;
+          height: 100%;
+          background: linear-gradient(to bottom,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.5) 25%,
+            rgba(255,255,255,0.92) 55%,
+            rgba(255,255,255,0.98) 100%
+          );
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+          padding-bottom: 20px;
+          cursor: pointer;
+          transition: opacity 0.4s ease;
+          z-index: 2;
+        }
+        .gated-zone.unlocked .gate-mask {
+          opacity: 0;
+          pointer-events: none;
+        }
+        .gated-zone.unlocked .gate-content {
+          filter: none;
+          pointer-events: auto;
+          opacity: 1;
+        }
+        .gate-lock-badge {
+          display: flex; align-items: center; gap: 8px;
+          background: #0F172A;
+          color: white;
+          font-size: 12px; font-weight: 700;
+          padding: 9px 18px; border-radius: 100px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+          letter-spacing: -0.1px;
+        }
+
+        /* section card gate — full card blur */
+        .sec-card-gated {
+          position: relative;
+          overflow: hidden;
+        }
+        .sec-card-gated .sec-card-body {
+          transition: filter 0.5s ease, opacity 0.5s ease;
+        }
+        .sec-card-gated.locked .sec-card-body {
+          filter: blur(7px);
+          pointer-events: none;
+          user-select: none;
+          opacity: 0.65;
+        }
+        .sec-card-gate-mask {
+          position: absolute; inset: 0;
+          background: linear-gradient(to bottom,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.65) 35%,
+            rgba(255,255,255,0.97) 70%,
+            rgba(255,255,255,1) 100%
+          );
+          display: flex; align-items: flex-end; justify-content: center;
+          padding-bottom: 16px;
+          cursor: pointer;
+          transition: opacity 0.4s ease;
+          z-index: 2;
+        }
+        .sec-card-gated.unlocked .sec-card-gate-mask {
+          opacity: 0; pointer-events: none;
+        }
+        .sec-card-gated.unlocked .sec-card-body {
+          filter: none; pointer-events: auto; opacity: 1;
+        }
 
         /* ── RECAP ── */
         .recap {
@@ -328,7 +410,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
           overflow: hidden;
         }
-        /* colored top strip by score */
         .sec-strip { height: 3px; width: 100%; }
         .sec-hd { padding: 18px 22px; border-bottom: 1px solid #F8F8F7; display: flex; align-items: center; gap: 12px; }
         .sec-icon {
@@ -346,7 +427,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .sec-photo-row { padding: 20px 0 4px; display: flex; justify-content: center; }
         .sec-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid #F1F5F9; }
 
-        /* criteria — accordion */
         .crit {
           border-bottom: 1px solid #F8F8F7; cursor: pointer;
           transition: background 0.15s;
@@ -378,7 +458,6 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           border-left: 3px solid #E2E8F0;
         }
 
-        /* section footer */
         .sec-ft {
           padding: 11px 22px; background: #FAFAFA; border-top: 1px solid #F1F1EF;
           display: flex; align-items: center; gap: 12px;
@@ -387,7 +466,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .sec-ft-fill  { height: 100%; border-radius: 100px; }
         .sec-ft-label { font-size: 11px; font-weight: 700; white-space: nowrap; }
 
-        /* ── CTA ── */
+        /* ── CTA (generic) ── */
         .cta {
           background: white; border-radius: 16px;
           border: 1px solid #EBEBEB;
@@ -423,6 +502,198 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .cta-btn svg { transition: transform 0.15s; }
         .cta-btn:hover svg { transform: translateX(2px); }
 
+        /* ── RESULT CTA (shown after form) ── */
+        #result-cta { display: none; }
+        #result-cta.visible { display: block; }
+
+        .result-cta-call {
+          background: white; border-radius: 16px;
+          border: 1px solid #EBEBEB;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+          overflow: hidden;
+        }
+        .result-cta-call-bar { height: 3px; background: linear-gradient(90deg, #3B82F6, #2563EB 60%, #6366F1); }
+        .result-cta-call-body { padding: 36px 28px; }
+        .result-eyebrow {
+          font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+          color: #3B82F6; margin-bottom: 12px;
+        }
+        .result-h {
+          font-size: clamp(20px, 4vw, 26px); font-weight: 900;
+          color: #0F172A; letter-spacing: -0.6px; line-height: 1.2;
+          margin-bottom: 10px;
+        }
+        .result-sub { font-size: 14px; color: #64748B; line-height: 1.75; margin-bottom: 24px; }
+        .result-btn-call {
+          display: inline-flex; align-items: center; gap: 7px;
+          background: #1D4ED8; color: white;
+          font-size: 14px; font-weight: 700;
+          padding: 13px 24px; border-radius: 10px;
+          text-decoration: none;
+          box-shadow: 0 1px 2px rgba(29,78,216,0.2), 0 4px 14px rgba(29,78,216,0.3);
+          transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+        }
+        .result-btn-call:hover {
+          background: #1E40AF; transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(29,78,216,0.2), 0 8px 20px rgba(29,78,216,0.35);
+        }
+
+        .result-cta-newsletter {
+          background: white; border-radius: 16px;
+          border: 1px solid #EBEBEB;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+          overflow: hidden;
+        }
+        .result-cta-newsletter-bar { height: 3px; background: linear-gradient(90deg, #10B981, #059669); }
+        .result-cta-newsletter-body { padding: 36px 28px; }
+        .result-check-icon {
+          width: 40px; height: 40px; border-radius: 50%;
+          background: #ECFDF5; display: flex; align-items: center; justify-content: center;
+          margin-bottom: 16px; color: #10B981;
+        }
+        .result-nl-title {
+          font-size: clamp(18px, 3.5vw, 22px); font-weight: 900;
+          color: #0F172A; letter-spacing: -0.5px; line-height: 1.3;
+          margin-bottom: 10px;
+        }
+        .result-nl-sub { font-size: 14px; color: #64748B; line-height: 1.75; margin-bottom: 24px; }
+        .result-btn-li {
+          display: inline-flex; align-items: center; gap: 7px;
+          background: #0F172A; color: white;
+          font-size: 14px; font-weight: 700;
+          padding: 13px 24px; border-radius: 10px;
+          text-decoration: none;
+          transition: transform 0.15s, background 0.15s;
+        }
+        .result-btn-li:hover { background: #1E293B; transform: translateY(-1px); }
+
+        /* ── STICKY BAR ── */
+        #sticky-bar {
+          position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+          background: rgba(9, 17, 28, 0.97);
+          backdrop-filter: blur(20px) saturate(180%);
+          border-top: 1px solid rgba(255,255,255,0.08);
+          padding: 12px 20px;
+          display: flex; align-items: center; justify-content: space-between; gap: 12px;
+          transform: translateY(100%);
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #sticky-bar.visible { transform: translateY(0); }
+        #sticky-bar.hidden { transform: translateY(100%); }
+        .sticky-bar-text {
+          font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.75);
+          line-height: 1.4;
+        }
+        .sticky-bar-text strong { color: white; }
+        .sticky-bar-btn {
+          flex-shrink: 0;
+          background: linear-gradient(135deg, #3B82F6, #2563EB);
+          color: white; font-size: 13px; font-weight: 700;
+          padding: 10px 18px; border-radius: 9px;
+          border: none; cursor: pointer;
+          display: flex; align-items: center; gap: 6px;
+          box-shadow: 0 2px 12px rgba(59,130,246,0.4);
+          transition: transform 0.15s, box-shadow 0.15s;
+          white-space: nowrap;
+        }
+        .sticky-bar-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 18px rgba(59,130,246,0.5);
+        }
+
+        /* ── MODAL ── */
+        #modal-bg {
+          position: fixed; inset: 0; z-index: 200;
+          background: rgba(0,0,0,0.55);
+          backdrop-filter: blur(4px);
+          display: flex; align-items: flex-end; justify-content: center;
+          opacity: 0; pointer-events: none;
+          transition: opacity 0.3s ease;
+        }
+        @media (min-width: 540px) {
+          #modal-bg { align-items: center; }
+        }
+        #modal-bg.open { opacity: 1; pointer-events: auto; }
+        .modal-box {
+          background: white; width: 100%; max-width: 480px;
+          border-radius: 24px 24px 0 0;
+          padding: 8px 0 0;
+          box-shadow: 0 -4px 40px rgba(0,0,0,0.15);
+          transform: translateY(40px);
+          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          max-height: 92vh; overflow-y: auto;
+        }
+        @media (min-width: 540px) {
+          .modal-box {
+            border-radius: 20px;
+            transform: scale(0.96) translateY(10px);
+            max-height: 80vh;
+          }
+        }
+        #modal-bg.open .modal-box {
+          transform: translateY(0);
+        }
+        @media (min-width: 540px) {
+          #modal-bg.open .modal-box { transform: scale(1) translateY(0); }
+        }
+        .modal-handle {
+          width: 36px; height: 4px; border-radius: 100px;
+          background: #E2E8F0; margin: 0 auto 20px;
+        }
+        @media (min-width: 540px) { .modal-handle { display: none; } }
+        .modal-close {
+          position: absolute; top: 16px; right: 16px;
+          width: 28px; height: 28px; border-radius: 50%;
+          background: #F1F5F9; border: none; cursor: pointer;
+          display: flex; align-items: center; justify-content: center;
+          color: #64748B; transition: background 0.15s;
+        }
+        .modal-close:hover { background: #E2E8F0; }
+        .modal-inner { padding: 0 24px 32px; position: relative; }
+        .modal-progress {
+          display: flex; gap: 6px; margin-bottom: 24px;
+        }
+        .mpd {
+          flex: 1; height: 3px; border-radius: 100px;
+          background: #F1F5F9; overflow: hidden;
+          transition: background 0.3s;
+        }
+        .mpd.active { background: #3B82F6; }
+        .mpd.done { background: #CBD5E1; }
+
+        /* question steps */
+        .q-step { display: none; }
+        .q-step.active { display: block; }
+        .q-label {
+          font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+          color: #94A3B8; margin-bottom: 10px;
+        }
+        .q-title {
+          font-size: clamp(17px, 4vw, 20px); font-weight: 800;
+          color: #0F172A; letter-spacing: -0.4px; line-height: 1.35;
+          margin-bottom: 20px;
+        }
+        .q-opts { display: flex; flex-direction: column; gap: 10px; }
+        .q-opt {
+          padding: 14px 16px;
+          border: 1.5px solid #E2E8F0; border-radius: 12px;
+          font-size: 14px; font-weight: 600; color: #1E293B;
+          background: white; cursor: pointer; text-align: left;
+          transition: border-color 0.15s, background 0.15s, color 0.15s;
+          display: flex; align-items: center; gap: 10px;
+          line-height: 1.4;
+        }
+        .q-opt:hover { border-color: #3B82F6; background: #EFF6FF; color: #1D4ED8; }
+        .q-opt.selected { border-color: #3B82F6; background: #EFF6FF; color: #1D4ED8; }
+        .q-opt-icon {
+          width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+          background: #F8FAFC;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 16px;
+        }
+        .q-opt:hover .q-opt-icon,
+        .q-opt.selected .q-opt-icon { background: #DBEAFE; }
+
         /* ── FOOTER ── */
         .pf { display: flex; align-items: center; gap: 14px; padding-top: 24px; border-top: 1px solid #EBEBEB; flex-wrap: wrap; }
         .pf-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1.5px solid #EBEBEB; }
@@ -436,7 +707,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           .crit-body-inner { padding-left: 22px; }
           .qw-idx { width: 36px; font-size: 34px; }
           .cta-body { padding: 28px 20px; }
+          .result-cta-call-body, .result-cta-newsletter-body { padding: 28px 20px; }
           .pf-right { display: none; }
+          .sticky-bar-text { display: none; }
         }
       `}</style>
 
@@ -445,12 +718,16 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         (function() {
           var TARGET = ${gPct};
           var COLOR  = '${t.color}';
-          var BG     = '${t.bg}';
-          var BORDER = '${t.border}';
+          var AUDIT_ID = '${auditId}';
+          var LOCK_KEY = 'optin_unlocked_' + AUDIT_ID;
+          var ANS_KEY  = 'optin_ans3_' + AUDIT_ID;
+
+          var answers = { q1: null, q2: null, q3: null };
+          var currentStep = 1;
 
           function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 
-          /* ── score counter + gauge ── */
+          /* ── Score counter + gauge ── */
           window.addEventListener('DOMContentLoaded', function() {
             var numEl  = document.getElementById('score-num');
             var fillEl = document.getElementById('gauge-fill');
@@ -477,11 +754,12 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               }, 200);
             }
 
-            /* ── accordion: quick wins ── */
+            /* ── Accordions: quick wins ── */
             document.querySelectorAll('.qw-row').forEach(function(row) {
               row.addEventListener('click', function() {
                 var body = row.querySelector('.qw-body');
                 var inner = row.querySelector('.qw-body-inner');
+                if (!body || !inner) return;
                 var isOpen = row.classList.contains('open');
                 if (isOpen) {
                   body.style.maxHeight = '0';
@@ -493,7 +771,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               });
             });
 
-            /* ── accordion: criteria ── */
+            /* ── Accordions: criteria ── */
             document.querySelectorAll('.crit').forEach(function(crit) {
               crit.addEventListener('click', function() {
                 var body = crit.querySelector('.crit-body');
@@ -510,7 +788,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               });
             });
 
-            /* ── scroll-triggered bar animations ── */
+            /* ── Scroll-triggered bars ── */
             var bars = document.querySelectorAll('[data-bar]');
             var observed = new Set();
             if (window.IntersectionObserver) {
@@ -529,7 +807,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               bars.forEach(function(b) { b.style.width = b.getAttribute('data-bar') + '%'; });
             }
 
-            /* ── mini donut circles ── */
+            /* ── Mini donut circles ── */
             document.querySelectorAll('[data-ring]').forEach(function(el) {
               var pct = parseFloat(el.getAttribute('data-ring'));
               var r = 14; var circ = 2 * Math.PI * r;
@@ -539,7 +817,161 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                 el.style.strokeDashoffset = circ - (pct / 100) * circ;
               }, 300);
             });
+
+            /* ── Sticky bar: show after hero scrolls out ── */
+            var hero = document.querySelector('.hero');
+            var stickyBar = document.getElementById('sticky-bar');
+            var alreadyUnlocked = localStorage.getItem(LOCK_KEY);
+
+            if (alreadyUnlocked && stickyBar) {
+              var savedAns = localStorage.getItem(ANS_KEY);
+              unlockContent(savedAns, false);
+            } else if (stickyBar && hero) {
+              setTimeout(function() {
+                var heroObs = new IntersectionObserver(function(entries) {
+                  entries.forEach(function(entry) {
+                    if (!entry.isIntersecting) {
+                      stickyBar.classList.add('visible');
+                    } else {
+                      stickyBar.classList.remove('visible');
+                    }
+                  });
+                }, { threshold: 0 });
+                heroObs.observe(hero);
+              }, 1000);
+            }
+
+            /* ── Gate mask click → open modal ── */
+            document.querySelectorAll('.gate-mask, .sec-card-gate-mask').forEach(function(mask) {
+              mask.addEventListener('click', function(e) { e.stopPropagation(); openModal(); });
+            });
+
+            /* ── Sticky bar button ── */
+            var sBtn = document.getElementById('sticky-bar-btn');
+            if (sBtn) sBtn.addEventListener('click', openModal);
+
+            /* ── Modal close ── */
+            var modalBg = document.getElementById('modal-bg');
+            var mClose = document.getElementById('modal-close');
+            if (modalBg) {
+              modalBg.addEventListener('click', function(e) {
+                if (e.target === modalBg) closeModal();
+              });
+            }
+            if (mClose) mClose.addEventListener('click', closeModal);
+
+            /* ── Q options ── */
+            document.querySelectorAll('.q-opt').forEach(function(opt) {
+              opt.addEventListener('click', function() {
+                var step = opt.closest('.q-step');
+                step.querySelectorAll('.q-opt').forEach(function(o) { o.classList.remove('selected'); });
+                opt.classList.add('selected');
+                var q = opt.getAttribute('data-q');
+                var val = opt.getAttribute('data-val');
+                answers[q] = val;
+                setTimeout(function() { goNext(); }, 320);
+              });
+            });
           });
+
+          function openModal() {
+            var modalBg = document.getElementById('modal-bg');
+            if (modalBg) modalBg.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            setStep(1);
+          }
+
+          function closeModal() {
+            var modalBg = document.getElementById('modal-bg');
+            if (modalBg) modalBg.classList.remove('open');
+            document.body.style.overflow = '';
+          }
+
+          function setStep(n) {
+            currentStep = n;
+            document.querySelectorAll('.q-step').forEach(function(s) { s.classList.remove('active'); });
+            var target = document.getElementById('q-step-' + n);
+            if (target) target.classList.add('active');
+            updateProgress(n);
+          }
+
+          function updateProgress(n) {
+            var dots = document.querySelectorAll('.mpd');
+            dots.forEach(function(d, i) {
+              d.classList.remove('active', 'done');
+              if (i + 1 === n) d.classList.add('active');
+              else if (i + 1 < n) d.classList.add('done');
+            });
+          }
+
+          function goNext() {
+            if (currentStep < 3) {
+              setStep(currentStep + 1);
+            } else {
+              finishForm();
+            }
+          }
+
+          function finishForm() {
+            var ans3 = answers.q3;
+            /* Save to localStorage */
+            localStorage.setItem(LOCK_KEY, '1');
+            localStorage.setItem(ANS_KEY, ans3 || '');
+            /* Save to Supabase via API route (best-effort) */
+            fetch('/api/qualify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ auditId: AUDIT_ID, q1: answers.q1, q2: answers.q2, q3: answers.q3 })
+            }).catch(function() {});
+            closeModal();
+            unlockContent(ans3, true);
+          }
+
+          function unlockContent(ans3, animate) {
+            var stickyBar = document.getElementById('sticky-bar');
+            /* Remove all gates */
+            document.querySelectorAll('.gated-zone').forEach(function(z) {
+              if (animate) {
+                z.classList.add('unlocked');
+                setTimeout(function() { z.classList.remove('locked'); }, 500);
+              } else {
+                z.classList.remove('locked');
+                z.classList.add('unlocked');
+              }
+            });
+            document.querySelectorAll('.sec-card-gated').forEach(function(z) {
+              if (animate) {
+                z.classList.add('unlocked');
+                setTimeout(function() { z.classList.remove('locked'); }, 500);
+              } else {
+                z.classList.remove('locked');
+                z.classList.add('unlocked');
+              }
+            });
+            /* Hide sticky bar */
+            if (stickyBar) { stickyBar.classList.remove('visible'); stickyBar.classList.add('hidden'); }
+            /* Show personalized CTA */
+            var resultCta = document.getElementById('result-cta');
+            var genericCta = document.getElementById('generic-cta');
+            if (resultCta) resultCta.classList.add('visible');
+            if (genericCta) genericCta.style.display = 'none';
+            /* Show correct result variant */
+            var callBox = document.getElementById('result-call');
+            var nlBox   = document.getElementById('result-nl');
+            if (ans3 === 'accompagne') {
+              if (callBox) callBox.style.display = 'block';
+              if (nlBox)   nlBox.style.display   = 'none';
+            } else {
+              if (callBox) callBox.style.display = 'none';
+              if (nlBox)   nlBox.style.display   = 'block';
+            }
+            /* Scroll to result */
+            if (animate && resultCta) {
+              setTimeout(function() {
+                resultCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }, 600);
+            }
+          }
         })();
       ` }} />
 
@@ -605,30 +1037,72 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               </div>
             </div>
 
-            {quickWins.map((w, i) => (
-              <div key={i} className="qw-row">
+            {/* Priority 01 — free */}
+            {quickWins[0] && (
+              <div className="qw-row">
                 <div className="qw-row-hd">
-                  <span className="qw-idx">0{i + 1}</span>
+                  <span className="qw-idx">01</span>
                   <div className="qw-content">
-                    <p className="qw-section-tag">{w.section}</p>
-                    <p className="qw-title">{w.titre}</p>
-                    {w.explication && (
-                      <p className="qw-preview">{w.explication.slice(0, 70)}{w.explication.length > 70 ? '…' : ''}</p>
+                    <p className="qw-section-tag">{quickWins[0].section}</p>
+                    <p className="qw-title">{quickWins[0].titre}</p>
+                    {quickWins[0].explication && (
+                      <p className="qw-preview">{quickWins[0].explication.slice(0, 70)}{quickWins[0].explication.length > 70 ? '…' : ''}</p>
                     )}
                   </div>
                   <svg className="qw-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                     <path d="M4 6l4 4 4-4"/>
                   </svg>
                 </div>
-                {w.explication && (
+                {quickWins[0].explication && (
                   <div className="qw-body">
                     <div className="qw-body-inner">
-                      <div className="qw-body-text" style={{ color: t.color }}>{w.explication}</div>
+                      <div className="qw-body-text" style={{ color: t.color }}>{quickWins[0].explication}</div>
                     </div>
                   </div>
                 )}
               </div>
-            ))}
+            )}
+
+            {/* Priorities 02 & 03 — gated */}
+            {quickWins.length > 1 && (
+              <div className="gated-zone locked" style={{ minHeight: '120px' }}>
+                <div className="gate-content">
+                  {quickWins.slice(1).map((w, i) => (
+                    <div key={i} className="qw-row">
+                      <div className="qw-row-hd">
+                        <span className="qw-idx">0{i + 2}</span>
+                        <div className="qw-content">
+                          <p className="qw-section-tag">{w.section}</p>
+                          <p className="qw-title">{w.titre}</p>
+                          {w.explication && (
+                            <p className="qw-preview">{w.explication.slice(0, 70)}{w.explication.length > 70 ? '…' : ''}</p>
+                          )}
+                        </div>
+                        <svg className="qw-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                          <path d="M4 6l4 4 4-4"/>
+                        </svg>
+                      </div>
+                      {w.explication && (
+                        <div className="qw-body">
+                          <div className="qw-body-inner">
+                            <div className="qw-body-text" style={{ color: t.color }}>{w.explication}</div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="gate-mask">
+                  <div className="gate-lock-badge">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <rect x="3" y="7" width="10" height="8" rx="2"/>
+                      <path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>
+                    </svg>
+                    Voir les {quickWins.length - 1} autres priorités
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -668,7 +1142,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           </div>
         </div>
 
-        {/* ── SECTION DETAIL CARDS ── */}
+        {/* ── SECTION DETAIL CARDS — all gated ── */}
         {SECTIONS.map((s) => {
           const pts = Number(data[`${s.key}_total_points`]) || 0
           const max = Number(data[`${s.key}_total_maximum`]) || s.max
@@ -676,99 +1150,161 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           const pct = Math.round((pts / max) * 100)
           const criteres = getCriteres(data, s.key)
           return (
-            <div key={s.key} className="sec-card">
-              <div className="sec-strip" style={{ background: c.bar }} />
-              <div className="sec-hd">
-                <div
-                  className="sec-icon"
-                  style={{ background: c.soft, color: c.text }}
-                  dangerouslySetInnerHTML={{ __html: ICONS[s.key] || '' }}
-                />
-                <div className="sec-info">
-                  <p className="sec-name">{s.label}</p>
-                  <p className="sec-desc">{s.desc}</p>
-                </div>
-                <span className="sec-score" style={{ background: c.soft, color: c.text, border: `1px solid ${c.border}` }}>
-                  {pts}/{max}
-                </span>
-              </div>
-
-              {s.key === 'banner' && data.cover_url && <img className="sec-banner" src={data.cover_url} alt="Bannière" />}
-              {s.key === 'photo' && data.photo_url && (
-                <div className="sec-photo-row">
-                  <img className="sec-photo" src={data.photo_url} alt="Photo de profil" />
-                </div>
-              )}
-
-              {criteres.map((cr, i) => {
-                const cc = scoreColor(cr.pts / cr.max)
-                const r = 14; const circ = 2 * Math.PI * r
-                const initOffset = circ
-                return (
-                  <div key={i} className="crit">
-                    <div className="crit-hd">
-                      {/* mini donut */}
-                      <div className="crit-bar-mini">
-                        <svg width="36" height="36" viewBox="0 0 36 36">
-                          <circle className="crit-mini-track" cx="18" cy="18" r={r} />
-                          <circle
-                            className="crit-mini-fill"
-                            cx="18" cy="18" r={r}
-                            stroke={cc.bar}
-                            data-ring={Math.round((cr.pts / cr.max) * 100)}
-                            style={{ strokeDasharray: circ, strokeDashoffset: initOffset }}
-                          />
-                        </svg>
-                      </div>
-                      <span className="crit-name">{cr.titre}</span>
-                      <span className="crit-pts" style={{ color: cc.text }}>{cr.pts}/{cr.max}</span>
-                      {cr.explication && (
-                        <svg className="crit-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                          <path d="M4 6l4 4 4-4"/>
-                        </svg>
-                      )}
+            <div key={s.key} className="sec-card sec-card-gated locked">
+              <div className="sec-card-body">
+                <div className="sec-card">
+                  <div className="sec-strip" style={{ background: c.bar }} />
+                  <div className="sec-hd">
+                    <div
+                      className="sec-icon"
+                      style={{ background: c.soft, color: c.text }}
+                      dangerouslySetInnerHTML={{ __html: ICONS[s.key] || '' }}
+                    />
+                    <div className="sec-info">
+                      <p className="sec-name">{s.label}</p>
+                      <p className="sec-desc">{s.desc}</p>
                     </div>
-                    {cr.explication && (
-                      <div className="crit-body">
-                        <div className="crit-body-inner">
-                          <div className="crit-expl" style={{ borderLeftColor: cc.bar }}>{cr.explication}</div>
-                        </div>
-                      </div>
-                    )}
+                    <span className="sec-score" style={{ background: c.soft, color: c.text, border: `1px solid ${c.border}` }}>
+                      {pts}/{max}
+                    </span>
                   </div>
-                )
-              })}
 
-              <div className="sec-ft">
-                <div className="sec-ft-track">
-                  <div
-                    className="sec-ft-fill"
-                    data-bar={pct}
-                    style={{ width: '0%', background: c.bar }}
-                  />
+                  {s.key === 'banner' && data.cover_url && <img className="sec-banner" src={data.cover_url} alt="Bannière" />}
+                  {s.key === 'photo' && data.photo_url && (
+                    <div className="sec-photo-row">
+                      <img className="sec-photo" src={data.photo_url} alt="Photo de profil" />
+                    </div>
+                  )}
+
+                  {criteres.map((cr, i) => {
+                    const cc = scoreColor(cr.pts / cr.max)
+                    const r = 14; const circ = 2 * Math.PI * r
+                    const initOffset = circ
+                    return (
+                      <div key={i} className="crit">
+                        <div className="crit-hd">
+                          <div className="crit-bar-mini">
+                            <svg width="36" height="36" viewBox="0 0 36 36">
+                              <circle className="crit-mini-track" cx="18" cy="18" r={r} />
+                              <circle
+                                className="crit-mini-fill"
+                                cx="18" cy="18" r={r}
+                                stroke={cc.bar}
+                                data-ring={Math.round((cr.pts / cr.max) * 100)}
+                                style={{ strokeDasharray: circ, strokeDashoffset: initOffset }}
+                              />
+                            </svg>
+                          </div>
+                          <span className="crit-name">{cr.titre}</span>
+                          <span className="crit-pts" style={{ color: cc.text }}>{cr.pts}/{cr.max}</span>
+                          {cr.explication && (
+                            <svg className="crit-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                              <path d="M4 6l4 4 4-4"/>
+                            </svg>
+                          )}
+                        </div>
+                        {cr.explication && (
+                          <div className="crit-body">
+                            <div className="crit-body-inner">
+                              <div className="crit-expl" style={{ borderLeftColor: cc.bar }}>{cr.explication}</div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+
+                  <div className="sec-ft">
+                    <div className="sec-ft-track">
+                      <div
+                        className="sec-ft-fill"
+                        data-bar={pct}
+                        style={{ width: '0%', background: c.bar }}
+                      />
+                    </div>
+                    <span className="sec-ft-label" style={{ color: c.text }}>{pct}%</span>
+                  </div>
                 </div>
-                <span className="sec-ft-label" style={{ color: c.text }}>{pct}%</span>
+              </div>
+              <div className="sec-card-gate-mask">
+                <div className="gate-lock-badge">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <rect x="3" y="7" width="10" height="8" rx="2"/>
+                    <path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>
+                  </svg>
+                  Débloque l'analyse détaillée
+                </div>
               </div>
             </div>
           )
         })}
 
-        {/* ── CTA ── */}
-        <div className="cta">
+        {/* ── GENERIC CTA (shown before form) ── */}
+        <div id="generic-cta" className="cta">
           <div className="cta-top-bar" />
           <div className="cta-body">
-            <p className="cta-eyebrow">Prochaine étape</p>
-            <h2 className="cta-h">Tu sais ce qui freine ton profil.<br />Passons à l'action.</h2>
+            <p className="cta-eyebrow">Analyse complète</p>
+            <h2 className="cta-h">Tu sais où tu en es.<br />Voyons comment débloquer la suite.</h2>
             <p className="cta-sub">
-              Un diagnostic, c'est utile. Mais sans plan d'action concret, ça reste du bruit.
-              Un appel de 30 min suffit à transformer ton profil en levier de business réel.
+              Réponds à 3 questions rapides pour accéder à ton analyse complète
+              et recevoir les recommandations adaptées à ta situation.
             </p>
-            <a className="cta-btn" href="https://www.romainbour.com/waitingroom" target="_blank" rel="noreferrer">
-              Réserver un appel gratuit
+            <button
+              className="cta-btn"
+              onClick={undefined}
+              style={{ border: 'none', cursor: 'pointer' }}
+              id="generic-cta-btn"
+            >
+              Voir mon analyse complète
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M2 7h10M8 3l4 4-4 4"/>
               </svg>
-            </a>
+            </button>
+          </div>
+        </div>
+
+        {/* ── RESULT CTA (shown after form) ── */}
+        <div id="result-cta">
+          {/* Accompagné → Calendly */}
+          <div id="result-call" className="result-cta-call" style={{ display: 'none' }}>
+            <div className="result-cta-call-bar" />
+            <div className="result-cta-call-body">
+              <p className="result-eyebrow">Prochaine étape</p>
+              <h2 className="result-h">Construisons ton plan<br />d'action ensemble.</h2>
+              <p className="result-sub">
+                30 minutes pour identifier tes leviers prioritaires, clarifier ton positionnement
+                et repartir avec un plan d'action concret pour ton profil LinkedIn.
+              </p>
+              <a className="result-btn-call" href="https://calendly.com/romain-visibility/callmemaybe" target="_blank" rel="noreferrer">
+                Réserver mon appel gratuit
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M2 7h10M8 3l4 4-4 4"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Seul → Newsletter */}
+          <div id="result-nl" className="result-cta-newsletter" style={{ display: 'none' }}>
+            <div className="result-cta-newsletter-bar" />
+            <div className="result-cta-newsletter-body">
+              <div className="result-check-icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 10l4.5 4.5 7.5-8"/>
+                </svg>
+              </div>
+              <h2 className="result-nl-title">Tu es sur la liste avant-première.</h2>
+              <p className="result-nl-sub">
+                Je t'enverrai les stratégies qui font vraiment la différence dès le lancement de ma newsletter LinkedIn.
+                En attendant, retrouve mes analyses et conseils chaque semaine directement sur LinkedIn.
+              </p>
+              <a className="result-btn-li" href="https://www.linkedin.com/in/romainbour/" target="_blank" rel="noreferrer">
+                Suivre sur LinkedIn
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M2 7h10M8 3l4 4-4 4"/>
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -784,6 +1320,104 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         </div>
 
       </div>
+
+      {/* ── STICKY BAR ── */}
+      <div id="sticky-bar">
+        <p className="sticky-bar-text"><strong>Ton analyse complète t'attend.</strong> Réponds à 3 questions rapides.</p>
+        <button className="sticky-bar-btn" id="sticky-bar-btn">
+          Voir mon analyse
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M2 6.5h9M7 3l3.5 3.5L7 10"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* ── MODAL ── */}
+      <div id="modal-bg">
+        <div className="modal-box">
+          <div className="modal-handle" />
+          <div className="modal-inner" style={{ position: 'relative' }}>
+            <button className="modal-close" id="modal-close" aria-label="Fermer">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M1 1l10 10M11 1L1 11"/>
+              </svg>
+            </button>
+
+            {/* Progress dots */}
+            <div className="modal-progress">
+              <div className="mpd active" />
+              <div className="mpd" />
+              <div className="mpd" />
+            </div>
+
+            {/* Step 1 */}
+            <div id="q-step-1" className="q-step active">
+              <p className="q-label">Question 1 sur 3</p>
+              <h3 className="q-title">Ce qui freine le plus ta visibilité LinkedIn en ce moment ?</h3>
+              <div className="q-opts">
+                {[
+                  { val: 'methode',   icon: '🗺️', label: 'Pas de méthode claire' },
+                  { val: 'message',   icon: '💬', label: 'Message flou ou trop généraliste' },
+                  { val: 'temps',     icon: '⏱️', label: 'Manque de temps' },
+                  { val: 'convert',   icon: '📉', label: 'Je poste mais rien ne convertit' },
+                ].map(o => (
+                  <button key={o.val} className="q-opt" data-q="q1" data-val={o.val}>
+                    <span className="q-opt-icon">{o.icon}</span>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div id="q-step-2" className="q-step">
+              <p className="q-label">Question 2 sur 3</p>
+              <h3 className="q-title">Ton objectif prioritaire sur LinkedIn ?</h3>
+              <div className="q-opts">
+                {[
+                  { val: 'leads',     icon: '🎯', label: 'Générer des leads qualifiés' },
+                  { val: 'autorite',  icon: '📣', label: 'Développer mon autorité' },
+                  { val: 'les-deux',  icon: '🚀', label: 'Les deux à la fois' },
+                ].map(o => (
+                  <button key={o.val} className="q-opt" data-q="q2" data-val={o.val}>
+                    <span className="q-opt-icon">{o.icon}</span>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div id="q-step-3" className="q-step">
+              <p className="q-label">Question 3 sur 3</p>
+              <h3 className="q-title">Ce que tu recherches pour avancer ?</h3>
+              <div className="q-opts">
+                {[
+                  { val: 'seul',       icon: '📚', label: 'Comprendre et progresser seul' },
+                  { val: 'accompagne', icon: '🤝', label: 'Être accompagné pour aller plus vite' },
+                ].map(o => (
+                  <button key={o.val} className="q-opt" data-q="q3" data-val={o.val}>
+                    <span className="q-opt-icon">{o.icon}</span>
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Wire generic CTA button to open modal */}
+      <script dangerouslySetInnerHTML={{ __html: `
+        document.addEventListener('DOMContentLoaded', function() {
+          var btn = document.getElementById('generic-cta-btn');
+          if (btn) btn.addEventListener('click', function() {
+            var modalBg = document.getElementById('modal-bg');
+            if (modalBg) modalBg.classList.add('open');
+            document.body.style.overflow = 'hidden';
+          });
+        });
+      ` }} />
     </>
   )
 }
