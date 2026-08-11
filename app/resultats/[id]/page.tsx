@@ -86,6 +86,50 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
+
+        /* ── PDF BUTTON ── */
+        .pdf-bar {
+          background: white; border-top: 1px solid #F1F1EF;
+          padding: 10px 22px;
+          display: flex; align-items: center; justify-content: space-between; gap: 12px;
+          border-radius: 0 0 16px 16px;
+        }
+        .pdf-hint { font-size: 12px; color: #94A3B8; }
+        .pdf-btn {
+          display: inline-flex; align-items: center; gap: 6px;
+          background: #F8FAFC; border: 1.5px solid #E2E8F0;
+          color: #334155; font-size: 13px; font-weight: 600;
+          padding: 8px 16px; border-radius: 9px;
+          cursor: pointer; transition: background 0.15s, border-color 0.15s;
+        }
+        .pdf-btn:hover { background: #EFF6FF; border-color: #3B82F6; color: #1D4ED8; }
+
+        /* ── PRINT / PDF ── */
+        @media print {
+          body { background: white; padding-bottom: 0; }
+          .nav, #sticky-bar, #modal-bg, #generic-cta, .pdf-bar,
+          .gate-mask, .sec-card-gate-mask, .gated-zone .gate-mask { display: none !important; }
+          .hero { min-height: auto; padding: 32px 24px 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .wrap { padding: 20px 16px; gap: 12px; }
+          .gated-zone.locked .gate-content { filter: none; opacity: 1; pointer-events: auto; }
+          .sec-card-gated.locked .sec-card-body { filter: none; opacity: 1; pointer-events: auto; }
+          .sec-card-gated.locked, .gated-zone.locked { overflow: visible; }
+          .crit-body { max-height: none !important; overflow: visible !important; }
+          .qw-body { max-height: none !important; overflow: visible !important; }
+          .qw, .recap, .sec-card, .cta, .result-cta-call, .result-cta-newsletter {
+            break-inside: avoid; box-shadow: none; border: 1px solid #EBEBEB;
+          }
+          #result-cta { display: block !important; }
+          #result-call { display: none !important; }
+          #result-nl { display: none !important; }
+          .pf { margin-top: 16px; }
+          .gauge-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .sec-strip, .recap-bar-fill, .sec-ft-fill, .cta-top-bar,
+          .result-cta-call-bar, .result-cta-newsletter-bar {
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+          }
+          @page { margin: 1.5cm 1.5cm; size: A4; }
+        }
         body {
           font-family: 'Inter', -apple-system, sans-serif;
           background: #F8F8F7;
@@ -1334,6 +1378,17 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           </div>
         </div>
 
+        {/* ── PDF DOWNLOAD BAR ── */}
+        <div className="pdf-bar">
+          <p className="pdf-hint">Garde une trace de ton analyse pour y revenir sans la refaire.</p>
+          <button className="pdf-btn" id="pdf-btn">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8 2v9M5 8l3 3 3-3M2 13h12"/>
+            </svg>
+            Télécharger mon analyse (PDF)
+          </button>
+        </div>
+
         {/* ── FOOTER ── */}
         <div className="pf">
           <img className="pf-img" src="/romain-face.jpeg" alt="Romain Bour" />
@@ -1433,14 +1488,34 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         </div>
       </div>
 
-      {/* Wire generic CTA button to open modal */}
+      {/* Wire generic CTA + PDF button */}
       <script dangerouslySetInnerHTML={{ __html: `
         document.addEventListener('DOMContentLoaded', function() {
+          /* Generic CTA → open modal */
           var btn = document.getElementById('generic-cta-btn');
           if (btn) btn.addEventListener('click', function() {
             var modalBg = document.getElementById('modal-bg');
             if (modalBg) modalBg.classList.add('open');
             document.body.style.overflow = 'hidden';
+          });
+
+          /* PDF button → unlock all then print */
+          var pdfBtn = document.getElementById('pdf-btn');
+          if (pdfBtn) pdfBtn.addEventListener('click', function() {
+            /* Reveal all gated content before printing */
+            document.querySelectorAll('.gated-zone').forEach(function(z) {
+              z.classList.remove('locked'); z.classList.add('unlocked');
+            });
+            document.querySelectorAll('.sec-card-gated').forEach(function(z) {
+              z.classList.remove('locked'); z.classList.add('unlocked');
+            });
+            document.querySelectorAll('.crit-body').forEach(function(b) {
+              b.style.maxHeight = 'none';
+            });
+            document.querySelectorAll('.qw-body').forEach(function(b) {
+              b.style.maxHeight = 'none';
+            });
+            setTimeout(function() { window.print(); }, 150);
           });
         });
       ` }} />
