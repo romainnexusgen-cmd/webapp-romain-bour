@@ -298,6 +298,7 @@ export default function HomePage() {
           .grid-score       { grid-template-columns: 1fr !important; }
           .grid-dashboard   { grid-template-columns: repeat(2, 1fr) !important; }
           .hero-stats       { display: none !important; }
+          .hero-dashboard   { display: none !important; }
           .section-padding  { padding: 64px 24px !important; }
           .hero-cta-row     { flex-direction: column !important; align-items: flex-start !important; }
         }
@@ -359,7 +360,7 @@ export default function HomePage() {
         </div>
 
         {/* ── Dashboard qui émerge du bas ── */}
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', padding: '0 32px' }}>
+        <div className="hero-dashboard" style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', padding: '0 32px' }}>
           <div className="float-slow pulse" style={{
             width: '100%', maxWidth: '900px',
             background: 'linear-gradient(180deg, #0F1E30 0%, #0B1929 100%)',
