@@ -67,7 +67,24 @@ export default function HomePage() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
   const [scanPhase, setScanPhase] = useState(0)
+  const [overlayScore, setOverlayScore] = useState(0)
   const scanTimers = useRef<ReturnType<typeof setTimeout>[]>([])
+
+  // Count-up 0→67 when score reveal starts
+  useEffect(() => {
+    if (scanPhase < 6) { setOverlayScore(0); return }
+    let frame = 0
+    const target = 67
+    const duration = 60
+    const tick = () => {
+      frame++
+      const progress = Math.min(frame / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setOverlayScore(Math.round(eased * target))
+      if (frame < duration) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }, [scanPhase])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -306,15 +323,51 @@ export default function HomePage() {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
-        .li-scan-line {
-          position: absolute; left: 0; right: 0; height: 3px; z-index: 20; pointer-events: none;
-          background: linear-gradient(90deg, transparent 0%, rgba(41,121,255,0.4) 5%, #2979FF 20%, #60A5FA 50%, #2979FF 80%, rgba(41,121,255,0.4) 95%, transparent 100%);
-          box-shadow: 0 0 30px rgba(41,121,255,0.9), 0 0 80px rgba(41,121,255,0.35), 0 2px 0 rgba(255,255,255,0.15);
-          animation: scan-descend 3.3s cubic-bezier(0.4,0,0.6,1) forwards;
+        /* Bande scan IA — large, lumineuse */
+        .li-scan-band {
+          position: absolute; left: 0; right: 0; height: 90px;
+          z-index: 20; pointer-events: none;
+          background: linear-gradient(180deg,
+            transparent 0%,
+            rgba(41,121,255,0.04) 15%,
+            rgba(41,121,255,0.13) 40%,
+            rgba(41,121,255,0.20) 50%,
+            rgba(41,121,255,0.13) 60%,
+            rgba(41,121,255,0.04) 85%,
+            transparent 100%
+          );
+          border-top: 2px solid rgba(41,121,255,0.75);
+          box-shadow:
+            0 0 0 1px rgba(255,255,255,0.08) inset,
+            0 -2px 0 rgba(41,121,255,0.3),
+            0 0 60px rgba(41,121,255,0.5),
+            0 0 160px rgba(41,121,255,0.18);
+          animation: scan-descend 3.3s cubic-bezier(0.4,0,0.55,1) forwards;
         }
+        /* Ligne fine au bord avant de la bande */
+        .li-scan-band::before {
+          content: '';
+          position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+          background: linear-gradient(90deg,
+            transparent 0%, rgba(255,255,255,0.4) 8%,
+            #60A5FA 25%, #fff 50%, #60A5FA 75%,
+            rgba(255,255,255,0.4) 92%, transparent 100%
+          );
+          filter: blur(0.5px);
+        }
+        @keyframes stagger-in {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .s0 { animation: stagger-in 0.5s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.05s; }
+        .s1 { animation: stagger-in 0.5s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.2s; }
+        .s2 { animation: stagger-in 0.5s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.38s; }
+        .s3 { animation: stagger-in 0.5s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.52s; }
+        .s4 { animation: stagger-in 0.6s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.68s; }
+        .s5 { animation: stagger-in 0.6s cubic-bezier(0.16,1,0.3,1) both; animation-delay: 0.85s; }
         .li-badge-enter { animation: badge-pop 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .li-score-enter { animation: score-in 0.55s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .li-overlay-enter { animation: overlay-in 0.5s ease forwards; }
+        .li-score-enter { animation: score-in 0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
+        .li-overlay-enter { animation: overlay-in 0.6s ease forwards; }
 
         @keyframes m1 {
           0%   { transform: translate(0%,   0%)   scale(1);   }
@@ -412,9 +465,9 @@ export default function HomePage() {
         fontFamily: 'Inter, -apple-system, sans-serif',
       }}>
 
-        {/* ── Scan line — pleine largeur ── */}
+        {/* ── Bande scan IA — large et lumineuse ── */}
         {scanPhase >= 1 && scanPhase < 6 && (
-          <div className="li-scan-line" style={{ zIndex: 30 }} />
+          <div className="li-scan-band" style={{ zIndex: 30 }} />
         )}
 
         {/* ── Status badge flottant en haut ── */}
@@ -590,46 +643,45 @@ export default function HomePage() {
             alignItems: 'center', justifyContent: 'center',
             padding: '40px 24px', gap: '0',
           }}>
-            {/* Score */}
-            <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-              <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px' }}>Score LinkedIn · Sophie Martin</p>
-              <div className="li-score-enter" style={{ display: 'flex', alignItems: 'baseline', gap: '6px', justifyContent: 'center', marginBottom: '10px' }}>
+            {/* Score — count-up */}
+            <div className="s0" style={{ textAlign: 'center', marginBottom: '4px' }}>
+              <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '16px' }}>Score LinkedIn · Sophie Martin</p>
+              <div className="li-score-enter" style={{ display: 'flex', alignItems: 'baseline', gap: '6px', justifyContent: 'center', marginBottom: '0' }}>
                 <span style={{
                   fontSize: 'clamp(88px, 12vw, 128px)', fontWeight: 900, lineHeight: 1,
                   letterSpacing: '-6px', color: '#2979FF',
                   textShadow: '0 0 60px rgba(41,121,255,0.8), 0 0 120px rgba(41,121,255,0.3)',
                   fontVariantNumeric: 'tabular-nums',
-                }}>67</span>
+                }}>{overlayScore}</span>
                 <span style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, color: 'rgba(255,255,255,0.18)' }}>/100</span>
-              </div>
-              {/* Barre score */}
-              <div style={{ width: '220px', height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '100px', overflow: 'hidden', margin: '0 auto 12px' }}>
-                <div style={{ height: '100%', width: '67%', background: 'linear-gradient(90deg, #1565FF, #2979FF, #60A5FA)', borderRadius: '100px', boxShadow: '0 0 20px rgba(41,121,255,0.7)' }} />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', marginBottom: '20px' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B', display: 'inline-block' }} />
-                <span style={{ fontSize: '14px', fontWeight: 700, color: '#F59E0B' }}>Fort potentiel · 3 priorités critiques identifiées</span>
-              </div>
-              {/* 3 badges */}
-              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '32px' }}>
-                {[
-                  { label: 'Bannière', score: '7/20', color: '#EF4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)' },
-                  { label: 'Titre', score: '11/20', color: '#F59E0B', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.3)' },
-                  { label: 'Posts', score: '4/10', color: '#EF4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)' },
-                ].map((b, i) => (
-                  <div key={i} style={{ background: b.bg, border: `1px solid ${b.border}`, borderRadius: '10px', padding: '8px 16px', textAlign: 'center' }}>
-                    <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '3px' }}>{b.label}</p>
-                    <p style={{ fontSize: '16px', fontWeight: 800, color: b.color }}>{b.score}</p>
-                  </div>
-                ))}
               </div>
             </div>
 
-            {/* Separator */}
-            <div style={{ width: '480px', maxWidth: '90vw', height: '1px', background: 'rgba(255,255,255,0.08)', marginBottom: '28px' }} />
+            {/* Label potentiel */}
+            <div className="s1" style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', marginBottom: '24px', marginTop: '16px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B', display: 'inline-block', boxShadow: '0 0 8px rgba(245,158,11,0.6)' }} />
+              <span style={{ fontSize: '14px', fontWeight: 700, color: '#F59E0B', letterSpacing: '0.01em' }}>Fort potentiel · 3 priorités critiques identifiées</span>
+            </div>
 
-            {/* Headline + CTA */}
-            <div style={{ textAlign: 'center' }}>
+            {/* 3 badges section */}
+            <div className="s2" style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '36px' }}>
+              {[
+                { label: 'Bannière', score: '7/20', color: '#EF4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)' },
+                { label: 'Titre', score: '11/20', color: '#F59E0B', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.3)' },
+                { label: 'Posts', score: '4/10', color: '#EF4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)' },
+              ].map((b, i) => (
+                <div key={i} style={{ background: b.bg, border: `1px solid ${b.border}`, borderRadius: '10px', padding: '8px 16px', textAlign: 'center' }}>
+                  <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '3px' }}>{b.label}</p>
+                  <p style={{ fontSize: '16px', fontWeight: 800, color: b.color }}>{b.score}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Separator */}
+            <div className="s3" style={{ width: '480px', maxWidth: '90vw', height: '1px', background: 'rgba(255,255,255,0.08)', marginBottom: '28px' }} />
+
+            {/* Headline */}
+            <div className="s4" style={{ textAlign: 'center' }}>
               <h1 style={{
                 fontSize: 'clamp(28px, 4vw, 46px)',
                 fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1.5px',
@@ -640,6 +692,10 @@ export default function HomePage() {
               <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '16px', lineHeight: 1.7, marginBottom: '28px', maxWidth: '420px', margin: '0 auto 28px' }}>
                 Découvre ton score sur 8 critères et tes 3 priorités concrètes — en 5 minutes, gratuitement.
               </p>
+            </div>
+
+            {/* CTA + Trust + Social */}
+            <div className="s5" style={{ textAlign: 'center' }}>
               <a href="#formulaire" className="hero-cta" style={{ fontSize: '17px', padding: '16px 36px' }}>
                 Analyser mon profil →
               </a>
