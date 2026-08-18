@@ -162,14 +162,15 @@ export default function HomePage() {
   }, [])
 
   useEffect(() => {
-    const timings = [0, 600, 1150, 1700, 2250, 2900, 3600, 5400]
+    // Full-screen hero: slower scan to cross full viewport height
+    const timings = [0, 1600, 2400, 3100, 3700, 4300, 5200, 8500]
     const runLoop = () => {
       scanTimers.current.forEach(clearTimeout)
       scanTimers.current = []
       timings.forEach((ms, i) => {
         scanTimers.current.push(setTimeout(() => setScanPhase(i === 7 ? 0 : i), ms))
       })
-      scanTimers.current.push(setTimeout(runLoop, 5900))
+      scanTimers.current.push(setTimeout(runLoop, 9200))
     }
     runLoop()
     return () => scanTimers.current.forEach(clearTimeout)
@@ -306,14 +307,14 @@ export default function HomePage() {
           to   { opacity: 1; }
         }
         .li-scan-line {
-          position: absolute; left: 0; right: 0; height: 2px; z-index: 20; pointer-events: none;
-          background: linear-gradient(90deg, transparent 0%, #2979FF 25%, #60A5FA 50%, #2979FF 75%, transparent 100%);
-          box-shadow: 0 0 20px rgba(41,121,255,0.95), 0 0 50px rgba(41,121,255,0.4), 0 -1px 0 rgba(255,255,255,0.2);
-          animation: scan-descend 2.3s ease-in-out forwards;
+          position: absolute; left: 0; right: 0; height: 3px; z-index: 20; pointer-events: none;
+          background: linear-gradient(90deg, transparent 0%, rgba(41,121,255,0.4) 5%, #2979FF 20%, #60A5FA 50%, #2979FF 80%, rgba(41,121,255,0.4) 95%, transparent 100%);
+          box-shadow: 0 0 30px rgba(41,121,255,0.9), 0 0 80px rgba(41,121,255,0.35), 0 2px 0 rgba(255,255,255,0.15);
+          animation: scan-descend 3.3s cubic-bezier(0.4,0,0.6,1) forwards;
         }
         .li-badge-enter { animation: badge-pop 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
         .li-score-enter { animation: score-in 0.55s cubic-bezier(0.16,1,0.3,1) forwards; }
-        .li-overlay-enter { animation: overlay-in 0.35s ease forwards; }
+        .li-overlay-enter { animation: overlay-in 0.5s ease forwards; }
 
         @keyframes m1 {
           0%   { transform: translate(0%,   0%)   scale(1);   }
@@ -401,280 +402,271 @@ export default function HomePage() {
 
 
       {/* ═══════════════════════════════════════
-          HERO — LinkedIn scan animation
+          HERO — LinkedIn plein écran
       ═══════════════════════════════════════ */}
       <section style={{
-        background: 'transparent',
-        minHeight: '100vh',
-        display: 'flex', alignItems: 'center',
-        padding: '80px 0 48px',
-        position: 'relative', overflow: 'hidden',
+        height: 'calc(100vh - 60px)',
+        position: 'relative',
+        overflow: 'hidden',
+        background: '#f3f2ef',
+        fontFamily: 'Inter, -apple-system, sans-serif',
       }}>
-        {/* Dot grid */}
-        <div aria-hidden style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '30px 30px', pointerEvents: 'none', maskImage: 'radial-gradient(ellipse 90% 80% at 60% 50%, black 20%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 60% 50%, black 20%, transparent 100%)' }} />
-        {/* Grain */}
-        <div aria-hidden style={{ position: 'absolute', inset: '-50%', width: '200%', height: '200%', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`, animation: 'grain 8s steps(10) infinite', pointerEvents: 'none' }} />
 
-        <div style={{ maxWidth: '1240px', margin: '0 auto', width: '100%', padding: '0 48px', display: 'flex', alignItems: 'center', gap: '72px', position: 'relative', zIndex: 2 }}>
+        {/* ── Scan line — pleine largeur ── */}
+        {scanPhase >= 1 && scanPhase < 6 && (
+          <div className="li-scan-line" style={{ zIndex: 30 }} />
+        )}
 
-          {/* ── LEFT: Headline + CTA ── */}
-          <div style={{ flex: '1', minWidth: 0 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '5px 14px 5px 8px', background: 'rgba(41,121,255,0.08)', border: '1px solid rgba(41,121,255,0.2)', borderRadius: '9999px', marginBottom: '28px' }}>
-              <span style={{ background: 'linear-gradient(135deg,#1D4ED8,#2979FF)', borderRadius: '9999px', padding: '2px 9px', fontSize: '10px', fontWeight: 800, color: '#fff', letterSpacing: '0.04em' }}>Optin.ia</span>
-              <span style={{ width: '1px', height: '12px', background: 'rgba(255,255,255,0.12)' }} />
-              <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.04em' }}>Audit gratuit · Experts B2B</span>
-            </div>
+        {/* ── Status badge flottant en haut ── */}
+        <div style={{
+          position: 'absolute', top: '20px', left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', alignItems: 'center', gap: '8px',
+          background: 'rgba(4,12,22,0.88)', border: '1px solid rgba(41,121,255,0.35)',
+          borderRadius: '9999px', padding: '6px 16px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          whiteSpace: 'nowrap', zIndex: 35,
+          backdropFilter: 'blur(12px)',
+        }}>
+          <span style={{
+            width: '7px', height: '7px', borderRadius: '50%',
+            background: scanPhase >= 6 ? '#22C55E' : '#2979FF',
+            display: 'inline-block',
+            boxShadow: scanPhase >= 6 ? '0 0 8px rgba(34,197,94,0.8)' : '0 0 8px rgba(41,121,255,0.8)',
+            animation: 'blink 1.5s infinite',
+          }} />
+          <span style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.02em' }}>
+            {scanPhase === 0 ? 'Profil LinkedIn chargé — analyse IA en attente' :
+             scanPhase < 6 ? 'Analyse IA en cours…' :
+             '✓ Analyse terminée — score calculé'}
+          </span>
+        </div>
 
-            <h1 className="hero-title" style={{
-              fontSize: 'clamp(36px, 3.8vw, 58px)',
-              fontWeight: 900, lineHeight: 1.05, letterSpacing: '-2px',
-              color: '#fff', marginBottom: '20px',
-            }}>
-              Ton expertise mérite<br />
-              d'être vue.<br />
-              <span style={{ color: 'rgba(255,255,255,0.2)' }}>Ton profil, pas encore.</span>
-            </h1>
+        {/* ── PROFIL LINKEDIN PLEINE PAGE ── */}
+        <div style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none' }}>
+          <div style={{ maxWidth: '860px', margin: '0 auto', paddingTop: '0' }}>
 
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '16px', lineHeight: 1.75, marginBottom: '32px', maxWidth: '380px' }}>
-              En 5 minutes, découvre ton score LinkedIn sur 8 critères et tes 3 priorités concrètes.
-            </p>
-
-            <div className="hero-cta-row" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '40px', flexWrap: 'wrap' }}>
-              <a href="#formulaire" className="hero-cta">Analyser mon profil →</a>
-              <div className="hero-stats" style={{ display: 'flex', gap: '20px' }}>
-                {[{ n: '+700', l: 'profils analysés' }, { n: '8', l: 'critères' }, { n: '5 min', l: 'résultat' }].map(s => (
-                  <div key={s.n} style={{ textAlign: 'left' }}>
-                    <div style={{ color: '#fff', fontSize: '17px', fontWeight: 800, letterSpacing: '-0.5px' }}>{s.n}</div>
-                    <div style={{ color: 'rgba(255,255,255,0.2)', fontSize: '11px' }}>{s.l}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Preuve sociale */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ display: 'flex' }}>
-                {TEMOIGNAGES.map((t, i) => (
-                  <img key={i} src={t.photo} alt={t.nom} width={28} height={28}
-                    style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #040C16', marginLeft: i > 0 ? '-8px' : '0', display: 'block' }} />
-                ))}
-              </div>
-              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>
-                <span style={{ color: 'rgba(255,255,255,0.65)', fontWeight: 600 }}>+700 experts B2B</span> ont déjà obtenu leur score
-              </p>
-            </div>
-          </div>
-
-          {/* ── RIGHT: LinkedIn mockup animé ── */}
-          <div className="hero-right" style={{ flexShrink: 0, position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-
-            {/* Halo glow derrière la carte */}
-            <div aria-hidden style={{ position: 'absolute', width: '420px', height: '420px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(41,121,255,0.18) 0%, rgba(41,121,255,0.04) 50%, transparent 75%)', pointerEvents: 'none', transform: 'translateY(20px)' }} />
-
-            {/* Étiquette "Analyse en cours" au dessus */}
+            {/* BANNIÈRE */}
             <div style={{
-              position: 'absolute', top: '-18px', left: '50%', transform: 'translateX(-50%)',
-              display: 'flex', alignItems: 'center', gap: '7px',
-              background: 'rgba(4,12,22,0.9)', border: '1px solid rgba(41,121,255,0.3)',
-              borderRadius: '9999px', padding: '5px 14px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-              whiteSpace: 'nowrap', zIndex: 30,
-            }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2979FF', display: 'inline-block', boxShadow: '0 0 8px rgba(41,121,255,0.8)', animation: 'blink 1.5s infinite' }} />
-              <span style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.02em' }}>
-                {scanPhase < 6 ? 'Analyse LinkedIn en cours…' : 'Analyse terminée'}
-              </span>
-            </div>
-
-            {/* LA CARTE LINKEDIN */}
-            <div style={{
-              width: '348px',
-              background: '#fff',
-              borderRadius: '12px',
-              boxShadow: '0 40px 100px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08)',
-              overflow: 'visible',
               position: 'relative',
-              fontFamily: 'Inter, -apple-system, sans-serif',
+              height: '220px',
+              background: 'linear-gradient(135deg, #0f2a52 0%, #1a3a6b 30%, #1e4d8c 60%, #2563a8 85%, #3b82c4 100%)',
+              overflow: 'hidden',
             }}>
-
-              {/* Ligne bleue LinkedIn en haut */}
-              <div style={{ height: '4px', borderRadius: '12px 12px 0 0', background: 'linear-gradient(90deg, #0A66C2, #2979FF)' }} />
-
-              {/* Contenu de la carte — overflow visible pour les badges */}
-              <div style={{ borderRadius: '0 0 12px 12px', overflow: 'visible', position: 'relative' }}>
-
-                {/* Scan line */}
-                {scanPhase >= 1 && scanPhase < 6 && (
-                  <div className="li-scan-line" />
-                )}
-
-                {/* ── BANNIÈRE ── */}
-                <div style={{
-                  position: 'relative',
-                  height: '88px',
-                  background: 'linear-gradient(135deg, #1a3a6b 0%, #0f2a52 35%, #1e4080 65%, #2563a8 100%)',
-                  overflow: 'visible',
+              {/* Pattern subtil sur la bannière */}
+              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(15,42,82,0.4) 100%)' }} />
+              {/* Badge bannière */}
+              {scanPhase >= 2 && (
+                <div className="li-badge-enter" style={{
+                  position: 'absolute', top: '16px', right: '20px', zIndex: 25,
+                  background: '#FEF2F2', color: '#DC2626', border: '2px solid #FCA5A5',
+                  borderRadius: '8px', padding: '6px 14px',
+                  fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                  display: 'flex', alignItems: 'center', gap: '8px',
                 }}>
-                  {/* Badge bannière */}
-                  {scanPhase >= 2 && (
-                    <span className="li-badge-enter" style={{
-                      position: 'absolute', top: '10px', right: '8px', zIndex: 25,
-                      background: '#FEF2F2', color: '#DC2626', border: '1.5px solid #FCA5A5',
-                      borderRadius: '6px', padding: '4px 9px',
-                      fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-                    }}>
-                      Bannière · 7/20
-                    </span>
-                  )}
-                  {/* Motif subtil sur la bannière */}
-                  <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                  Bannière · 7/20
                 </div>
+              )}
+            </div>
 
-                {/* ── PHOTO + INFO PROFIL ── */}
-                <div style={{ background: '#fff', padding: '0 20px 16px', position: 'relative', borderBottom: '1px solid #E8E8E8' }}>
-                  {/* Photo */}
-                  <div style={{
-                    width: '72px', height: '72px', borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #2979FF 0%, #1a3a7c 100%)',
-                    border: '4px solid #fff',
-                    marginTop: '-36px', marginBottom: '10px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '22px', fontWeight: 800, color: 'rgba(255,255,255,0.9)',
-                    boxShadow: '0 2px 12px rgba(0,0,0,0.2)',
-                    position: 'relative', zIndex: 5,
-                    flexShrink: 0,
-                  }}>S</div>
-
-                  {/* Nom + titre */}
-                  <div style={{ position: 'relative' }}>
-                    <p style={{ fontSize: '16px', fontWeight: 700, color: '#1B1F23', lineHeight: 1.2, marginBottom: '3px' }}>Sophie Martin</p>
-                    <p style={{ fontSize: '12px', color: '#555', lineHeight: 1.4, marginBottom: '6px', maxWidth: '230px' }}>Co-dirigeante PME · Stratégie & Développement commercial</p>
-                    <p style={{ fontSize: '11px', color: '#888', marginBottom: '10px' }}>Paris, Île-de-France · <span style={{ color: '#0A66C2', fontWeight: 600 }}>347 relations</span></p>
-                    {/* Boutons */}
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <span style={{ fontSize: '12px', fontWeight: 700, color: '#0A66C2', border: '1.5px solid #0A66C2', borderRadius: '100px', padding: '4px 14px', cursor: 'default' }}>Se connecter</span>
-                      <span style={{ fontSize: '12px', fontWeight: 600, color: '#444', border: '1.5px solid #C0C0C0', borderRadius: '100px', padding: '4px 14px', cursor: 'default' }}>Message</span>
-                    </div>
-
-                    {/* Badge titre */}
-                    {scanPhase >= 3 && (
-                      <span className="li-badge-enter" style={{
-                        position: 'absolute', top: '4px', right: '8px', zIndex: 25,
-                        background: '#FFFBEB', color: '#D97706', border: '1.5px solid #FCD34D',
-                        borderRadius: '6px', padding: '4px 9px',
-                        fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap',
-                        boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                      }}>
-                        Titre · 11/20
-                      </span>
-                    )}
-                  </div>
+            {/* BLOC PROFIL */}
+            <div style={{ background: '#fff', padding: '0 32px 24px', borderBottom: '1px solid #E8E8E8', position: 'relative' }}>
+              {/* Photo + badges de droite */}
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+                <div style={{
+                  width: '130px', height: '130px', borderRadius: '50%',
+                  background: 'linear-gradient(145deg, #2979FF 0%, #1a3a7c 100%)',
+                  border: '5px solid #fff',
+                  marginTop: '-65px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '42px', fontWeight: 800, color: 'rgba(255,255,255,0.9)',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+                  flexShrink: 0, position: 'relative', zIndex: 5,
+                }}>S</div>
+                <div style={{ display: 'flex', gap: '8px', paddingBottom: '8px' }}>
+                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#0A66C2', border: '1.5px solid #0A66C2', borderRadius: '100px', padding: '7px 20px', cursor: 'default', whiteSpace: 'nowrap' }}>Se connecter</span>
+                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#555', border: '1.5px solid #C0C0C0', borderRadius: '100px', padding: '7px 20px', cursor: 'default' }}>Message</span>
                 </div>
+              </div>
 
-                {/* ── À PROPOS ── */}
-                <div style={{ background: '#fff', padding: '14px 20px', borderBottom: '1px solid #E8E8E8', position: 'relative' }}>
-                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#1B1F23', marginBottom: '6px' }}>À propos</p>
-                  <p style={{ fontSize: '12px', color: '#555', lineHeight: 1.6 }}>
-                    J&apos;accompagne les dirigeants et experts établis à renforcer leur autorité et leur visibilité en ligne, sans jargon.
-                    <span style={{ color: '#0A66C2', fontWeight: 600 }}> voir plus</span>
-                  </p>
-                  {scanPhase >= 4 && (
-                    <span className="li-badge-enter" style={{
-                      position: 'absolute', top: '12px', right: '8px', zIndex: 25,
-                      background: '#FFFBEB', color: '#D97706', border: '1.5px solid #FCD34D',
-                      borderRadius: '6px', padding: '4px 9px',
-                      fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                    }}>
-                      À propos · 9/15
-                    </span>
-                  )}
-                </div>
+              {/* Nom + infos */}
+              <div style={{ marginTop: '12px', position: 'relative' }}>
+                <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1B1F23', lineHeight: 1.2, marginBottom: '4px' }}>Sophie Martin</h2>
+                <p style={{ fontSize: '16px', color: '#444', lineHeight: 1.5, marginBottom: '6px', maxWidth: '500px' }}>
+                  Co-dirigeante PME · Stratégie & Développement commercial B2B
+                </p>
+                <p style={{ fontSize: '13px', color: '#888', marginBottom: '0' }}>
+                  Paris, Île-de-France &nbsp;·&nbsp;
+                  <span style={{ color: '#0A66C2', fontWeight: 600, cursor: 'pointer' }}>347 relations</span>
+                </p>
 
-                {/* ── SÉLECTION DE POSTS ── */}
-                <div style={{ background: '#fff', padding: '14px 20px 16px', borderRadius: '0 0 12px 12px', overflow: 'hidden', position: 'relative' }}>
-                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#1B1F23', marginBottom: '10px' }}>Sélection de posts</p>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    {[
-                      { bg: 'linear-gradient(135deg, #dbeafe, #bfdbfe)', label: '📊 Stratégie' },
-                      { bg: 'linear-gradient(135deg, #dcfce7, #bbf7d0)', label: '💡 Expertise' },
-                      { bg: 'linear-gradient(135deg, #fef9c3, #fde68a)', label: '🎯 ROI' },
-                    ].map((p, i) => (
-                      <div key={i} style={{
-                        flex: 1, height: '52px', borderRadius: '6px',
-                        background: p.bg, border: '1px solid rgba(0,0,0,0.07)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '9px', fontWeight: 600, color: '#555',
-                      }}>{p.label}</div>
-                    ))}
-                  </div>
-                  {scanPhase >= 5 && (
-                    <span className="li-badge-enter" style={{
-                      position: 'absolute', top: '12px', right: '8px', zIndex: 25,
-                      background: '#FEF2F2', color: '#DC2626', border: '1.5px solid #FCA5A5',
-                      borderRadius: '6px', padding: '4px 9px',
-                      fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-                    }}>
-                      Posts · 4/10
-                    </span>
-                  )}
-                </div>
-
-                {/* ── SCORE OVERLAY ── */}
-                {scanPhase >= 6 && (
-                  <div className="li-overlay-enter" style={{
-                    position: 'absolute', inset: 0, zIndex: 28,
-                    background: 'rgba(4,12,22,0.86)',
-                    borderRadius: '0 0 12px 12px',
-                    display: 'flex', flexDirection: 'column',
-                    alignItems: 'center', justifyContent: 'center',
-                    gap: '8px',
+                {/* Badge Titre */}
+                {scanPhase >= 3 && (
+                  <div className="li-badge-enter" style={{
+                    position: 'absolute', top: '0', right: '0', zIndex: 25,
+                    background: '#FFFBEB', color: '#D97706', border: '2px solid #FCD34D',
+                    borderRadius: '8px', padding: '6px 14px',
+                    fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+                    display: 'flex', alignItems: 'center', gap: '8px',
                   }}>
-                    <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: '4px' }}>Score global</p>
-                    <div className="li-score-enter" style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                      <span style={{
-                        fontSize: '80px', fontWeight: 900, lineHeight: 1,
-                        letterSpacing: '-4px', color: '#2979FF',
-                        textShadow: '0 0 40px rgba(41,121,255,0.7)',
-                        fontVariantNumeric: 'tabular-nums',
-                      }}>67</span>
-                      <span style={{ fontSize: '28px', fontWeight: 700, color: 'rgba(255,255,255,0.2)' }}>/100</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#F59E0B', display: 'inline-block' }} />
-                      <span style={{ fontSize: '12px', fontWeight: 600, color: '#F59E0B' }}>Fort potentiel · 3 priorités critiques</span>
-                    </div>
-                    <div style={{ marginTop: '12px', display: 'flex', gap: '6px' }}>
-                      {[
-                        { label: 'Bannière', score: '7/20', color: '#EF4444' },
-                        { label: 'Titre', score: '11/20', color: '#F59E0B' },
-                        { label: 'Posts', score: '4/10', color: '#EF4444' },
-                      ].map((b, i) => (
-                        <div key={i} style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '6px 10px', textAlign: 'center' }}>
-                          <p style={{ fontSize: '9px', color: 'rgba(255,255,255,0.4)', marginBottom: '2px' }}>{b.label}</p>
-                          <p style={{ fontSize: '13px', fontWeight: 800, color: b.color }}>{b.score}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    Titre · 11/20
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Label "Ton profil" en bas */}
-            <div style={{
-              position: 'absolute', bottom: '-18px', left: '50%', transform: 'translateX(-50%)',
-              background: 'rgba(4,12,22,0.85)', border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: '9999px', padding: '4px 14px',
-              fontSize: '11px', color: 'rgba(255,255,255,0.35)', fontWeight: 500,
-              whiteSpace: 'nowrap',
-            }}>
-              ↑ Aperçu de ce que l&apos;IA analyse sur ton profil
+            {/* À PROPOS */}
+            <div style={{ background: '#fff', padding: '20px 32px', borderBottom: '1px solid #E8E8E8', marginTop: '8px', position: 'relative' }}>
+              <p style={{ fontSize: '18px', fontWeight: 700, color: '#1B1F23', marginBottom: '10px' }}>À propos</p>
+              <p style={{ fontSize: '15px', color: '#555', lineHeight: 1.7, maxWidth: '680px' }}>
+                J&apos;accompagne les dirigeants et experts établis depuis plus de 10 ans à renforcer leur autorité et leur visibilité professionnelle en ligne, sans devenir influenceur et sans parler de leur vie perso.
+              </p>
+              <span style={{ fontSize: '14px', color: '#0A66C2', fontWeight: 600, cursor: 'pointer' }}>…voir plus</span>
+              {scanPhase >= 4 && (
+                <div className="li-badge-enter" style={{
+                  position: 'absolute', top: '20px', right: '20px', zIndex: 25,
+                  background: '#FFFBEB', color: '#D97706', border: '2px solid #FCD34D',
+                  borderRadius: '8px', padding: '6px 14px',
+                  fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  À propos · 9/15
+                </div>
+              )}
+            </div>
+
+            {/* ACTIVITÉ — POSTS */}
+            <div style={{ background: '#fff', padding: '20px 32px', marginTop: '8px', position: 'relative' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                <p style={{ fontSize: '18px', fontWeight: 700, color: '#1B1F23' }}>Activité</p>
+                <span style={{ fontSize: '13px', color: '#0A66C2', fontWeight: 600, cursor: 'pointer' }}>Voir tous les posts</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                {[
+                  { bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', icon: '📊', title: 'Stratégie', text: 'Les 3 erreurs qui coûtent de la visibilité aux dirigeants B2B...', likes: 142, comments: 28 },
+                  { bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', icon: '💡', title: 'Expertise', text: 'Ce que j\'ai appris en accompagnant 90 dirigeants sur LinkedIn...', likes: 89, comments: 15 },
+                  { bg: 'linear-gradient(135deg, #FEFCE8, #FEF9C3)', icon: '🎯', title: 'Résultats', text: 'Comment un profil optimisé génère des opportunités sans prospecter...', likes: 203, comments: 41 },
+                ].map((p, i) => (
+                  <div key={i} style={{ background: p.bg, borderRadius: '10px', border: '1px solid rgba(0,0,0,0.06)', padding: '16px', cursor: 'default' }}>
+                    <p style={{ fontSize: '11px', fontWeight: 700, color: '#0A66C2', marginBottom: '6px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{p.icon} {p.title}</p>
+                    <p style={{ fontSize: '12px', color: '#444', lineHeight: 1.5, marginBottom: '10px' }}>{p.text}</p>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <span style={{ fontSize: '11px', color: '#888' }}>👍 {p.likes}</span>
+                      <span style={{ fontSize: '11px', color: '#888' }}>💬 {p.comments}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {scanPhase >= 5 && (
+                <div className="li-badge-enter" style={{
+                  position: 'absolute', top: '20px', right: '20px', zIndex: 25,
+                  background: '#FEF2F2', color: '#DC2626', border: '2px solid #FCA5A5',
+                  borderRadius: '8px', padding: '6px 14px',
+                  fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                  Posts · 4/10
+                </div>
+              )}
             </div>
           </div>
         </div>
+
+        {/* ── SCORE OVERLAY PLEIN ÉCRAN ── */}
+        {scanPhase >= 6 && (
+          <div className="li-overlay-enter" style={{
+            position: 'absolute', inset: 0, zIndex: 40,
+            background: 'rgba(2,8,18,0.9)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            padding: '40px 24px', gap: '0',
+          }}>
+            {/* Score */}
+            <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+              <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '12px' }}>Score LinkedIn · Sophie Martin</p>
+              <div className="li-score-enter" style={{ display: 'flex', alignItems: 'baseline', gap: '6px', justifyContent: 'center', marginBottom: '10px' }}>
+                <span style={{
+                  fontSize: 'clamp(88px, 12vw, 128px)', fontWeight: 900, lineHeight: 1,
+                  letterSpacing: '-6px', color: '#2979FF',
+                  textShadow: '0 0 60px rgba(41,121,255,0.8), 0 0 120px rgba(41,121,255,0.3)',
+                  fontVariantNumeric: 'tabular-nums',
+                }}>67</span>
+                <span style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, color: 'rgba(255,255,255,0.18)' }}>/100</span>
+              </div>
+              {/* Barre score */}
+              <div style={{ width: '220px', height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '100px', overflow: 'hidden', margin: '0 auto 12px' }}>
+                <div style={{ height: '100%', width: '67%', background: 'linear-gradient(90deg, #1565FF, #2979FF, #60A5FA)', borderRadius: '100px', boxShadow: '0 0 20px rgba(41,121,255,0.7)' }} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', marginBottom: '20px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B', display: 'inline-block' }} />
+                <span style={{ fontSize: '14px', fontWeight: 700, color: '#F59E0B' }}>Fort potentiel · 3 priorités critiques identifiées</span>
+              </div>
+              {/* 3 badges */}
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '32px' }}>
+                {[
+                  { label: 'Bannière', score: '7/20', color: '#EF4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)' },
+                  { label: 'Titre', score: '11/20', color: '#F59E0B', bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.3)' },
+                  { label: 'Posts', score: '4/10', color: '#EF4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)' },
+                ].map((b, i) => (
+                  <div key={i} style={{ background: b.bg, border: `1px solid ${b.border}`, borderRadius: '10px', padding: '8px 16px', textAlign: 'center' }}>
+                    <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginBottom: '3px' }}>{b.label}</p>
+                    <p style={{ fontSize: '16px', fontWeight: 800, color: b.color }}>{b.score}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Separator */}
+            <div style={{ width: '480px', maxWidth: '90vw', height: '1px', background: 'rgba(255,255,255,0.08)', marginBottom: '28px' }} />
+
+            {/* Headline + CTA */}
+            <div style={{ textAlign: 'center' }}>
+              <h1 style={{
+                fontSize: 'clamp(28px, 4vw, 46px)',
+                fontWeight: 900, lineHeight: 1.1, letterSpacing: '-1.5px',
+                color: '#fff', marginBottom: '12px',
+              }}>
+                Ton expertise mérite d&apos;être vue.
+              </h1>
+              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '16px', lineHeight: 1.7, marginBottom: '28px', maxWidth: '420px', margin: '0 auto 28px' }}>
+                Découvre ton score sur 8 critères et tes 3 priorités concrètes — en 5 minutes, gratuitement.
+              </p>
+              <a href="#formulaire" className="hero-cta" style={{ fontSize: '17px', padding: '16px 36px' }}>
+                Analyser mon profil →
+              </a>
+              {/* Trust */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
+                {[{ icon: '🔒', txt: 'Aucun accès' }, { icon: '⚡', txt: '5 min' }, { icon: '🎁', txt: 'Gratuit' }].map((r, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <span style={{ fontSize: '12px' }}>{r.icon}</span>
+                    <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)', fontWeight: 500 }}>{r.txt}</span>
+                  </div>
+                ))}
+              </div>
+              {/* Social proof */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginTop: '16px' }}>
+                <div style={{ display: 'flex' }}>
+                  {TEMOIGNAGES.map((t, i) => (
+                    <img key={i} src={t.photo} alt={t.nom} width={24} height={24}
+                      style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(255,255,255,0.1)', marginLeft: i > 0 ? '-7px' : '0', display: 'block' }} />
+                  ))}
+                </div>
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>
+                  <span style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>+700 experts B2B</span> ont déjà leur score
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ═══════════════════════════════
