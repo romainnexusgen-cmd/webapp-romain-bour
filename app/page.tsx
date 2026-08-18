@@ -455,180 +455,285 @@ export default function HomePage() {
 
 
       {/* ═══════════════════════════════════════
-          HERO — LinkedIn plein écran
+          HERO — Browser macOS + LinkedIn desktop réaliste
       ═══════════════════════════════════════ */}
       <section style={{
         height: 'calc(100vh - 60px)',
         position: 'relative',
         overflow: 'hidden',
-        background: '#f3f2ef',
-        fontFamily: 'Inter, -apple-system, sans-serif',
+        display: 'flex', flexDirection: 'column',
+        background: '#1a1a1a',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}>
 
-        {/* ── Bande scan IA — large et lumineuse ── */}
+        {/* ── Bande scan IA — traverse TOUTE la section ── */}
         {scanPhase >= 1 && scanPhase < 6 && (
-          <div className="li-scan-band" style={{ zIndex: 30 }} />
+          <div className="li-scan-band" style={{ zIndex: 50 }} />
         )}
 
-        {/* ── Status badge flottant en haut ── */}
+        {/* ── Chrome macOS — fenêtre navigateur ── */}
         <div style={{
-          position: 'absolute', top: '20px', left: '50%', transform: 'translateX(-50%)',
-          display: 'flex', alignItems: 'center', gap: '8px',
-          background: 'rgba(4,12,22,0.88)', border: '1px solid rgba(41,121,255,0.35)',
-          borderRadius: '9999px', padding: '6px 16px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-          whiteSpace: 'nowrap', zIndex: 35,
-          backdropFilter: 'blur(12px)',
+          height: '40px', flexShrink: 0,
+          background: 'linear-gradient(180deg, #ececec 0%, #d8d8d8 100%)',
+          borderBottom: '1px solid #acacac',
+          display: 'flex', alignItems: 'center', padding: '0 14px', gap: '0',
+          position: 'relative', zIndex: 10,
         }}>
-          <span style={{
-            width: '7px', height: '7px', borderRadius: '50%',
-            background: scanPhase >= 6 ? '#22C55E' : '#2979FF',
-            display: 'inline-block',
-            boxShadow: scanPhase >= 6 ? '0 0 8px rgba(34,197,94,0.8)' : '0 0 8px rgba(41,121,255,0.8)',
-            animation: 'blink 1.5s infinite',
-          }} />
-          <span style={{ fontSize: '12px', fontWeight: 600, color: 'rgba(255,255,255,0.8)', letterSpacing: '0.02em' }}>
-            {scanPhase === 0 ? 'Profil LinkedIn chargé — analyse IA en attente' :
-             scanPhase < 6 ? 'Analyse IA en cours…' :
-             '✓ Analyse terminée — score calculé'}
-          </span>
+          {/* Traffic lights */}
+          <div style={{ display: 'flex', gap: '7px', marginRight: '20px' }}>
+            {(['#FF5F57','#FEBC2E','#28C840'] as const).map((c, i) => (
+              <div key={i} style={{ width: '12px', height: '12px', borderRadius: '50%', background: c, flexShrink: 0, boxShadow: `0 0.5px 1px rgba(0,0,0,0.3)` }} />
+            ))}
+          </div>
+          {/* Nav arrows */}
+          <div style={{ display: 'flex', gap: '1px', marginRight: '12px', color: '#aaa', fontSize: '18px', lineHeight: 1, userSelect: 'none' }}>
+            <span style={{ fontWeight: 300 }}>‹</span>
+            <span style={{ fontWeight: 300, opacity: 0.4 }}>›</span>
+          </div>
+          {/* URL bar centrée */}
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+            <div style={{
+              width: '420px', height: '25px',
+              background: '#fff', borderRadius: '5px',
+              border: '1px solid rgba(0,0,0,0.2)',
+              display: 'flex', alignItems: 'center', gap: '6px', padding: '0 10px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+            }}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22C55E" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span style={{ fontSize: '11.5px', color: '#1a1a1a', fontWeight: 400, letterSpacing: '0.01em' }}>
+                linkedin.com/<span style={{ color: '#555' }}>in/sophie-martin-67b2a4/</span>
+              </span>
+            </div>
+          </div>
+          {/* Badge IA status */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '5px',
+            background: scanPhase >= 6 ? 'rgba(34,197,94,0.1)' : 'rgba(41,121,255,0.1)',
+            border: `1px solid ${scanPhase >= 6 ? 'rgba(34,197,94,0.35)' : 'rgba(41,121,255,0.3)'}`,
+            borderRadius: '100px', padding: '3px 10px', marginLeft: '12px',
+          }}>
+            <span style={{
+              width: '6px', height: '6px', borderRadius: '50%',
+              background: scanPhase >= 6 ? '#22C55E' : '#2979FF',
+              animation: 'blink 1.5s infinite', flexShrink: 0,
+            }} />
+            <span style={{ fontSize: '10px', fontWeight: 600, color: scanPhase >= 6 ? '#15803D' : '#1D4ED8', whiteSpace: 'nowrap' }}>
+              {scanPhase === 0 ? 'Prêt à analyser' : scanPhase < 6 ? 'Analyse en cours…' : '✓ Terminé'}
+            </span>
+          </div>
         </div>
 
-        {/* ── PROFIL LINKEDIN PLEINE PAGE ── */}
-        <div style={{ height: '100%', overflowY: 'auto', scrollbarWidth: 'none' }}>
-          <div style={{ maxWidth: '860px', margin: '0 auto', paddingTop: '0' }}>
+        {/* ── LinkedIn full-width ── */}
+        <div style={{ flex: 1, overflow: 'hidden', background: '#f3f2ef', display: 'flex', flexDirection: 'column' }}>
 
-            {/* BANNIÈRE */}
+          {/* Nav LinkedIn */}
+          <div style={{
+            background: '#fff', height: '52px', flexShrink: 0,
+            display: 'flex', alignItems: 'center', padding: '0 20px', gap: '4px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,0.08)',
+          }}>
+            {/* Logo LinkedIn SVG */}
+            <svg width="34" height="34" viewBox="0 0 34 34" style={{ flexShrink: 0, marginRight: '4px' }}>
+              <rect width="34" height="34" rx="4" fill="#0A66C2"/>
+              <path fill="#fff" d="M8 13h3.5v11H8V13zm1.75-5.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM14 13h3.4v1.5h.05A3.7 3.7 0 0 1 20.8 13c3.6 0 4.2 2.4 4.2 5.5V24h-3.5v-4.8c0-1.15-.02-2.6-1.6-2.6s-1.85 1.25-1.85 2.5V24H14V13z"/>
+            </svg>
+            {/* Barre de recherche */}
+            <div style={{ background: '#EEF3F8', borderRadius: '4px', height: '34px', width: '220px', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 12px', marginRight: '8px' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <span style={{ fontSize: '13px', color: '#999' }}>Recherche</span>
+            </div>
+            <div style={{ flex: 1 }} />
+            {/* Nav items */}
+            {[
+              { icon: '⊞', label: 'Accueil' },
+              { icon: '◎', label: 'Réseau' },
+              { icon: '◈', label: 'Emplois' },
+              { icon: '✉', label: 'Messages' },
+              { icon: '🔔', label: 'Notifs' },
+            ].map((item, i) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 10px', opacity: 0.5, cursor: 'default', minWidth: '52px' }}>
+                <span style={{ fontSize: '18px', color: '#666', lineHeight: 1.1 }}>{item.icon}</span>
+                <span style={{ fontSize: '10px', color: '#888', marginTop: '2px' }}>{item.label}</span>
+              </div>
+            ))}
+            <div style={{ width: '1px', height: '28px', background: 'rgba(0,0,0,0.12)', margin: '0 4px' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 10px', cursor: 'default' }}>
+              <div style={{ width: '26px', height: '26px', borderRadius: '50%', background: 'linear-gradient(145deg, #2979FF, #1a3a7c)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 800, color: '#fff' }}>S</div>
+              <span style={{ fontSize: '10px', color: '#888', marginTop: '1px' }}>Moi ▾</span>
+            </div>
+          </div>
+
+          {/* Contenu scrollable */}
+          <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none' }}>
+
+            {/* BANNIÈRE pleine largeur */}
             <div style={{
-              position: 'relative',
-              height: '220px',
+              position: 'relative', height: '200px', width: '100%',
               background: 'linear-gradient(135deg, #0f2a52 0%, #1a3a6b 30%, #1e4d8c 60%, #2563a8 85%, #3b82c4 100%)',
-              overflow: 'hidden',
+              overflow: 'visible',
             }}>
-              {/* Pattern subtil sur la bannière */}
-              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(15,42,82,0.4) 100%)' }} />
-              {/* Badge bannière */}
+              <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.28) 100%)' }} />
               {scanPhase >= 2 && (
                 <div className="li-badge-enter" style={{
-                  position: 'absolute', top: '16px', right: '20px', zIndex: 25,
+                  position: 'absolute', top: '14px', right: '28px', zIndex: 25,
                   background: '#FEF2F2', color: '#DC2626', border: '2px solid #FCA5A5',
-                  borderRadius: '8px', padding: '6px 14px',
+                  borderRadius: '8px', padding: '5px 13px',
                   fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                  display: 'flex', alignItems: 'center', gap: '8px',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
+                  display: 'flex', alignItems: 'center', gap: '7px',
                 }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                   Bannière · 7/20
                 </div>
               )}
             </div>
 
-            {/* BLOC PROFIL */}
-            <div style={{ background: '#fff', padding: '0 32px 24px', borderBottom: '1px solid #E8E8E8', position: 'relative' }}>
-              {/* Photo + badges de droite */}
-              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-                <div style={{
-                  width: '130px', height: '130px', borderRadius: '50%',
-                  background: 'linear-gradient(145deg, #2979FF 0%, #1a3a7c 100%)',
-                  border: '5px solid #fff',
-                  marginTop: '-65px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '42px', fontWeight: 800, color: 'rgba(255,255,255,0.9)',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                  flexShrink: 0, position: 'relative', zIndex: 5,
-                }}>S</div>
-                <div style={{ display: 'flex', gap: '8px', paddingBottom: '8px' }}>
-                  <span style={{ fontSize: '14px', fontWeight: 700, color: '#0A66C2', border: '1.5px solid #0A66C2', borderRadius: '100px', padding: '7px 20px', cursor: 'default', whiteSpace: 'nowrap' }}>Se connecter</span>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: '#555', border: '1.5px solid #C0C0C0', borderRadius: '100px', padding: '7px 20px', cursor: 'default' }}>Message</span>
-                </div>
-              </div>
+            {/* Layout 2 colonnes */}
+            <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '0 16px 40px', display: 'grid', gridTemplateColumns: '1fr 300px', gap: '16px' }}>
 
-              {/* Nom + infos */}
-              <div style={{ marginTop: '12px', position: 'relative' }}>
-                <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1B1F23', lineHeight: 1.2, marginBottom: '4px' }}>Sophie Martin</h2>
-                <p style={{ fontSize: '16px', color: '#444', lineHeight: 1.5, marginBottom: '6px', maxWidth: '500px' }}>
-                  Co-dirigeante PME · Stratégie & Développement commercial B2B
-                </p>
-                <p style={{ fontSize: '13px', color: '#888', marginBottom: '0' }}>
-                  Paris, Île-de-France &nbsp;·&nbsp;
-                  <span style={{ color: '#0A66C2', fontWeight: 600, cursor: 'pointer' }}>347 relations</span>
-                </p>
-
-                {/* Badge Titre */}
-                {scanPhase >= 3 && (
-                  <div className="li-badge-enter" style={{
-                    position: 'absolute', top: '0', right: '0', zIndex: 25,
-                    background: '#FFFBEB', color: '#D97706', border: '2px solid #FCD34D',
-                    borderRadius: '8px', padding: '6px 14px',
-                    fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                  }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    Titre · 11/20
+              {/* ─── Colonne principale ─── */}
+              <div>
+                {/* Card profil */}
+                <div style={{ background: '#fff', borderRadius: '0 0 10px 10px', marginBottom: '12px', overflow: 'visible', position: 'relative', paddingBottom: '20px', boxShadow: '0 0 0 1px rgba(0,0,0,0.06)' }}>
+                  <div style={{ padding: '0 24px' }}>
+                    <div style={{
+                      width: '120px', height: '120px', borderRadius: '50%',
+                      background: 'linear-gradient(145deg, #2979FF 0%, #1a3a7c 100%)',
+                      border: '4px solid #fff', marginTop: '-60px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '36px', fontWeight: 800, color: 'rgba(255,255,255,0.9)',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.2)', position: 'relative', zIndex: 5,
+                    }}>S</div>
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* À PROPOS */}
-            <div style={{ background: '#fff', padding: '20px 32px', borderBottom: '1px solid #E8E8E8', marginTop: '8px', position: 'relative' }}>
-              <p style={{ fontSize: '18px', fontWeight: 700, color: '#1B1F23', marginBottom: '10px' }}>À propos</p>
-              <p style={{ fontSize: '15px', color: '#555', lineHeight: 1.7, maxWidth: '680px' }}>
-                J&apos;accompagne les dirigeants et experts établis depuis plus de 10 ans à renforcer leur autorité et leur visibilité professionnelle en ligne, sans devenir influenceur et sans parler de leur vie perso.
-              </p>
-              <span style={{ fontSize: '14px', color: '#0A66C2', fontWeight: 600, cursor: 'pointer' }}>…voir plus</span>
-              {scanPhase >= 4 && (
-                <div className="li-badge-enter" style={{
-                  position: 'absolute', top: '20px', right: '20px', zIndex: 25,
-                  background: '#FFFBEB', color: '#D97706', border: '2px solid #FCD34D',
-                  borderRadius: '8px', padding: '6px 14px',
-                  fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  À propos · 9/15
+                  <div style={{ position: 'absolute', right: '20px', top: '12px', display: 'flex', gap: '8px' }}>
+                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#0A66C2', border: '1.5px solid #0A66C2', borderRadius: '100px', padding: '6px 18px', cursor: 'default', whiteSpace: 'nowrap' }}>Se connecter</span>
+                    <span style={{ fontSize: '14px', fontWeight: 600, color: '#555', border: '1.5px solid #C0C0C0', borderRadius: '100px', padding: '6px 18px', cursor: 'default' }}>Message</span>
+                  </div>
+                  <div style={{ padding: '14px 24px 0', position: 'relative' }}>
+                    <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#1B1F23', lineHeight: 1.2, marginBottom: '3px' }}>Sophie Martin</h2>
+                    <p style={{ fontSize: '15px', color: '#444', lineHeight: 1.5, marginBottom: '4px', maxWidth: '460px' }}>
+                      Co-dirigeante PME · Stratégie &amp; Développement commercial B2B
+                    </p>
+                    <p style={{ fontSize: '12px', color: '#888' }}>
+                      Paris, Île-de-France &nbsp;·&nbsp;
+                      <span style={{ color: '#0A66C2', fontWeight: 600 }}>347 relations</span>
+                    </p>
+                    {scanPhase >= 3 && (
+                      <div className="li-badge-enter" style={{
+                        position: 'absolute', bottom: '0', right: '0', zIndex: 25,
+                        background: '#FFFBEB', color: '#D97706', border: '2px solid #FCD34D',
+                        borderRadius: '8px', padding: '5px 12px',
+                        fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                        display: 'flex', alignItems: 'center', gap: '6px',
+                      }}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="#D97706"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        Titre · 11/20
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
 
-            {/* ACTIVITÉ — POSTS */}
-            <div style={{ background: '#fff', padding: '20px 32px', marginTop: '8px', position: 'relative' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <p style={{ fontSize: '18px', fontWeight: 700, color: '#1B1F23' }}>Activité</p>
-                <span style={{ fontSize: '13px', color: '#0A66C2', fontWeight: 600, cursor: 'pointer' }}>Voir tous les posts</span>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
-                {[
-                  { bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', icon: '📊', title: 'Stratégie', text: 'Les 3 erreurs qui coûtent de la visibilité aux dirigeants B2B...', likes: 142, comments: 28 },
-                  { bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', icon: '💡', title: 'Expertise', text: 'Ce que j\'ai appris en accompagnant 90 dirigeants sur LinkedIn...', likes: 89, comments: 15 },
-                  { bg: 'linear-gradient(135deg, #FEFCE8, #FEF9C3)', icon: '🎯', title: 'Résultats', text: 'Comment un profil optimisé génère des opportunités sans prospecter...', likes: 203, comments: 41 },
-                ].map((p, i) => (
-                  <div key={i} style={{ background: p.bg, borderRadius: '10px', border: '1px solid rgba(0,0,0,0.06)', padding: '16px', cursor: 'default' }}>
-                    <p style={{ fontSize: '11px', fontWeight: 700, color: '#0A66C2', marginBottom: '6px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{p.icon} {p.title}</p>
-                    <p style={{ fontSize: '12px', color: '#444', lineHeight: 1.5, marginBottom: '10px' }}>{p.text}</p>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      <span style={{ fontSize: '11px', color: '#888' }}>👍 {p.likes}</span>
-                      <span style={{ fontSize: '11px', color: '#888' }}>💬 {p.comments}</span>
+                {/* Card À propos */}
+                <div style={{ background: '#fff', borderRadius: '10px', padding: '20px 24px', marginBottom: '12px', position: 'relative', boxShadow: '0 0 0 1px rgba(0,0,0,0.06)' }}>
+                  <p style={{ fontSize: '16px', fontWeight: 700, color: '#1B1F23', marginBottom: '10px' }}>À propos</p>
+                  <p style={{ fontSize: '14px', color: '#555', lineHeight: 1.75, marginBottom: '6px' }}>
+                    J&apos;accompagne les dirigeants et experts établis depuis plus de 10 ans à renforcer leur autorité et leur visibilité professionnelle en ligne, sans devenir influenceur et sans parler de leur vie perso.
+                  </p>
+                  <span style={{ fontSize: '13px', color: '#0A66C2', fontWeight: 600, cursor: 'pointer' }}>…voir plus</span>
+                  {scanPhase >= 4 && (
+                    <div className="li-badge-enter" style={{
+                      position: 'absolute', top: '16px', right: '16px', zIndex: 25,
+                      background: '#FFFBEB', color: '#D97706', border: '2px solid #FCD34D',
+                      borderRadius: '8px', padding: '5px 12px',
+                      fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                    }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="#D97706"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      À propos · 9/15
                     </div>
-                  </div>
-                ))}
-              </div>
-              {scanPhase >= 5 && (
-                <div className="li-badge-enter" style={{
-                  position: 'absolute', top: '20px', right: '20px', zIndex: 25,
-                  background: '#FEF2F2', color: '#DC2626', border: '2px solid #FCA5A5',
-                  borderRadius: '8px', padding: '6px 14px',
-                  fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                }}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                  Posts · 4/10
+                  )}
                 </div>
-              )}
+
+                {/* Card Activité */}
+                <div style={{ background: '#fff', borderRadius: '10px', padding: '20px 24px', position: 'relative', boxShadow: '0 0 0 1px rgba(0,0,0,0.06)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                    <p style={{ fontSize: '16px', fontWeight: 700, color: '#1B1F23' }}>Activité · <span style={{ fontWeight: 500, color: '#888' }}>847 abonnés</span></p>
+                    <span style={{ fontSize: '12px', color: '#0A66C2', fontWeight: 600, cursor: 'pointer' }}>Tous les posts</span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+                    {[
+                      { bg: 'linear-gradient(135deg, #EFF6FF, #DBEAFE)', icon: '📊', title: 'Stratégie', text: 'Les 3 erreurs qui coûtent de la visibilité aux dirigeants B2B...', likes: 142, comments: 28 },
+                      { bg: 'linear-gradient(135deg, #F0FDF4, #DCFCE7)', icon: '💡', title: 'Expertise', text: 'Ce que j\'ai appris en accompagnant 90 dirigeants sur LinkedIn...', likes: 89, comments: 15 },
+                    ].map((p, i) => (
+                      <div key={i} style={{ background: p.bg, borderRadius: '8px', border: '1px solid rgba(0,0,0,0.06)', padding: '14px' }}>
+                        <p style={{ fontSize: '10px', fontWeight: 700, color: '#0A66C2', marginBottom: '5px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>{p.icon} {p.title}</p>
+                        <p style={{ fontSize: '12px', color: '#444', lineHeight: 1.5, marginBottom: '8px' }}>{p.text}</p>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <span style={{ fontSize: '11px', color: '#888' }}>👍 {p.likes}</span>
+                          <span style={{ fontSize: '11px', color: '#888' }}>💬 {p.comments}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {scanPhase >= 5 && (
+                    <div className="li-badge-enter" style={{
+                      position: 'absolute', top: '16px', right: '16px', zIndex: 25,
+                      background: '#FEF2F2', color: '#DC2626', border: '2px solid #FCA5A5',
+                      borderRadius: '8px', padding: '5px 12px',
+                      fontSize: '13px', fontWeight: 700, whiteSpace: 'nowrap',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                    }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                      Posts · 4/10
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* ─── Sidebar droite ─── */}
+              <div>
+                {/* Stats profil */}
+                <div style={{ background: '#fff', borderRadius: '10px', padding: '16px 20px', marginBottom: '12px', boxShadow: '0 0 0 1px rgba(0,0,0,0.06)' }}>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#1B1F23', marginBottom: '14px' }}>Tableau de bord</p>
+                  {[
+                    { label: 'Vues du profil', value: '127', note: '+12% cette semaine', noteColor: '#15803D' },
+                    { label: 'Apparitions dans les recherches', value: '843', note: '7 derniers jours', noteColor: '#6B7280' },
+                    { label: 'Interactions sur les posts', value: '234', note: '30 derniers jours', noteColor: '#6B7280' },
+                  ].map((s, i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: i < 2 ? '1px solid #f0f0f0' : 'none' }}>
+                      <div>
+                        <p style={{ fontSize: '12px', color: '#444', fontWeight: 500 }}>{s.label}</p>
+                        <p style={{ fontSize: '10px', color: s.noteColor, marginTop: '1px' }}>{s.note}</p>
+                      </div>
+                      <span style={{ fontSize: '20px', fontWeight: 700, color: '#1B1F23' }}>{s.value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Profils similaires */}
+                <div style={{ background: '#fff', borderRadius: '10px', padding: '16px 20px', boxShadow: '0 0 0 1px rgba(0,0,0,0.06)' }}>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: '#1B1F23', marginBottom: '14px' }}>Profils similaires</p>
+                  {[
+                    { initial: 'M', name: 'Marc Dupont', title: 'DG · PME Industrie', color: '#7C3AED' },
+                    { initial: 'C', name: 'Claire Vidal', title: 'Experte RH B2B', color: '#059669' },
+                    { initial: 'L', name: 'Laurent Morin', title: 'Directeur Commercial', color: '#D97706' },
+                  ].map((p, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < 2 ? '14px' : '0' }}>
+                      <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 800, color: '#fff', flexShrink: 0 }}>{p.initial}</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: '13px', fontWeight: 600, color: '#1B1F23', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</p>
+                        <p style={{ fontSize: '11px', color: '#888', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.title}</p>
+                      </div>
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: '#0A66C2', border: '1.5px solid #0A66C2', borderRadius: '100px', padding: '3px 12px', flexShrink: 0, cursor: 'default' }}>+ Suivre</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
