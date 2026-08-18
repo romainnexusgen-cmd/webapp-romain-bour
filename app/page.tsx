@@ -75,7 +75,7 @@ export default function HomePage() {
     setError('')
     setLoading(true)
     try {
-      await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, profileLink }) })
+      await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, lien: profileLink }) })
       setSubmitted(true)
     } catch {
       setError('Une erreur est survenue. Réessaie dans quelques secondes.')
@@ -269,6 +269,7 @@ export default function HomePage() {
         @keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0.2} }
         @keyframes bar-in { from{width:0} }
         @keyframes grain  { 0%,100%{transform:translate(0,0)} 10%{transform:translate(-2%,-3%)} 30%{transform:translate(3%,2%)} 50%{transform:translate(-1%,4%)} 70%{transform:translate(2%,-2%)} 90%{transform:translate(-3%,1%)} }
+        @keyframes spin   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
         @keyframes m1 {
           0%   { transform: translate(0%,   0%)   scale(1);   }
@@ -668,82 +669,88 @@ export default function HomePage() {
           FORMULAIRE
       ═══════════════════════════════ */}
       <section id="formulaire" className="section-padding" style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div className="form-inner reveal" style={{ display: 'flex', gap: '80px', alignItems: 'flex-start' }}>
-            <div style={{ flex: 1 }}>
-              <p style={{ color: '#2979FF', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>Évalue ton profil</p>
-              <h2 style={{ fontSize: '34px', fontWeight: 900, color: '#fff', letterSpacing: '-1px', lineHeight: 1.12, marginBottom: '14px' }}>Ton profil reflète-t-il<br />ton niveau d'expertise ?</h2>
-              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '15px', lineHeight: 1.8, marginBottom: '40px' }}>En 5 minutes, tu reçois un diagnostic complet sur les 8 piliers de ta visibilité — avec des recommandations concrètes, pas des généralités.</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {['Ton positionnement est-il lisible pour un inconnu ?', 'Ta crédibilité transparaît-elle dès les premières secondes ?', 'Ton profil génère-t-il des opportunités entrantes ?', 'Rapport complet par email · Gratuit · En 5 minutes.'].map((txt, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '1.5px solid rgba(41,121,255,0.35)', background: 'rgba(41,121,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
-                      <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="#2979FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </div>
-                    <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '14px', lineHeight: 1.65 }}>{txt}</p>
-                  </div>
-                ))}
-              </div>
+        <div style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center' }}>
+
+          {/* Header centré */}
+          <div className="reveal" style={{ marginBottom: '48px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '5px 14px', background: 'rgba(41,121,255,0.08)', border: '1px solid rgba(41,121,255,0.18)', borderRadius: '9999px', marginBottom: '20px' }}>
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22C55E', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px', fontWeight: 600 }}>Gratuit · Résultat en 5 minutes</span>
             </div>
+            <h2 style={{ fontSize: '38px', fontWeight: 900, color: '#fff', letterSpacing: '-1.2px', lineHeight: 1.1, marginBottom: '14px' }}>
+              Où en es-tu<br /><span style={{ color: 'rgba(255,255,255,0.25)' }}>vraiment ?</span>
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '15px', lineHeight: 1.75 }}>
+              Colle ton lien LinkedIn. Reçois ton score et tes 3 priorités directement par email.
+            </p>
+          </div>
 
-            <div className="form-box" style={{ flexShrink: 0, width: '400px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {/* Carte formulaire */}
+          <div className="reveal d1" style={{
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.10)',
+            borderRadius: '24px',
+            padding: '40px 36px',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04) inset',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {/* Lueur bleue en haut de la carte */}
+            <div aria-hidden style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '60%', height: '1px', background: 'linear-gradient(90deg, transparent, #2979FF, transparent)' }} />
 
-              {/* Tutoriel animé — où trouver son URL */}
-              <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', overflow: 'hidden' }}>
-                <p style={{ padding: '12px 16px 10px', color: 'rgba(255,255,255,0.35)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  Où trouver ton lien LinkedIn ?
-                </p>
-                {/* Fausse barre de navigateur */}
-                <div style={{ padding: '14px 16px 16px' }}>
-                  <div style={{ background: '#0A1520', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)' }}>
-                    {/* Chrome bar */}
-                    <div style={{ background: '#111C2A', padding: '8px 10px', display: 'flex', alignItems: 'center', gap: '6px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                      <div style={{ display: 'flex', gap: '4px' }}>
-                        {['#FF5F57','#FFBD2E','#28C840'].map(c => <div key={c} style={{ width: 8, height: 8, borderRadius: '50%', background: c, opacity: 0.7 }} />)}
-                      </div>
-                      <div style={{ flex: 1, background: 'rgba(255,255,255,0.06)', borderRadius: '5px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/></svg>
-                        <UrlTypingAnimation />
-                      </div>
-                    </div>
-                    {/* Fausse page LinkedIn */}
-                    <div style={{ padding: '14px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #2979FF, #60A5FA)', flexShrink: 0 }} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ height: 8, background: 'rgba(255,255,255,0.15)', borderRadius: 4, width: '60%', marginBottom: 6 }} />
-                        <div style={{ height: 6, background: 'rgba(255,255,255,0.07)', borderRadius: 4, width: '80%' }} />
-                      </div>
-                    </div>
-                    <div style={{ padding: '0 14px 14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div style={{ background: 'rgba(41,121,255,0.15)', border: '1px solid rgba(41,121,255,0.3)', borderRadius: '6px', padding: '6px 12px' }}>
-                        <p style={{ fontSize: '10px', fontWeight: 700, color: '#60A5FA' }}>① Clique sur "Moi" → "Voir le profil"</p>
-                      </div>
-                    </div>
-                    <div style={{ margin: '0 14px 14px', padding: '8px 12px', background: 'rgba(255,255,255,0.04)', borderRadius: '8px', border: '1px dashed rgba(41,121,255,0.4)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2979FF" strokeWidth="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                      <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', fontFamily: 'monospace' }}>linkedin.com/in/<span style={{ color: '#60A5FA', fontWeight: 700 }}>ton-nom</span></p>
-                      <span style={{ marginLeft: 'auto', fontSize: '9px', color: '#2979FF', fontWeight: 700 }}>② Copie l&apos;URL ici</span>
-                    </div>
-                  </div>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+              {/* Champ LinkedIn */}
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                 </div>
+                <input className="field" type="url" placeholder="linkedin.com/in/ton-profil" value={profileLink} onChange={e => setProfileLink(e.target.value)} style={{ paddingLeft: '40px' }} />
               </div>
 
-              {/* Formulaire */}
-              <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '16px', padding: '28px' }}>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '14px' }}>Colle ton lien LinkedIn</p>
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <input className="field" type="url" placeholder="https://linkedin.com/in/ton-profil" value={profileLink} onChange={e => setProfileLink(e.target.value)} />
-                  <input className="field" type="email" placeholder="ton@email.com" value={email} onChange={e => setEmail(e.target.value)} />
-                  <label style={{ display: 'flex', gap: '9px', alignItems: 'flex-start', cursor: 'pointer', marginTop: '2px' }}>
-                    <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: '3px', accentColor: '#2979FF', flexShrink: 0, cursor: 'pointer' }} />
-                    <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', lineHeight: 1.6 }}>J&apos;accepte de recevoir mon analyse et d&apos;autres contenus par email.</span>
-                  </label>
-                  {error && <p style={{ color: '#EF4444', fontSize: '12px', fontWeight: 500 }}>{error}</p>}
-                  <button type="submit" disabled={loading} className="submit" style={{ marginTop: '4px' }}>
-                    {loading ? 'Analyse en cours…' : 'Évaluer mon profil →'}
-                  </button>
-                </form>
+              {/* Champ email */}
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </div>
+                <input className="field" type="email" placeholder="ton@email.com" value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: '40px' }} />
               </div>
+
+              {/* Consent */}
+              <label style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', textAlign: 'left', marginTop: '4px' }}>
+                <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: '3px', accentColor: '#2979FF', flexShrink: 0, cursor: 'pointer' }} />
+                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', lineHeight: 1.65 }}>J&apos;accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.</span>
+              </label>
+
+              {error && (
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 12px' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <p style={{ color: '#EF4444', fontSize: '12px', fontWeight: 500 }}>{error}</p>
+                </div>
+              )}
+
+              <button type="submit" disabled={loading} className="submit" style={{ marginTop: '8px', fontSize: '16px', padding: '15px', position: 'relative', overflow: 'hidden' }}>
+                {loading ? (
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                    Analyse en cours…
+                  </span>
+                ) : 'Analyser mon profil LinkedIn →'}
+              </button>
+            </form>
+
+            {/* Réassurance */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+              {[
+                { icon: '🔒', txt: 'Aucun accès à ton compte' },
+                { icon: '⚡', txt: 'Résultat en 5 min' },
+                { icon: '🎁', txt: '100% gratuit' },
+              ].map((r, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <span style={{ fontSize: '11px' }}>{r.icon}</span>
+                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontWeight: 500 }}>{r.txt}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
