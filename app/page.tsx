@@ -582,6 +582,75 @@ export default function HomePage() {
 
 
       {/* ═══════════════════════════════
+          POURQUOI C'EST IMPORTANT
+      ═══════════════════════════════ */}
+      <section style={{ background: '#0f1117', padding: '72px 56px', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+
+          <div className="reveal" style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <h2 style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.15, color: '#fff', maxWidth: '640px', margin: '0 auto' }}>
+              Votre profil LinkedIn est votre{' '}
+              <span style={{ color: '#2979FF' }}>première impression en ligne.</span>
+            </h2>
+            <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.45)', marginTop: '16px', maxWidth: '520px', margin: '16px auto 0', lineHeight: 1.7 }}>
+              Quand vous rencontrez quelqu'un, la première chose qu'il fait, c'est vous chercher sur Google. Votre profil LinkedIn arrive en premier résultat. Toujours.
+            </p>
+          </div>
+
+          {/* 3 stat cards */}
+          <div className="reveal d1" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', marginBottom: '1px' }}>
+            {[
+              {
+                stat: '#1',
+                title: 'Résultat Google',
+                label: 'Avant chaque rendez-vous, chaque mise en relation, chaque opportunité — les gens cherchent votre nom. Votre LinkedIn arrive en premier. Toujours.',
+                source: 'Fait établi',
+              },
+              {
+                stat: '+30%',
+                title: 'De vues en plus',
+                label: 'Un profil complet et optimisé génère 30 % de visites supplémentaires chaque semaine vs un profil négligé — sans rien changer d\'autre.',
+                source: 'LinkedIn, 2026',
+              },
+              {
+                stat: '89%',
+                title: 'Des décideurs y sont',
+                label: 'Cadres, dirigeants, acheteurs, recruteurs, partenaires potentiels — près de 9 professionnels à responsabilités sur 10 sont actifs sur LinkedIn.',
+                source: 'LinkedIn, 2026',
+              },
+            ].map((item, i) => (
+              <div key={i} style={{ background: '#161b27', padding: '32px 28px' }}>
+                <p style={{ fontSize: '44px', fontWeight: 900, color: '#fff', letterSpacing: '-2px', lineHeight: 1, marginBottom: '6px' }}>{item.stat}</p>
+                <p style={{ fontSize: '11px', fontWeight: 700, color: '#2979FF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>{item.title}</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.50)', lineHeight: 1.7, marginBottom: '12px' }}>{item.label}</p>
+                <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.18)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{item.source}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Audience card — who's on LinkedIn */}
+          <div className="reveal d2" style={{ background: '#161b27', borderRadius: '16px', padding: '32px 36px', marginTop: '1px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '40px', flexWrap: 'wrap' }}>
+              <div style={{ flexShrink: 0 }}>
+                <p style={{ fontSize: '44px', fontWeight: 900, color: '#fff', letterSpacing: '-2px', lineHeight: 1, marginBottom: '4px' }}>38M</p>
+                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>membres en France</p>
+                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>80 % de la population active</p>
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '14px', fontWeight: 500 }}>Votre cible est là — quelle que soit votre activité :</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {['Consultants', 'Coachs', 'Avocats', 'Dirigeants', 'Formateurs', 'Ingénieurs', 'RH & Recruteurs', 'Commerciaux', 'Experts-comptables', 'Médecins', 'Architectes', 'Thérapeutes', 'Freelances', 'Entrepreneurs'].map((tag) => (
+                    <span key={tag} style={{ display: 'inline-block', padding: '5px 12px', borderRadius: '100px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════
           APERÇU DU RAPPORT
       ═══════════════════════════════ */}
       <section className="section-padding" style={{ background: '#fff', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
