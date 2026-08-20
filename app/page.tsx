@@ -485,7 +485,7 @@ export default function HomePage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '20px' }}>
               <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22C55E', animation: 'blink 2.5s infinite' }} />
               <span style={{ fontSize: '13px', color: '#9ca3af' }}>
-                <span style={{ color: '#374151', fontWeight: 600 }}>+700 dirigeants</span> ont déjà leur score
+                <span style={{ color: '#374151', fontWeight: 600 }}>+700 experts</span> ont déjà leur score
               </span>
             </div>
           </div>
@@ -518,7 +518,7 @@ export default function HomePage() {
                       <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(145deg, #2979FF, #1a3a7c)', border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 800, color: '#fff' }}>S</div>
                     </div>
                     <p style={{ fontWeight: 700, fontSize: '14px', color: '#0f1117', marginBottom: '2px' }}>Sophie Martin</p>
-                    <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '10px', lineHeight: 1.4 }}>Co-dirigeante · PME BTP · Paris</p>
+                    <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '10px', lineHeight: 1.4 }}>Consultante RH · Experte formation · Paris</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                       <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '88%' }} />
                       <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '72%' }} />
