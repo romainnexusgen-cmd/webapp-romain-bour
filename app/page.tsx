@@ -208,7 +208,7 @@ export default function HomePage() {
           <h2 style={{ color: '#0f1117', fontSize: '22px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>C'est en route.</h2>
           <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: 1.7 }}>Votre rapport arrive à <span style={{ color: '#0f1117', fontWeight: 600 }}>{email}</span> dans moins de 5 minutes.</p>
           <p style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.7, marginTop: '16px', padding: '14px 16px', background: '#f3f4f6', borderRadius: '10px', textAlign: 'left' }}>
-            Si vous ne le voyez pas dans votre boite principale, vérifiez vos onglets <strong style={{ color: '#6b7280' }}>Promotions</strong> et <strong style={{ color: '#6b7280' }}>Sélection</strong>, ainsi que vos <strong style={{ color: '#6b7280' }}>spams</strong>.
+            Si vous ne le voyez pas dans votre boite principale, vérifiez l'onglet <strong style={{ color: '#6b7280' }}>Promotions</strong> ainsi que vos <strong style={{ color: '#6b7280' }}>spams</strong>.
           </p>
         </div>
       </div>
