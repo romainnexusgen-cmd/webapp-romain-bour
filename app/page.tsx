@@ -600,7 +600,7 @@ export default function HomePage() {
 
           {/* 3 stat cards */}
           <div className="reveal d1" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', marginBottom: '1px' }}>
-            [
+            {[
               {
                 stat: '#1',
                 title: 'Résultat Google',
