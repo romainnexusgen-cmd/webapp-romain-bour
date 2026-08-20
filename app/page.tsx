@@ -210,11 +210,11 @@ export default function HomePage() {
 
   if (submitted) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0B1929', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: '#f9f8f6', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'Inter, sans-serif' }}>
         <div style={{ textAlign: 'center', maxWidth: '380px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(41,121,255,0.12)', border: '1px solid rgba(41,121,255,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#2979FF', fontWeight: 700, fontSize: '18px' }}>✓</div>
-          <h2 style={{ color: '#fff', fontSize: '22px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>C'est en route.</h2>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '15px', lineHeight: 1.7 }}>Ton rapport arrive à <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 600 }}>{email}</span> dans moins de 5 minutes.</p>
+          <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#EFF6FF', border: '1px solid #BFDBFE', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#2979FF', fontWeight: 700, fontSize: '18px' }}>✓</div>
+          <h2 style={{ color: '#0f1117', fontSize: '22px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>C'est en route.</h2>
+          <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: 1.7 }}>Ton rapport arrive à <span style={{ color: '#0f1117', fontWeight: 600 }}>{email}</span> dans moins de 5 minutes.</p>
         </div>
       </div>
     )
@@ -231,28 +231,28 @@ export default function HomePage() {
         <div className="nav-badge-nav" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22C55E', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
-            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', fontWeight: 500 }}>+700 profils analysés</span>
+            <span style={{ color: '#9ca3af', fontSize: '11px', fontWeight: 500 }}>+700 profils analysés</span>
           </div>
           <a href="#formulaire" className="nav-cta-small">Analyser mon profil →</a>
         </div>
       </nav>
 
       {/* Canvas animé global — couvre toute la page en fixed */}
-      <canvas ref={canvasRef} aria-hidden style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0 }} />
+      <canvas ref={canvasRef} aria-hidden style={{ display: 'none' }} />
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background: #040C16; }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background: #f9f8f6; color: #0f1117; }
 
         .nav-bar {
           position: fixed; top: 0; left: 0; right: 0; z-index: 100;
           display: flex; align-items: center; justify-content: space-between;
           padding: 0 40px; height: 60px;
-          background: rgba(4,12,22,0.72);
+          background: rgba(249,248,246,0.88);
           backdrop-filter: blur(20px) saturate(180%);
           -webkit-backdrop-filter: blur(20px) saturate(180%);
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          border-bottom: 1px solid rgba(0,0,0,0.08);
         }
         .nav-logo {
           display: flex; align-items: center; gap: 10px; text-decoration: none;
@@ -261,23 +261,22 @@ export default function HomePage() {
           width: 30px; height: 30px; border-radius: 8px;
           background: linear-gradient(135deg, #1D4ED8 0%, #2979FF 60%, #60A5FA 100%);
           display: flex; align-items: center; justify-content: center;
-          box-shadow: 0 0 18px rgba(41,121,255,0.4);
           font-size: 14px; font-weight: 900; color: #fff; letter-spacing: -0.5px;
           font-family: 'Inter', sans-serif;
         }
         .nav-logo-text {
-          font-size: 16px; font-weight: 800; letter-spacing: -0.5px; color: #fff;
+          font-size: 16px; font-weight: 800; letter-spacing: -0.5px; color: #0f1117;
         }
         .nav-logo-text span { color: #2979FF; }
         .nav-cta-small {
           display: inline-flex; align-items: center; gap: 6px;
-          background: rgba(41,121,255,0.12); border: 1px solid rgba(41,121,255,0.28);
-          color: #60A5FA; font-weight: 700; font-size: 13px;
-          padding: 7px 16px; border-radius: 8px; text-decoration: none;
+          background: #0f1117; border: none;
+          color: #fff; font-weight: 700; font-size: 13px;
+          padding: 8px 18px; border-radius: 8px; text-decoration: none;
           font-family: 'Inter', sans-serif;
-          transition: background 0.15s, border-color 0.15s;
+          transition: background 0.15s, opacity 0.15s;
         }
-        .nav-cta-small:hover { background: rgba(41,121,255,0.2); border-color: rgba(41,121,255,0.5); }
+        .nav-cta-small:hover { background: #2979FF; }
         @media (max-width: 640px) { .nav-bar { padding: 0 20px; } .nav-badge-nav { display: none !important; } }
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(40px); }
@@ -406,12 +405,12 @@ export default function HomePage() {
         .score-bar { animation: bar-in 1.4s cubic-bezier(0.16,1,0.3,1) forwards; }
 
         .field {
-          width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+          width: 100%; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
           padding: 12px 15px; font-size: 14px; font-family: 'Inter', sans-serif;
-          color: #fff; outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+          color: #0f1117; outline: none; transition: border-color 0.15s, box-shadow 0.15s;
         }
-        .field::placeholder { color: rgba(255,255,255,0.3); }
-        .field:focus { border-color: #2979FF; box-shadow: 0 0 0 3px rgba(41,121,255,0.15); }
+        .field::placeholder { color: #9ca3af; }
+        .field:focus { border-color: #2979FF; box-shadow: 0 0 0 3px rgba(41,121,255,0.1); }
 
         .submit {
           width: 100%; background: #2979FF; color: #fff; font-weight: 700; font-size: 15px;
@@ -472,19 +471,19 @@ export default function HomePage() {
           {/* ─── Colonne gauche : copywriting ─── */}
           <div>
             <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2979FF', marginBottom: '20px' }}>Audit LinkedIn gratuit</p>
-            <h1 style={{ fontSize: 'clamp(32px, 3.5vw, 52px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: '#fff', marginBottom: '20px' }}>
+            <h1 style={{ fontSize: 'clamp(32px, 3.5vw, 52px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: '#0f1117', marginBottom: '20px' }}>
               Démarquez-vous avec un profil LinkedIn à la hauteur de votre expertise.
             </h1>
-            <p style={{ fontSize: '17px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
+            <p style={{ fontSize: '17px', color: '#6b7280', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
               Découvrez votre score sur 100, vos points faibles et vos 3 priorités concrètes — en 5 minutes.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '36px' }}>
               {['Score personnalisé sur 100', '8 critères analysés par l\'IA', '3 priorités actionnables'].map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(41,121,255,0.15)', border: '1px solid rgba(41,121,255,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(41,121,255,0.1)', border: '1px solid rgba(41,121,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#2979FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
-                  <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>{item}</span>
+                  <span style={{ fontSize: '14px', color: '#374151', fontWeight: 500 }}>{item}</span>
                 </div>
               ))}
             </div>
@@ -495,11 +494,11 @@ export default function HomePage() {
               <div style={{ display: 'flex' }}>
                 {TEMOIGNAGES.map((t, i) => (
                   <img key={i} src={t.photo} alt={t.nom} width={28} height={28}
-                    style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(255,255,255,0.12)', marginLeft: i > 0 ? '-8px' : '0', display: 'block' }} />
+                    style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #e5e7eb', marginLeft: i > 0 ? '-8px' : '0', display: 'block' }} />
                 ))}
               </div>
-              <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>
-                <span style={{ color: 'rgba(255,255,255,0.65)', fontWeight: 600 }}>+700 dirigeants</span> ont déjà leur score
+              <span style={{ fontSize: '13px', color: '#9ca3af' }}>
+                <span style={{ color: '#374151', fontWeight: 600 }}>+700 dirigeants</span> ont déjà leur score
               </span>
             </div>
           </div>
@@ -509,7 +508,7 @@ export default function HomePage() {
             <div style={{
               width: '100%', maxWidth: '420px',
               background: '#fff', borderRadius: '16px',
-              boxShadow: '0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.12), 0 0 0 1px #e5e7eb',
               overflow: 'hidden',
               fontFamily: 'Inter, sans-serif',
             }}>
@@ -582,88 +581,76 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           APERÇU DU RAPPORT
       ═══════════════════════════════ */}
-      <section className="section-padding" style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
+      <section className="section-padding" style={{ background: '#fff', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
-          {/* Header */}
           <div className="reveal" style={{ marginBottom: '64px', textAlign: 'center' }}>
             <p style={{ color: '#2979FF', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>Ce que tu vas recevoir</p>
-            <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.1, color: '#fff', maxWidth: '560px', margin: '0 auto' }}>
+            <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.1, color: '#0f1117', maxWidth: '560px', margin: '0 auto' }}>
               Un diagnostic sur chaque pilier{' '}
-              <span style={{ color: 'rgba(255,255,255,0.25)' }}>de ta visibilité.</span>
+              <span style={{ color: '#9ca3af' }}>de ta visibilité.</span>
             </h2>
           </div>
 
-          {/* Layout 2 colonnes — score + barres */}
           <div ref={scoreRef} className="grid-score" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: '24px', alignItems: 'stretch' }}>
 
-            {/* Colonne gauche — score global + exemple analyse */}
             <div className="reveal" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {/* Score card */}
-              <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '32px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', marginBottom: '20px' }}>Score global · Exemple</p>
-
-                {/* Compteur animé */}
+              <div style={{ background: '#f9f8f6', border: '1px solid #e5e7eb', borderRadius: '20px', padding: '32px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '20px' }}>Score global · Exemple</p>
                 <div style={{ marginBottom: '20px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '72px', fontWeight: 900, color: '#fff', lineHeight: 1, letterSpacing: '-4px', fontVariantNumeric: 'tabular-nums' }}>{displayScore}</span>
-                    <span style={{ fontSize: '24px', fontWeight: 700, color: 'rgba(255,255,255,0.2)' }}>/100</span>
+                    <span style={{ fontSize: '72px', fontWeight: 900, color: '#0f1117', lineHeight: 1, letterSpacing: '-4px', fontVariantNumeric: 'tabular-nums' }}>{displayScore}</span>
+                    <span style={{ fontSize: '24px', fontWeight: 700, color: '#d1d5db' }}>/100</span>
                   </div>
-
-                  {/* Barre score global */}
-                  <div style={{ height: '6px', background: 'rgba(255,255,255,0.07)', borderRadius: '100px', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: barsVisible ? `${total}%` : '0%', background: 'linear-gradient(90deg, #1565FF, #2979FF, #60A5FA)', borderRadius: '100px', transition: 'width 1.6s cubic-bezier(0.16,1,0.3,1)', boxShadow: '0 0 16px rgba(41,121,255,0.6)' }} />
+                  <div style={{ height: '6px', background: '#e5e7eb', borderRadius: '100px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: barsVisible ? `${total}%` : '0%', background: 'linear-gradient(90deg, #1565FF, #2979FF)', borderRadius: '100px', transition: 'width 1.6s cubic-bezier(0.16,1,0.3,1)' }} />
                   </div>
                 </div>
-
-                <div style={{ padding: '12px 14px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '10px' }}>
-                  <p style={{ fontSize: '12px', color: '#F59E0B', fontWeight: 600, lineHeight: 1.5 }}>Profil à fort potentiel — 3 axes prioritaires identifiés</p>
+                <div style={{ padding: '12px 14px', background: '#FEF9C3', border: '1px solid #FDE047', borderRadius: '10px' }}>
+                  <p style={{ fontSize: '12px', color: '#854D0E', fontWeight: 600, lineHeight: 1.5 }}>Profil à fort potentiel — 3 axes prioritaires identifiés</p>
                 </div>
               </div>
 
-              {/* Exemple carte analyse — bannière */}
-              <div style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.18)', borderRadius: '16px', padding: '20px 22px' }}>
+              <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '16px', padding: '20px 22px' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
                   <div>
-                    <p style={{ fontWeight: 700, fontSize: '14px', color: '#fff', marginBottom: '2px' }}>Bannière</p>
-                    <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>Première impression visuelle</p>
+                    <p style={{ fontWeight: 700, fontSize: '14px', color: '#0f1117', marginBottom: '2px' }}>Bannière</p>
+                    <p style={{ fontSize: '11px', color: '#9ca3af' }}>Première impression visuelle</p>
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <div style={{ fontSize: '22px', fontWeight: 900, color: '#EF4444', letterSpacing: '-0.5px', lineHeight: 1 }}>7<span style={{ fontSize: '13px', fontWeight: 500, color: 'rgba(255,255,255,0.2)' }}>/20</span></div>
-                    <span style={{ fontSize: '9px', fontWeight: 700, color: '#EF4444', background: 'rgba(239,68,68,0.15)', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>À retravailler</span>
+                    <div style={{ fontSize: '22px', fontWeight: 900, color: '#EF4444', letterSpacing: '-0.5px', lineHeight: 1 }}>7<span style={{ fontSize: '13px', fontWeight: 500, color: '#d1d5db' }}>/20</span></div>
+                    <span style={{ fontSize: '9px', fontWeight: 700, color: '#EF4444', background: '#FEE2E2', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>À retravailler</span>
                   </div>
                 </div>
-                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.65, marginBottom: '12px' }}>Ta bannière ne communique aucun message sur ton expertise. Un visiteur ne comprend pas en une seconde ce que tu fais.</p>
-                <div style={{ background: 'rgba(41,121,255,0.08)', border: '1px solid rgba(41,121,255,0.18)', borderRadius: '8px', padding: '10px 12px' }}>
-                  <p style={{ fontSize: '11px', color: '#60A5FA', fontWeight: 600 }}>💡 Crée une bannière qui exprime ton positionnement en 3 secondes.</p>
+                <p style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.65, marginBottom: '12px' }}>Ta bannière ne communique aucun message sur ton expertise. Un visiteur ne comprend pas en une seconde ce que tu fais.</p>
+                <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '8px', padding: '10px 12px' }}>
+                  <p style={{ fontSize: '11px', color: '#1D4ED8', fontWeight: 600 }}>💡 Crée une bannière qui exprime ton positionnement en 3 secondes.</p>
                 </div>
               </div>
             </div>
 
-            {/* Colonne droite — 8 critères avec barres animées */}
-            <div className="reveal d1" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '20px', overflow: 'hidden' }}>
-              <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>Les 8 critères analysés</p>
+            <div className="reveal d1" style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '20px', overflow: 'hidden' }}>
+              <div style={{ padding: '20px 24px', borderBottom: '1px solid #f3f4f6' }}>
+                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af' }}>Les 8 critères analysés</p>
               </div>
               <div style={{ padding: '8px 0' }}>
                 {CRITERES.map((c, i) => (
-                  <div key={i} style={{ padding: '13px 24px', borderBottom: i < CRITERES.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div key={i} style={{ padding: '13px 24px', borderBottom: i < CRITERES.length - 1 ? '1px solid #f9fafb' : 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>{c.label}</span>
+                      <span style={{ fontSize: '13px', color: '#374151', fontWeight: 500 }}>{c.label}</span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ fontSize: '9px', fontWeight: 700, color: c.tc, background: c.bg, padding: '2px 7px', borderRadius: '4px' }}>{c.tag}</span>
                         <span style={{ fontSize: '11px', fontWeight: 700, color: c.color, minWidth: '32px', textAlign: 'right' }}>{c.score}/{c.max}</span>
                       </div>
                     </div>
-                    <div style={{ height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: barsVisible ? `${c.pct}%` : '0%', background: c.color, borderRadius: '2px', transition: `width 1.2s cubic-bezier(0.16,1,0.3,1) ${i * 0.07}s`, boxShadow: `0 0 8px ${c.color}80` }} />
+                    <div style={{ height: '4px', background: '#f3f4f6', borderRadius: '2px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: barsVisible ? `${c.pct}%` : '0%', background: c.color, borderRadius: '2px', transition: `width 1.2s cubic-bezier(0.16,1,0.3,1) ${i * 0.07}s` }} />
                     </div>
                   </div>
                 ))}
               </div>
-              {/* Footer */}
-              <div style={{ padding: '14px 24px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(41,121,255,0.05)' }}>
-                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)' }}>+ recommandations concrètes pour chaque critère · reçu par email</p>
+              <div style={{ padding: '14px 24px', borderTop: '1px solid #f3f4f6', background: '#f9f8f6' }}>
+                <p style={{ fontSize: '11px', color: '#9ca3af' }}>+ recommandations concrètes pour chaque critère · reçu par email</p>
               </div>
             </div>
 
@@ -674,15 +661,15 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           TEMOIGNAGES
       ═══════════════════════════════ */}
-      <section className="section-padding" style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
+      <section className="section-padding" style={{ background: '#fff', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '64px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.15, color: '#fff', marginBottom: '12px' }}>
+            <h2 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.15, color: '#0f1117', marginBottom: '12px' }}>
               Leur avis,{' '}
-              <span style={{ color: 'rgba(255,255,255,0.25)' }}>sans filtre.</span>
+              <span style={{ color: '#9ca3af' }}>sans filtre.</span>
             </h2>
-            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>Des experts B2B qui ont voulu savoir où ils en étaient.</p>
+            <p style={{ fontSize: '15px', color: '#6b7280', fontWeight: 400 }}>Des experts B2B qui ont voulu savoir où ils en étaient.</p>
           </div>
 
           <div className="grid-temoignages" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
@@ -694,18 +681,18 @@ export default function HomePage() {
                   onMouseEnter={() => setHoveredCard(i)}
                   onMouseLeave={() => setHoveredCard(null)}
                   className={`reveal d${i + 1}`}
-                  style={{ background: isHovered ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.04)', border: `1px solid ${isHovered ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.07)'}`, borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease', transform: isHovered ? 'translateY(-5px)' : 'translateY(0)', boxShadow: isHovered ? '0 20px 48px rgba(0,0,0,0.35)' : 'none', cursor: 'default' }}>
+                  style={{ background: isHovered ? '#f3f4f6' : '#fff', border: `1px solid ${isHovered ? '#d1d5db' : '#e5e7eb'}`, borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease', transform: isHovered ? 'translateY(-5px)' : 'translateY(0)', boxShadow: isHovered ? '0 20px 48px rgba(0,0,0,0.08)' : '0 1px 3px rgba(0,0,0,0.06)', cursor: 'default' }}>
 
                   {/* Citation en premier — ce qui compte */}
                   <div style={{ padding: '28px 28px 20px', flex: 1 }}>
-                    <div aria-hidden style={{ fontSize: '52px', fontWeight: 900, color: isHovered ? 'rgba(41,121,255,0.3)' : 'rgba(255,255,255,0.07)', lineHeight: 1, marginBottom: '2px', fontFamily: 'Georgia, serif', transition: 'color 0.25s' }}>"</div>
-                    <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: '14px', lineHeight: 1.85, marginTop: '-10px' }}>
+                    <div aria-hidden style={{ fontSize: '52px', fontWeight: 900, color: isHovered ? 'rgba(41,121,255,0.4)' : '#e5e7eb', lineHeight: 1, marginBottom: '2px', fontFamily: 'Georgia, serif', transition: 'color 0.25s' }}>"</div>
+                    <p style={{ color: '#374151', fontSize: '14px', lineHeight: 1.85, marginTop: '-10px' }}>
                       {t.texte}
                     </p>
                   </div>
 
                   {/* Séparateur */}
-                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', margin: '0 28px' }} />
+                  <div style={{ height: '1px', background: '#f3f4f6', margin: '0 28px' }} />
 
                   {/* Identité */}
                   <div style={{ padding: '18px 28px 24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -715,18 +702,18 @@ export default function HomePage() {
                         alt={t.nom}
                         width={44}
                         height={44}
-                        style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', display: 'block', border: `2px solid ${isHovered ? 'rgba(41,121,255,0.6)' : 'rgba(255,255,255,0.1)'}`, transition: 'border-color 0.25s' }}
+                        style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', display: 'block', border: `2px solid ${isHovered ? 'rgba(41,121,255,0.6)' : '#e5e7eb'}`, transition: 'border-color 0.25s' }}
                       />
-                      <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '16px', height: '16px', background: '#0A66C2', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #0B1929' }}>
+                      <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '16px', height: '16px', background: '#0A66C2', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>
                         <svg width="8" height="8" viewBox="0 0 24 24" fill="#fff"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                       </div>
                     </div>
                     <div style={{ flex: 1 }}>
-                      <p style={{ fontWeight: 700, fontSize: '13px', color: '#fff', marginBottom: '2px' }}>{t.nom}</p>
-                      <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)' }}>{t.poste}</p>
+                      <p style={{ fontWeight: 700, fontSize: '13px', color: '#0f1117', marginBottom: '2px' }}>{t.nom}</p>
+                      <p style={{ fontSize: '11px', color: '#9ca3af' }}>{t.poste}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '1px', flexShrink: 0 }}>
-                      {[...Array(5)].map((_,j) => <svg key={j} width="10" height="10" viewBox="0 0 24 24" fill={isHovered ? '#FBBF24' : 'rgba(255,255,255,0.2)'} style={{ transition: 'fill 0.25s' }}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}
+                      {[...Array(5)].map((_,j) => <svg key={j} width="10" height="10" viewBox="0 0 24 24" fill={isHovered ? '#FBBF24' : '#FCD34D'} style={{ transition: 'fill 0.25s' }}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}
                     </div>
                   </div>
 
@@ -741,35 +728,33 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           FORMULAIRE
       ═══════════════════════════════ */}
-      <section id="formulaire" className="section-padding" style={{ background: 'transparent', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
+      <section id="formulaire" className="section-padding" style={{ background: '#f9f8f6', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center' }}>
 
           {/* Header centré */}
           <div className="reveal" style={{ marginBottom: '48px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '5px 14px', background: 'rgba(41,121,255,0.08)', border: '1px solid rgba(41,121,255,0.18)', borderRadius: '9999px', marginBottom: '20px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '5px 14px', background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '9999px', marginBottom: '20px' }}>
               <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22C55E', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
-              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px', fontWeight: 600 }}>Gratuit · Résultat en 5 minutes</span>
+              <span style={{ color: '#1D4ED8', fontSize: '11px', fontWeight: 600 }}>Gratuit · Résultat en 5 minutes</span>
             </div>
-            <h2 style={{ fontSize: '38px', fontWeight: 900, color: '#fff', letterSpacing: '-1.2px', lineHeight: 1.1, marginBottom: '14px' }}>
-              Où en es-tu<br /><span style={{ color: 'rgba(255,255,255,0.25)' }}>vraiment ?</span>
+            <h2 style={{ fontSize: '38px', fontWeight: 900, color: '#0f1117', letterSpacing: '-1.2px', lineHeight: 1.1, marginBottom: '14px' }}>
+              Où en es-tu<br /><span style={{ color: '#9ca3af' }}>vraiment ?</span>
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '15px', lineHeight: 1.75 }}>
+            <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: 1.75 }}>
               Colle ton lien LinkedIn. Reçois ton score et tes 3 priorités directement par email.
             </p>
           </div>
 
           {/* Carte formulaire */}
           <div className="reveal d1" style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.10)',
+            background: '#fff',
+            border: '1px solid #e5e7eb',
             borderRadius: '24px',
             padding: '40px 36px',
-            boxShadow: '0 32px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04) inset',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.06)',
             position: 'relative',
             overflow: 'hidden',
           }}>
-            {/* Lueur bleue en haut de la carte */}
-            <div aria-hidden style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '60%', height: '1px', background: 'linear-gradient(90deg, transparent, #2979FF, transparent)' }} />
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
@@ -784,7 +769,7 @@ export default function HomePage() {
               {/* Champ email */}
               <div style={{ position: 'relative' }}>
                 <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 </div>
                 <input className="field" type="email" placeholder="ton@email.com" value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: '40px' }} />
               </div>
@@ -792,7 +777,7 @@ export default function HomePage() {
               {/* Consent */}
               <label style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', textAlign: 'left', marginTop: '4px' }}>
                 <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: '3px', accentColor: '#2979FF', flexShrink: 0, cursor: 'pointer' }} />
-                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px', lineHeight: 1.65 }}>J&apos;accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.</span>
+                <span style={{ color: '#6b7280', fontSize: '11px', lineHeight: 1.65 }}>J&apos;accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.</span>
               </label>
 
               {error && (
@@ -813,7 +798,7 @@ export default function HomePage() {
             </form>
 
             {/* Réassurance */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #f3f4f6' }}>
               {[
                 { icon: '🔒', txt: 'Aucun accès à ton compte' },
                 { icon: '⚡', txt: 'Résultat en 5 min' },
@@ -821,7 +806,7 @@ export default function HomePage() {
               ].map((r, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                   <span style={{ fontSize: '11px' }}>{r.icon}</span>
-                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontWeight: 500 }}>{r.txt}</span>
+                  <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 500 }}>{r.txt}</span>
                 </div>
               ))}
             </div>
@@ -830,22 +815,22 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ background: 'transparent', borderTop: '1px solid rgba(255,255,255,0.05)', padding: '28px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+      <footer style={{ background: '#fff', borderTop: '1px solid rgba(0,0,0,0.08)', padding: '28px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: 'linear-gradient(135deg,#1D4ED8,#2979FF)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900, color: '#fff' }}>O</div>
-            <span style={{ fontSize: '13px', fontWeight: 800, color: 'rgba(255,255,255,0.6)', letterSpacing: '-0.3px' }}>optin<span style={{ color: '#2979FF' }}>.ia</span></span>
+            <span style={{ fontSize: '13px', fontWeight: 800, color: '#374151', letterSpacing: '-0.3px' }}>optin<span style={{ color: '#2979FF' }}>.ia</span></span>
           </div>
-          <span style={{ width: '1px', height: '16px', background: 'rgba(255,255,255,0.08)' }} />
+          <span style={{ width: '1px', height: '16px', background: '#e5e7eb' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-            <img src="/romain-face.jpeg" alt="Romain Bour" style={{ width: '26px', height: '26px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+            <img src="/romain-face.jpeg" alt="Romain Bour" style={{ width: '26px', height: '26px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #e5e7eb' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
             <div>
-              <p style={{ fontWeight: 600, fontSize: '11px', color: 'rgba(255,255,255,0.5)', lineHeight: 1 }}>Créé par <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 700 }}>Romain Bour</span></p>
-              <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', marginTop: '2px' }}>Expert Branding B2B · +90 dirigeants</p>
+              <p style={{ fontWeight: 600, fontSize: '11px', color: '#6b7280', lineHeight: 1 }}>Créé par <span style={{ color: '#0f1117', fontWeight: 700 }}>Romain Bour</span></p>
+              <p style={{ fontSize: '10px', color: '#9ca3af', marginTop: '2px' }}>Expert Branding B2B · +90 dirigeants</p>
             </div>
           </div>
         </div>
-        <a href="https://www.linkedin.com/in/romainbour/" target="_blank" style={{ color: 'rgba(255,255,255,0.2)', fontSize: '12px', textDecoration: 'none', fontWeight: 500, transition: 'color 0.15s' }} onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.2)')}>LinkedIn →</a>
+        <a href="https://www.linkedin.com/in/romainbour/" target="_blank" style={{ color: '#9ca3af', fontSize: '12px', textDecoration: 'none', fontWeight: 500, transition: 'color 0.15s' }} onMouseEnter={e => (e.currentTarget.style.color = '#0f1117')} onMouseLeave={e => (e.currentTarget.style.color = '#9ca3af')}>LinkedIn →</a>
       </footer>
     </>
   )
