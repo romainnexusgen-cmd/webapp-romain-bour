@@ -512,11 +512,8 @@ export default function HomePage() {
               overflow: 'hidden',
               fontFamily: 'Inter, sans-serif',
               position: 'relative',
+              animation: 'float 7s ease-in-out infinite',
             }}>
-              {/* Bande scan IA animée */}
-              {scanPhase >= 1 && scanPhase <= 5 && (
-                <div className="li-scan-band" key={scanPhase} />
-              )}
               {/* Header card */}
               <div style={{ background: 'linear-gradient(135deg, #0f2a52, #1e4d8c)', padding: '20px 24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
@@ -597,66 +594,64 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div ref={scoreRef} className="grid-score" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: '24px', alignItems: 'stretch' }}>
+          {/* Grand card unifié */}
+          <div ref={scoreRef} className="reveal" style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}>
 
-            <div className="reveal" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ background: '#f9f8f6', border: '1px solid #e5e7eb', borderRadius: '20px', padding: '32px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '20px' }}>Score global · Exemple</p>
-                <div style={{ marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
-                    <span style={{ fontSize: '72px', fontWeight: 900, color: '#0f1117', lineHeight: 1, letterSpacing: '-4px', fontVariantNumeric: 'tabular-nums' }}>{displayScore}</span>
-                    <span style={{ fontSize: '24px', fontWeight: 700, color: '#d1d5db' }}>/100</span>
+            {/* Section principale : score + critères */}
+            <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr' }}>
+
+              {/* Gauche : score */}
+              <div style={{ padding: '28px 24px', borderRight: '1px solid #f3f4f6', background: '#f9f8f6', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af' }}>Score global</p>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px', marginBottom: '10px' }}>
+                    <span style={{ fontSize: '64px', fontWeight: 900, color: '#0f1117', lineHeight: 1, letterSpacing: '-3px', fontVariantNumeric: 'tabular-nums' }}>{displayScore}</span>
+                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#d1d5db' }}>/100</span>
                   </div>
-                  <div style={{ height: '6px', background: '#e5e7eb', borderRadius: '100px', overflow: 'hidden' }}>
+                  <div style={{ height: '5px', background: '#e5e7eb', borderRadius: '100px', overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: barsVisible ? `${total}%` : '0%', background: 'linear-gradient(90deg, #1565FF, #2979FF)', borderRadius: '100px', transition: 'width 1.6s cubic-bezier(0.16,1,0.3,1)' }} />
                   </div>
                 </div>
-                <div style={{ padding: '12px 14px', background: '#FEF9C3', border: '1px solid #FDE047', borderRadius: '10px' }}>
-                  <p style={{ fontSize: '12px', color: '#854D0E', fontWeight: 600, lineHeight: 1.5 }}>Profil à fort potentiel — 3 axes prioritaires identifiés</p>
+                <div style={{ padding: '10px 12px', background: '#FEFCE8', border: '1px solid #FDE047', borderRadius: '8px' }}>
+                  <p style={{ fontSize: '11px', color: '#713F12', fontWeight: 600, lineHeight: 1.4 }}>Profil à fort potentiel · 3 axes prioritaires</p>
                 </div>
               </div>
 
-              <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '16px', padding: '20px 22px' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <div>
-                    <p style={{ fontWeight: 700, fontSize: '14px', color: '#0f1117', marginBottom: '2px' }}>Bannière</p>
-                    <p style={{ fontSize: '11px', color: '#9ca3af' }}>Première impression visuelle</p>
-                  </div>
-                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <div style={{ fontSize: '22px', fontWeight: 900, color: '#EF4444', letterSpacing: '-0.5px', lineHeight: 1 }}>7<span style={{ fontSize: '13px', fontWeight: 500, color: '#d1d5db' }}>/20</span></div>
-                    <span style={{ fontSize: '9px', fontWeight: 700, color: '#EF4444', background: '#FEE2E2', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>À retravailler</span>
-                  </div>
+              {/* Droite : 8 critères */}
+              <div>
+                <div style={{ padding: '16px 24px', borderBottom: '1px solid #f3f4f6' }}>
+                  <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af' }}>Les 8 critères analysés</p>
                 </div>
-                <p style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.65, marginBottom: '12px' }}>Ta bannière ne communique aucun message sur ton expertise. Un visiteur ne comprend pas en une seconde ce que tu fais.</p>
-                <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '8px', padding: '10px 12px' }}>
-                  <p style={{ fontSize: '11px', color: '#1D4ED8', fontWeight: 600 }}>💡 Crée une bannière qui exprime ton positionnement en 3 secondes.</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="reveal d1" style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '20px', overflow: 'hidden' }}>
-              <div style={{ padding: '20px 24px', borderBottom: '1px solid #f3f4f6' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af' }}>Les 8 critères analysés</p>
-              </div>
-              <div style={{ padding: '8px 0' }}>
                 {CRITERES.map((c, i) => (
-                  <div key={i} style={{ padding: '13px 24px', borderBottom: i < CRITERES.length - 1 ? '1px solid #f9fafb' : 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ fontSize: '13px', color: '#374151', fontWeight: 500 }}>{c.label}</span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '9px', fontWeight: 700, color: c.tc, background: c.bg, padding: '2px 7px', borderRadius: '4px' }}>{c.tag}</span>
-                        <span style={{ fontSize: '11px', fontWeight: 700, color: c.color, minWidth: '32px', textAlign: 'right' }}>{c.score}/{c.max}</span>
-                      </div>
-                    </div>
-                    <div style={{ height: '4px', background: '#f3f4f6', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div key={i} style={{ padding: '11px 24px', borderBottom: i < CRITERES.length - 1 ? '1px solid #f9fafb' : 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{ fontSize: '12px', color: '#374151', fontWeight: 500, width: '130px', flexShrink: 0 }}>{c.label}</span>
+                    <div style={{ flex: 1, height: '4px', background: '#f3f4f6', borderRadius: '2px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: barsVisible ? `${c.pct}%` : '0%', background: c.color, borderRadius: '2px', transition: `width 1.2s cubic-bezier(0.16,1,0.3,1) ${i * 0.07}s` }} />
                     </div>
+                    <span style={{ fontSize: '9px', fontWeight: 700, color: c.tc, background: c.bg, padding: '2px 7px', borderRadius: '4px', flexShrink: 0 }}>{c.tag}</span>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: c.color, width: '32px', textAlign: 'right', flexShrink: 0 }}>{c.score}/{c.max}</span>
                   </div>
                 ))}
               </div>
-              <div style={{ padding: '14px 24px', borderTop: '1px solid #f3f4f6', background: '#f9f8f6' }}>
-                <p style={{ fontSize: '11px', color: '#9ca3af' }}>+ recommandations concrètes pour chaque critère · reçu par email</p>
+            </div>
+
+            {/* Bas : exemple d'analyse */}
+            <div style={{ padding: '20px 28px', background: '#FEF2F2', borderTop: '1px solid #FECACA', display: 'flex', alignItems: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
+                  <span style={{ fontWeight: 700, fontSize: '13px', color: '#0f1117' }}>Bannière</span>
+                  <span style={{ fontSize: '9px', fontWeight: 700, color: '#EF4444', background: '#FEE2E2', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>À retravailler · 7/20</span>
+                </div>
+                <p style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.6 }}>Ta bannière ne communique aucun message sur ton expertise. Un visiteur ne comprend pas en une seconde ce que tu fais.</p>
               </div>
+              <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '8px', padding: '10px 14px', flexShrink: 0, maxWidth: '280px' }}>
+                <p style={{ fontSize: '11px', color: '#1D4ED8', fontWeight: 600, lineHeight: 1.5 }}>Crée une bannière qui exprime ton positionnement en 3 secondes.</p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div style={{ padding: '12px 28px', borderTop: '1px solid #f3f4f6', background: '#fff' }}>
+              <p style={{ fontSize: '11px', color: '#9ca3af' }}>Recommandations concrètes pour chaque critère, reçues directement par email</p>
             </div>
 
           </div>
@@ -809,17 +804,8 @@ export default function HomePage() {
             </form>
 
             {/* Réassurance */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #f3f4f6' }}>
-              {[
-                { icon: '🔒', txt: 'Aucun accès à ton compte' },
-                { icon: '⚡', txt: 'Résultat en 5 min' },
-                { icon: '🎁', txt: '100% gratuit' },
-              ].map((r, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                  <span style={{ fontSize: '11px' }}>{r.icon}</span>
-                  <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 500 }}>{r.txt}</span>
-                </div>
-              ))}
+            <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #f3f4f6', textAlign: 'center' }}>
+              <p style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 500 }}>Aucun accès à ton compte · Résultat en 5 min · 100% gratuit</p>
             </div>
           </div>
         </div>
