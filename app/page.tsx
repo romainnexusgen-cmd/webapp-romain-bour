@@ -47,7 +47,7 @@ function UrlTypingAnimation() {
   }, [displayed, phase])
 
   return (
-    <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.6)', fontFamily: 'monospace', flex: 1 }}>
+    <span style={{ fontSize: '12px', color: '#6b7280', fontFamily: 'monospace', flex: 1 }}>
       {displayed}<span style={{ opacity: phase === 'erasing' ? 0 : 1, animation: 'blink 1s infinite' }}>|</span>
     </span>
   )
@@ -475,10 +475,10 @@ export default function HomePage() {
               Démarquez-vous avec un profil LinkedIn à la hauteur de votre expertise.
             </h1>
             <p style={{ fontSize: '17px', color: '#6b7280', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
-              Découvrez votre score sur 100, vos points faibles et vos 3 priorités concrètes — en 5 minutes.
+              Votre profil LinkedIn vous fait perdre des opportunités. Découvrez exactement lesquelles, en 5 minutes.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '36px' }}>
-              {['Score personnalisé sur 100', '8 critères analysés par l\'IA', '3 priorités actionnables'].map((item, i) => (
+              {['Votre score sur 100 avec le détail par critère', 'Les 3 points qui freinent le plus votre visibilité', 'Des recommandations concrètes reçues par email'].map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(41,121,255,0.1)', border: '1px solid rgba(41,121,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#2979FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -511,7 +511,12 @@ export default function HomePage() {
               boxShadow: '0 24px 80px rgba(0,0,0,0.12), 0 0 0 1px #e5e7eb',
               overflow: 'hidden',
               fontFamily: 'Inter, sans-serif',
+              position: 'relative',
             }}>
+              {/* Bande scan IA animée */}
+              {scanPhase >= 1 && scanPhase <= 5 && (
+                <div className="li-scan-band" key={scanPhase} />
+              )}
               {/* Header card */}
               <div style={{ background: 'linear-gradient(135deg, #0f2a52, #1e4d8c)', padding: '20px 24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
@@ -741,7 +746,7 @@ export default function HomePage() {
               Où en es-tu<br /><span style={{ color: '#9ca3af' }}>vraiment ?</span>
             </h2>
             <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: 1.75 }}>
-              Colle ton lien LinkedIn. Reçois ton score et tes 3 priorités directement par email.
+              Colle ton lien LinkedIn. Reçois ton score et tes 3 priorités par email, en moins de 5 minutes.
             </p>
           </div>
 
@@ -759,11 +764,17 @@ export default function HomePage() {
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
               {/* Champ LinkedIn */}
-              <div style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+              <div>
+                <div style={{ position: 'relative' }}>
+                  <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                  </div>
+                  <input className="field" type="url" placeholder="Colle ton lien LinkedIn ici" value={profileLink} onChange={e => setProfileLink(e.target.value)} style={{ paddingLeft: '40px' }} />
                 </div>
-                <input className="field" type="url" placeholder="linkedin.com/in/ton-profil" value={profileLink} onChange={e => setProfileLink(e.target.value)} style={{ paddingLeft: '40px' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px', paddingLeft: '4px' }}>
+                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Ex :</span>
+                  <UrlTypingAnimation />
+                </div>
               </div>
 
               {/* Champ email */}
