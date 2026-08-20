@@ -638,7 +638,7 @@ export default function HomePage() {
                 <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>80 % de la population active</p>
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '14px', fontWeight: 500 }}>Votre cible est là — quelle que soit votre activité :</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '14px', fontWeight: 500 }}>Votre cible est là, quelle que soit votre activité :</p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {['Consultants', 'Coachs', 'Avocats', 'Dirigeants', 'Formateurs', 'Ingénieurs', 'RH & Recruteurs', 'Commerciaux', 'Experts-comptables', 'Médecins', 'Architectes', 'Thérapeutes', 'Freelances', 'Entrepreneurs'].map((tag) => (
                     <span key={tag} style={{ display: 'inline-block', padding: '5px 12px', borderRadius: '100px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>{tag}</span>

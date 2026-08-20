@@ -102,7 +102,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           padding: 8px 16px; border-radius: 9px;
           cursor: pointer; transition: background 0.15s, border-color 0.15s;
         }
-        .pdf-btn:hover { background: #EFF6FF; border-color: #3B82F6; color: #1D4ED8; }
+        .pdf-btn:hover { background: #EFF6FF; border-color: #2979FF; color: #2979FF; }
 
         /* ── PRINT / PDF ── */
         @media print {
@@ -132,7 +132,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         }
         body {
           font-family: 'Inter', -apple-system, sans-serif;
-          background: #F8F8F7;
+          background: #f9f8f6;
           color: #0F172A;
           -webkit-font-smoothing: antialiased;
           line-height: 1.5;
@@ -152,7 +152,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .nav-brand { display: flex; align-items: center; gap: 10px; }
         .nav-logo {
           width: 26px; height: 26px; border-radius: 7px;
-          background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+          background: linear-gradient(135deg, #2979FF 0%, #2979FF 100%);
           display: flex; align-items: center; justify-content: center;
           font-size: 11px; font-weight: 900; color: white; letter-spacing: -0.3px;
         }
@@ -371,7 +371,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         }
         .gate-lock-badge {
           display: flex; align-items: center; gap: 8px;
-          background: linear-gradient(135deg, #1D4ED8, #3B82F6);
+          background: linear-gradient(135deg, #2979FF, #2979FF);
           color: white;
           font-size: 13px; font-weight: 700;
           padding: 12px 22px; border-radius: 100px;
@@ -437,7 +437,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .recap-row {
           display: flex; align-items: center; gap: 14px;
           padding: 12px 22px;
-          border-bottom: 1px solid #F8F8F7;
+          border-bottom: 1px solid #f9f8f6;
         }
         .recap-row:last-child { border-bottom: none; }
         .recap-icon {
@@ -463,7 +463,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           overflow: hidden;
         }
         .sec-strip { height: 3px; width: 100%; }
-        .sec-hd { padding: 18px 22px; border-bottom: 1px solid #F8F8F7; display: flex; align-items: center; gap: 12px; }
+        .sec-hd { padding: 18px 22px; border-bottom: 1px solid #f9f8f6; display: flex; align-items: center; gap: 12px; }
         .sec-icon {
           width: 32px; height: 32px; border-radius: 8px;
           display: flex; align-items: center; justify-content: center; flex-shrink: 0;
@@ -480,7 +480,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .sec-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid #F1F5F9; }
 
         .crit {
-          border-bottom: 1px solid #F8F8F7; cursor: pointer;
+          border-bottom: 1px solid #f9f8f6; cursor: pointer;
           transition: background 0.15s;
         }
         .crit:last-of-type { border-bottom: none; }
@@ -500,8 +500,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           color: #94A3B8; font-size: 11px; font-weight: 600;
           transition: color 0.15s;
         }
-        .crit:hover .crit-chev-wrap { color: #3B82F6; }
-        .crit.open .crit-chev-wrap { color: #3B82F6; }
+        .crit:hover .crit-chev-wrap { color: #2979FF; }
+        .crit.open .crit-chev-wrap { color: #2979FF; }
         .crit-chev-label { white-space: nowrap; }
         .crit.open .crit-chev-label { display: none; }
         .crit-chev {
@@ -535,11 +535,11 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
           overflow: hidden;
         }
-        .cta-top-bar { height: 3px; background: linear-gradient(90deg, #3B82F6, #2563EB 60%, #6366F1); }
+        .cta-top-bar { height: 3px; background: linear-gradient(90deg, #2979FF, #1a6aff 60%, #6366F1); }
         .cta-body { padding: 36px 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
         .cta-eyebrow {
           font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-          color: #3B82F6; margin-bottom: 12px;
+          color: #2979FF; margin-bottom: 12px;
         }
         .cta-h {
           font-size: clamp(22px, 4.5vw, 28px); font-weight: 900;
@@ -549,7 +549,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .cta-sub { font-size: 14px; color: #64748B; line-height: 1.75; max-width: 440px; margin-bottom: 28px; }
         .cta-btn {
           display: inline-flex; align-items: center; gap: 7px;
-          background: #1D4ED8;
+          background: #2979FF;
           color: white; font-size: 14px; font-weight: 700; letter-spacing: -0.1px;
           padding: 12px 22px; border-radius: 10px;
           text-decoration: none;
@@ -574,11 +574,11 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
           overflow: hidden;
         }
-        .result-cta-call-bar { height: 3px; background: linear-gradient(90deg, #3B82F6, #2563EB 60%, #6366F1); }
+        .result-cta-call-bar { height: 3px; background: linear-gradient(90deg, #2979FF, #1a6aff 60%, #6366F1); }
         .result-cta-call-body { padding: 36px 28px; }
         .result-eyebrow {
           font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-          color: #3B82F6; margin-bottom: 12px;
+          color: #2979FF; margin-bottom: 12px;
         }
         .result-h {
           font-size: clamp(20px, 4vw, 26px); font-weight: 900;
@@ -588,7 +588,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .result-sub { font-size: 14px; color: #64748B; line-height: 1.75; margin-bottom: 24px; }
         .result-btn-call {
           display: inline-flex; align-items: center; gap: 7px;
-          background: #1D4ED8; color: white;
+          background: #2979FF; color: white;
           font-size: 14px; font-weight: 700;
           padding: 13px 24px; border-radius: 10px;
           text-decoration: none;
@@ -649,7 +649,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .sticky-bar-text strong { color: white; }
         .sticky-bar-btn {
           flex-shrink: 0;
-          background: linear-gradient(135deg, #3B82F6, #2563EB);
+          background: linear-gradient(135deg, #2979FF, #1a6aff);
           color: white; font-size: 13px; font-weight: 700;
           padding: 10px 18px; border-radius: 9px;
           border: none; cursor: pointer;
@@ -720,7 +720,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           background: #F1F5F9; overflow: hidden;
           transition: background 0.3s;
         }
-        .mpd.active { background: #3B82F6; }
+        .mpd.active { background: #2979FF; }
         .mpd.done { background: #CBD5E1; }
 
         /* question steps */
@@ -745,8 +745,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           display: flex; align-items: center; gap: 10px;
           line-height: 1.4;
         }
-        .q-opt:hover { border-color: #3B82F6; background: #EFF6FF; color: #1D4ED8; }
-        .q-opt.selected { border-color: #3B82F6; background: #EFF6FF; color: #1D4ED8; }
+        .q-opt:hover { border-color: #2979FF; background: #EFF6FF; color: #2979FF; }
+        .q-opt.selected { border-color: #2979FF; background: #EFF6FF; color: #2979FF; }
         .q-opt-icon {
           width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
           background: #F8FAFC;
@@ -761,7 +761,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         .pf-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1.5px solid #EBEBEB; }
         .pf-name { font-size: 13px; font-weight: 700; color: #0F172A; margin-bottom: 1px; }
         .pf-sub { font-size: 12px; color: #94A3B8; margin-bottom: 4px; }
-        .pf-link { font-size: 12px; color: #3B82F6; font-weight: 600; text-decoration: none; }
+        .pf-link { font-size: 12px; color: #2979FF; font-weight: 600; text-decoration: none; }
         .pf-right { margin-left: auto; font-size: 11px; color: #CBD5E1; letter-spacing: 0.05em; }
 
         @media (max-width: 480px) {
@@ -1098,8 +1098,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
             <div className="qw-hd">
               <div className="qw-hd-left">
                 <p className="qw-hd-label">Plan d'action</p>
-                <p className="qw-hd-title">Tes priorités de progression</p>
-                <p className="qw-hd-sub">Clique sur chaque point pour voir les détails</p>
+                <p className="qw-hd-title">Vos priorités de progression</p>
+                <p className="qw-hd-sub">Cliquez sur chaque point pour voir les détails</p>
               </div>
             </div>
 
@@ -1314,10 +1314,10 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           <div className="cta-top-bar" />
           <div className="cta-body">
             <p className="cta-eyebrow">Analyse complète</p>
-            <h2 className="cta-h">Tu sais où tu en es.<br />Voyons comment débloquer la suite.</h2>
+            <h2 className="cta-h">Vous savez où vous en êtes.<br />Voyons comment débloquer la suite.</h2>
             <p className="cta-sub">
-              Réponds à 3 questions rapides pour accéder à ton analyse complète
-              et recevoir les recommandations adaptées à ta situation.
+              Répondez à 3 questions rapides pour accéder à votre analyse complète
+              et recevoir les recommandations adaptées à votre situation.
             </p>
             <button
               className="cta-btn"
@@ -1340,10 +1340,10 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
             <div className="result-cta-call-bar" />
             <div className="result-cta-call-body">
               <p className="result-eyebrow">Prochaine étape</p>
-              <h2 className="result-h">Construisons ton plan<br />d'action ensemble.</h2>
+              <h2 className="result-h">Construisons votre plan<br />d'action ensemble.</h2>
               <p className="result-sub">
-                30 minutes pour identifier tes leviers prioritaires, clarifier ton positionnement
-                et repartir avec un plan d'action concret pour ton profil LinkedIn.
+                30 minutes pour identifier vos leviers prioritaires, clarifier votre positionnement
+                et repartir avec un plan d'action concret pour votre profil LinkedIn.
               </p>
               <a className="result-btn-call" href="https://calendly.com/romain-visibility/callmemaybe" target="_blank" rel="noreferrer">
                 Réserver mon appel gratuit
@@ -1365,8 +1365,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               </div>
               <h2 className="result-nl-title">Rejoins la newsletter.</h2>
               <p className="result-nl-sub">
-                Chaque semaine, les stratégies concrètes pour faire de ton profil LinkedIn un vrai levier de business — sans devenir influenceur.
-                Tu seras parmi les premiers à recevoir le premier numéro.
+                Chaque semaine, les stratégies concrètes pour faire de votre profil LinkedIn un vrai levier de business, sans devenir influenceur.
+                Vous serez parmi les premiers à recevoir le premier numéro.
               </p>
               <a className="result-btn-li" href="https://www.linkedin.com/in/romainbour/" target="_blank" rel="noreferrer">
                 Suivre sur LinkedIn
@@ -1404,7 +1404,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
       {/* ── STICKY BAR ── */}
       <div id="sticky-bar">
-        <p className="sticky-bar-text"><strong>Ton analyse complète t'attend.</strong> Réponds à 3 questions rapides.</p>
+        <p className="sticky-bar-text"><strong>Votre analyse complète vous attend.</strong> Répondez à 3 questions rapides.</p>
         <button className="sticky-bar-btn" id="sticky-bar-btn">
           Voir mon analyse
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -1434,7 +1434,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
             {/* Step 1 */}
             <div id="q-step-1" className="q-step active">
               <p className="q-label">Question 1 sur 3</p>
-              <h3 className="q-title">Ce qui freine le plus ta visibilité LinkedIn en ce moment ?</h3>
+              <h3 className="q-title">Ce qui freine le plus votre visibilité LinkedIn en ce moment ?</h3>
               <div className="q-opts">
                 {[
                   { val: 'methode',   icon: '🗺️', label: 'Pas de méthode claire' },
@@ -1453,7 +1453,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
             {/* Step 2 */}
             <div id="q-step-2" className="q-step">
               <p className="q-label">Question 2 sur 3</p>
-              <h3 className="q-title">Ton objectif prioritaire sur LinkedIn ?</h3>
+              <h3 className="q-title">Votre objectif prioritaire sur LinkedIn ?</h3>
               <div className="q-opts">
                 {[
                   { val: 'leads',     icon: '🎯', label: 'Générer des leads qualifiés' },
@@ -1471,7 +1471,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
             {/* Step 3 */}
             <div id="q-step-3" className="q-step">
               <p className="q-label">Question 3 sur 3</p>
-              <h3 className="q-title">Ce que tu recherches pour avancer ?</h3>
+              <h3 className="q-title">Ce que vous recherchez pour avancer ?</h3>
               <div className="q-opts">
                 {[
                   { val: 'seul',       icon: '📚', label: 'Comprendre et progresser seul' },
