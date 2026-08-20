@@ -494,28 +494,23 @@ export default function HomePage() {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '20px', paddingBottom: '20px' }}>
             <div style={{ width: '100%', maxWidth: '480px', position: 'relative', animation: 'float 7s ease-in-out infinite' }}>
 
-              {/* Conteneur fond lavande */}
-              <div style={{ background: 'linear-gradient(140deg, #EEF2FF 0%, #E0E7FF 100%)', borderRadius: '20px', padding: '20px', boxShadow: '0 24px 60px rgba(79,70,229,0.12)' }}>
+              {/* Conteneur fond neutre */}
+              <div style={{ background: 'linear-gradient(140deg, #F5F4F0 0%, #EDEAE4 100%)', borderRadius: '20px', padding: '20px', boxShadow: '0 24px 60px rgba(0,0,0,0.10)' }}>
 
-                {/* Mockup page LinkedIn */}
+                {/* Mockup profil professionnel — style original, pas LinkedIn */}
                 <div style={{ background: '#fff', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', fontFamily: 'Inter, sans-serif' }}>
 
-                  {/* Barre nav LinkedIn simulée */}
-                  <div style={{ height: '30px', background: '#fff', borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', padding: '0 10px', gap: '8px' }}>
-                    <div style={{ width: '18px', height: '18px', background: '#0A66C2', borderRadius: '3px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <span style={{ color: '#fff', fontSize: '10px', fontWeight: 900, fontFamily: 'Georgia, serif', lineHeight: 1 }}>in</span>
-                    </div>
-                    <div style={{ flex: 1, height: '7px', background: '#f3f4f6', borderRadius: '4px' }} />
-                    <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e5e7eb' }} />
+                  {/* Bannière abstraite — palette originale */}
+                  <div style={{ height: '88px', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)', position: 'relative' }}>
+                    {/* Formes géométriques abstraites */}
+                    <div style={{ position: 'absolute', top: '12px', right: '20px', width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+                    <div style={{ position: 'absolute', bottom: '8px', right: '60px', width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
                   </div>
-
-                  {/* Bannière */}
-                  <div style={{ height: '88px', background: 'linear-gradient(135deg, #083d6e 0%, #0a66c2 55%, #1da0f2 100%)', position: 'relative' }} />
 
                   {/* Zone profil */}
                   <div style={{ padding: '0 20px 16px', position: 'relative' }}>
                     <div style={{ marginTop: '-32px', marginBottom: '8px' }}>
-                      <div style={{ width: '68px', height: '68px', borderRadius: '50%', background: 'linear-gradient(145deg, #2979FF, #1a3a7c)', border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 800, color: '#fff' }}>S</div>
+                      <div style={{ width: '68px', height: '68px', borderRadius: '50%', background: 'linear-gradient(145deg, #374151, #1f2937)', border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 800, color: '#fff' }}>S</div>
                     </div>
                     <p style={{ fontWeight: 700, fontSize: '16px', color: '#0f1117', marginBottom: '3px' }}>Sophie Martin</p>
                     <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '12px', lineHeight: 1.4 }}>Consultante RH · Experte formation · Paris</p>
