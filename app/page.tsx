@@ -490,75 +490,95 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ─── Colonne droite : mock rapport ─── */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{
-              width: '100%', maxWidth: '420px',
-              background: '#fff', borderRadius: '16px',
-              boxShadow: '0 24px 80px rgba(0,0,0,0.12), 0 0 0 1px #e5e7eb',
-              overflow: 'hidden',
-              fontFamily: 'Inter, sans-serif',
-              position: 'relative',
-              animation: 'float 7s ease-in-out infinite',
-            }}>
-              {/* Header card */}
-              <div style={{ background: 'linear-gradient(135deg, #0f2a52, #1e4d8c)', padding: '20px 24px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(145deg,#2979FF,#1a3a7c)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, color: '#fff' }}>S</div>
-                  <div>
-                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#fff', marginBottom: '1px' }}>Sophie Martin</p>
-                    <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Co-dirigeante PME · Paris</p>
-                  </div>
-                  <div style={{ marginLeft: 'auto', background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.4)', borderRadius: '100px', padding: '3px 10px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#FCD34D' }}>Fort potentiel</span>
-                  </div>
-                </div>
-              </div>
+          {/* ─── Colonne droite : profil LinkedIn mockup + overlay résultat ─── */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '20px', paddingBottom: '20px' }}>
+            <div style={{ width: '100%', maxWidth: '420px', position: 'relative', animation: 'float 7s ease-in-out infinite' }}>
 
-              {/* Score principal */}
-              <div style={{ padding: '24px 24px 16px', borderBottom: '1px solid #f0f0f0', textAlign: 'center' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#aaa', marginBottom: '8px' }}>Score global</p>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: '4px', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '72px', fontWeight: 900, color: '#2979FF', lineHeight: 1, letterSpacing: '-3px', fontVariantNumeric: 'tabular-nums' }}>67</span>
-                  <span style={{ fontSize: '24px', fontWeight: 600, color: '#ccc' }}>/100</span>
-                </div>
-                {/* Barre de score */}
-                <div style={{ height: '6px', background: '#f0f0f0', borderRadius: '100px', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: '67%', background: 'linear-gradient(90deg, #1565FF, #60A5FA)', borderRadius: '100px' }} />
-                </div>
-              </div>
+              {/* Conteneur fond lavande */}
+              <div style={{ background: 'linear-gradient(140deg, #EEF2FF 0%, #E0E7FF 100%)', borderRadius: '20px', padding: '20px', boxShadow: '0 24px 60px rgba(79,70,229,0.12)' }}>
 
-              {/* 8 critères analysés — vue d'ensemble */}
-              <div style={{ padding: '14px 24px' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#aaa', marginBottom: '10px' }}>Analyse complète · 8 critères</p>
-                {CRITERES.map((c, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: i < CRITERES.length - 1 ? '7px' : '0' }}>
-                    <span style={{ fontSize: '11px', color: '#555', fontWeight: 500, width: '110px', flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.label}</span>
-                    <div style={{ flex: 1, height: '3px', background: '#f0f0f0', borderRadius: '100px', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${c.pct}%`, background: c.color, borderRadius: '100px' }} />
+                {/* Mockup page LinkedIn */}
+                <div style={{ background: '#fff', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', fontFamily: 'Inter, sans-serif' }}>
+
+                  {/* Barre nav LinkedIn simulée */}
+                  <div style={{ height: '30px', background: '#fff', borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', padding: '0 10px', gap: '8px' }}>
+                    <div style={{ width: '18px', height: '18px', background: '#0A66C2', borderRadius: '3px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <span style={{ color: '#fff', fontSize: '10px', fontWeight: 900, fontFamily: 'Georgia, serif', lineHeight: 1 }}>in</span>
                     </div>
-                    <span style={{ fontSize: '9px', fontWeight: 700, color: c.tc, background: c.bg, padding: '1px 5px', borderRadius: '3px', flexShrink: 0 }}>{c.tag}</span>
-                    <span style={{ fontSize: '10px', color: '#bbb', width: '26px', textAlign: 'right', flexShrink: 0 }}>{c.score}/{c.max}</span>
+                    <div style={{ flex: 1, height: '7px', background: '#f3f4f6', borderRadius: '4px' }} />
+                    <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e5e7eb' }} />
+                  </div>
+
+                  {/* Bannière */}
+                  <div style={{ height: '68px', background: 'linear-gradient(135deg, #083d6e 0%, #0a66c2 55%, #1da0f2 100%)', position: 'relative' }} />
+
+                  {/* Zone profil */}
+                  <div style={{ padding: '0 16px 14px', position: 'relative' }}>
+                    <div style={{ marginTop: '-26px', marginBottom: '6px' }}>
+                      <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(145deg, #2979FF, #1a3a7c)', border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 800, color: '#fff' }}>S</div>
+                    </div>
+                    <p style={{ fontWeight: 700, fontSize: '14px', color: '#0f1117', marginBottom: '2px' }}>Sophie Martin</p>
+                    <p style={{ fontSize: '11px', color: '#6b7280', marginBottom: '10px', lineHeight: 1.4 }}>Co-dirigeante · PME BTP · Paris</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                      <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '88%' }} />
+                      <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '72%' }} />
+                    </div>
+                  </div>
+
+                  {/* Section À propos simulée */}
+                  <div style={{ borderTop: '5px solid #f3f4f6', padding: '12px 16px' }}>
+                    <p style={{ fontSize: '12px', fontWeight: 700, color: '#0f1117', marginBottom: '8px' }}>À propos</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                      <div style={{ height: '5px', background: '#f3f4f6', borderRadius: '3px', width: '96%' }} />
+                      <div style={{ height: '5px', background: '#f3f4f6', borderRadius: '3px', width: '82%' }} />
+                      <div style={{ height: '5px', background: '#f3f4f6', borderRadius: '3px', width: '90%' }} />
+                    </div>
+                  </div>
+
+                  {/* Section Expériences simulée */}
+                  <div style={{ borderTop: '5px solid #f3f4f6', padding: '12px 16px 14px' }}>
+                    <p style={{ fontSize: '12px', fontWeight: 700, color: '#0f1117', marginBottom: '8px' }}>Expériences</p>
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                      <div style={{ width: '28px', height: '28px', background: '#e5e7eb', borderRadius: '4px', flexShrink: 0 }} />
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '70%' }} />
+                        <div style={{ height: '5px', background: '#f3f4f6', borderRadius: '3px', width: '55%' }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Overlay résultat audit — flotte en bas à droite */}
+              <div style={{
+                position: 'absolute', bottom: '-14px', right: '-14px',
+                background: '#fff', border: '1px solid #e5e7eb',
+                borderRadius: '16px', padding: '16px 18px',
+                boxShadow: '0 12px 40px rgba(0,0,0,0.14)',
+                width: '200px',
+                fontFamily: 'Inter, sans-serif',
+              }}>
+                <p style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '8px' }}>Résultat de l&apos;analyse</p>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '40px', fontWeight: 900, color: '#2979FF', letterSpacing: '-2px', lineHeight: 1 }}>67</span>
+                  <span style={{ fontSize: '15px', fontWeight: 600, color: '#d1d5db' }}>/100</span>
+                </div>
+                <div style={{ height: '4px', background: '#f3f4f6', borderRadius: '100px', overflow: 'hidden', marginBottom: '12px' }}>
+                  <div style={{ height: '100%', width: '67%', background: 'linear-gradient(90deg, #1565FF, #2979FF)', borderRadius: '100px' }} />
+                </div>
+                <p style={{ fontSize: '10px', fontWeight: 600, color: '#374151', marginBottom: '6px' }}>3 priorités identifiées</p>
+                {[
+                  { label: 'Bannière', color: '#EF4444' },
+                  { label: 'Titre du profil', color: '#F59E0B' },
+                  { label: 'Sélection de posts', color: '#EF4444' },
+                ].map((p, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: i < 2 ? '5px' : 0 }}>
+                    <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
+                    <span style={{ fontSize: '11px', color: '#374151' }}>{p.label}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Priorités condensées */}
-              <div style={{ padding: '12px 24px 18px', borderTop: '1px solid #f0f0f0', background: '#fafafa' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#aaa', marginBottom: '8px' }}>3 priorités · reçues par email</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  {[
-                    { label: 'Refaire la bannière', color: '#EF4444' },
-                    { label: 'Réécrire le titre du profil', color: '#F59E0B' },
-                    { label: 'Activer la sélection de posts', color: '#EF4444' },
-                  ].map((p, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
-                      <span style={{ fontSize: '11px', color: '#333', fontWeight: 500 }}>{p.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
 
