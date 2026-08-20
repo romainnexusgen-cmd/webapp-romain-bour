@@ -80,9 +80,9 @@ export default function HomePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!consent) { setError("Merci d'accepter de recevoir ton analyse par mail."); return }
-    if (!profileLink) { setError('Merci de renseigner ton lien LinkedIn.'); return }
-    if (!email) { setError('Merci de renseigner ton adresse email.'); return }
+    if (!consent) { setError("Merci d'accepter de recevoir votre analyse par mail."); return }
+    if (!profileLink) { setError('Merci de renseigner votre lien LinkedIn.'); return }
+    if (!email) { setError('Merci de renseigner votre adresse email.'); return }
     setError('')
     setLoading(true)
     try {
@@ -206,7 +206,10 @@ export default function HomePage() {
         <div style={{ textAlign: 'center', maxWidth: '380px' }}>
           <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#EFF6FF', border: '1px solid #BFDBFE', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#2979FF', fontWeight: 700, fontSize: '18px' }}>✓</div>
           <h2 style={{ color: '#0f1117', fontSize: '22px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>C'est en route.</h2>
-          <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: 1.7 }}>Ton rapport arrive à <span style={{ color: '#0f1117', fontWeight: 600 }}>{email}</span> dans moins de 5 minutes.</p>
+          <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: 1.7 }}>Votre rapport arrive à <span style={{ color: '#0f1117', fontWeight: 600 }}>{email}</span> dans moins de 5 minutes.</p>
+          <p style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.7, marginTop: '16px', padding: '14px 16px', background: '#f3f4f6', borderRadius: '10px', textAlign: 'left' }}>
+            Si vous ne le voyez pas dans votre boite principale, vérifiez vos onglets <strong style={{ color: '#6b7280' }}>Promotions</strong> et <strong style={{ color: '#6b7280' }}>Sélection</strong>, ainsi que vos <strong style={{ color: '#6b7280' }}>spams</strong>.
+          </p>
         </div>
       </div>
     )
