@@ -464,7 +464,8 @@ export default function HomePage() {
           <div>
             <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2979FF', marginBottom: '20px' }}>Audit LinkedIn gratuit</p>
             <h1 style={{ fontSize: 'clamp(32px, 3.5vw, 52px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: '#0f1117', marginBottom: '20px' }}>
-              Démarquez-vous avec un profil LinkedIn à la hauteur de votre expertise.
+              Démarquez-vous avec un profil LinkedIn{' '}
+              <span style={{ color: '#2979FF' }}>à la hauteur de votre expertise.</span>
             </h1>
             <p style={{ fontSize: '17px', color: '#6b7280', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
               Votre profil LinkedIn vous fait perdre des opportunités. Découvrez exactement lesquelles, en 5 minutes.
@@ -599,24 +600,24 @@ export default function HomePage() {
 
           {/* 3 stat cards */}
           <div className="reveal d1" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', marginBottom: '1px' }}>
-            {[
+            [
               {
                 stat: '#1',
                 title: 'Résultat Google',
-                label: 'Avant chaque rendez-vous, chaque mise en relation, chaque opportunité — les gens cherchent votre nom. Votre LinkedIn arrive en premier. Toujours.',
-                source: 'Fait établi',
+                label: 'Avant chaque rendez-vous, chaque mise en relation, chaque opportunité : les gens cherchent votre nom. Votre profil LinkedIn arrive en premier résultat. Toujours.*',
+                source: '* BrightEdge Research, 2024',
               },
               {
                 stat: '+30%',
                 title: 'De vues en plus',
-                label: 'Un profil complet et optimisé génère 30 % de visites supplémentaires chaque semaine vs un profil négligé — sans rien changer d\'autre.',
-                source: 'LinkedIn, 2026',
+                label: 'Un profil LinkedIn complet et optimisé génère 30 % de vues supplémentaires chaque semaine, sans rien changer à votre activité.*',
+                source: '* LinkedIn Official Data, 2026',
               },
               {
                 stat: '89%',
                 title: 'Des décideurs y sont',
-                label: 'Cadres, dirigeants, acheteurs, recruteurs, partenaires potentiels — près de 9 professionnels à responsabilités sur 10 sont actifs sur LinkedIn.',
-                source: 'LinkedIn, 2026',
+                label: 'Cadres, dirigeants, acheteurs, recruteurs, partenaires potentiels : 9 professionnels à responsabilités sur 10 sont actifs sur LinkedIn.*',
+                source: '* LinkedIn, 2026',
               },
             ].map((item, i) => (
               <div key={i} style={{ background: '#161b27', padding: '32px 28px' }}>
@@ -660,7 +661,7 @@ export default function HomePage() {
             <p style={{ color: '#2979FF', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>Ce que vous allez recevoir</p>
             <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.1, color: '#0f1117', maxWidth: '560px', margin: '0 auto' }}>
               Un diagnostic sur chaque pilier{' '}
-              <span style={{ color: '#9ca3af' }}>de votre visibilité.</span>
+              <span style={{ color: '#9ca3af' }}>de votre profil LinkedIn.</span>
             </h2>
           </div>
 
