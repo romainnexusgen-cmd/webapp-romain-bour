@@ -4,11 +4,6 @@ import { useState, useEffect, useRef } from 'react'
 
 const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL || ''
 
-const TEMOIGNAGES = [
-  { texte: "J'ai construit ma réputation sur 20 ans de terrain. Mon LinkedIn ressemblait au profil d'un stagiaire. L'analyse m'a montré exactement ce qu'il fallait corriger — sans jargon.", nom: "François-Xavier D.", poste: "Agent commercial indépendant", initiale: "F", photo: "https://i.pravatar.cc/120?img=52" },
-  { texte: "Je savais que mon expertise valait quelque chose. Mais mon profil ne le montrait pas. Le diagnostic était précis, adapté à mon secteur.", nom: "Sophie M.", poste: "Co-dirigeante PME", initiale: "S", photo: "https://i.pravatar.cc/120?img=47" },
-  { texte: "En le corrigeant, les bonnes personnes ont commencé à me trouver — sans que j'aie à courir après.", nom: "Isabelle G.", poste: "Formatrice B2B, Genève", initiale: "I", photo: "https://i.pravatar.cc/120?img=9" },
-]
 
 const CRITERES = [
   { label: 'Photo de profil',    score: 12, max: 15, pct: 80,  color: '#10B981', bg: '#DCFCE7', tc: '#15803D', tag: 'Bon',            icon: '📸' },
@@ -54,9 +49,6 @@ function UrlTypingAnimation() {
 }
 
 export default function HomePage() {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const [activeSlide, setActiveSlide] = useState(0)
-  const carouselRef = useRef<HTMLDivElement>(null)
   const [displayScore, setDisplayScore] = useState(0)
   const [barsVisible, setBarsVisible] = useState(false)
   const scoreRef = useRef<HTMLDivElement>(null)
@@ -490,13 +482,8 @@ export default function HomePage() {
             <a href="#formulaire" className="hero-cta" style={{ fontSize: '16px', padding: '15px 32px', marginBottom: '24px', display: 'inline-flex' }}>
               Analyser mon profil gratuitement →
             </a>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
-              <div style={{ display: 'flex' }}>
-                {TEMOIGNAGES.map((t, i) => (
-                  <img key={i} src={t.photo} alt={t.nom} width={28} height={28}
-                    style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #e5e7eb', marginLeft: i > 0 ? '-8px' : '0', display: 'block' }} />
-                ))}
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '20px' }}>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22C55E', animation: 'blink 2.5s infinite' }} />
               <span style={{ fontSize: '13px', color: '#9ca3af' }}>
                 <span style={{ color: '#374151', fontWeight: 600 }}>+700 dirigeants</span> ont déjà leur score
               </span>
@@ -541,35 +528,34 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 3 priorités critiques */}
-              <div style={{ padding: '16px 24px' }}>
-                <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: '12px' }}>3 priorités identifiées</p>
-                {[
-                  { label: 'Refaire la bannière', score: 7, max: 20, color: '#EF4444', bg: '#FEF2F2' },
-                  { label: 'Réécrire le titre du profil', score: 11, max: 20, color: '#F59E0B', bg: '#FFFBEB' },
-                  { label: 'Activer la sélection de posts', score: 4, max: 10, color: '#EF4444', bg: '#FEF2F2' },
-                ].map((p, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < 2 ? '10px' : '0' }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: p.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <span style={{ fontSize: '13px', fontWeight: 800, color: p.color }}>{p.score}</span>
+              {/* 8 critères analysés — vue d'ensemble */}
+              <div style={{ padding: '14px 24px' }}>
+                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#aaa', marginBottom: '10px' }}>Analyse complète · 8 critères</p>
+                {CRITERES.map((c, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: i < CRITERES.length - 1 ? '7px' : '0' }}>
+                    <span style={{ fontSize: '11px', color: '#555', fontWeight: 500, width: '110px', flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.label}</span>
+                    <div style={{ flex: 1, height: '3px', background: '#f0f0f0', borderRadius: '100px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${c.pct}%`, background: c.color, borderRadius: '100px' }} />
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <p style={{ fontSize: '12px', fontWeight: 600, color: '#1B1F23', marginBottom: '4px' }}>{p.label}</p>
-                      <div style={{ height: '4px', background: '#f0f0f0', borderRadius: '100px', overflow: 'hidden' }}>
-                        <div style={{ height: '100%', width: `${(p.score/p.max)*100}%`, background: p.color, borderRadius: '100px' }} />
-                      </div>
-                    </div>
-                    <span style={{ fontSize: '11px', color: '#aaa', fontWeight: 500, whiteSpace: 'nowrap' }}>{p.score}/{p.max}</span>
+                    <span style={{ fontSize: '9px', fontWeight: 700, color: c.tc, background: c.bg, padding: '1px 5px', borderRadius: '3px', flexShrink: 0 }}>{c.tag}</span>
+                    <span style={{ fontSize: '10px', color: '#bbb', width: '26px', textAlign: 'right', flexShrink: 0 }}>{c.score}/{c.max}</span>
                   </div>
                 ))}
               </div>
 
-              {/* Points forts */}
-              <div style={{ padding: '12px 24px 20px', borderTop: '1px solid #f0f0f0' }}>
-                <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888', marginBottom: '10px' }}>Points forts</p>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {[{ label: 'Photo · 12/15', color: '#10B981' }, { label: 'Crédibilité · 16/20', color: '#10B981' }, { label: 'Expériences · 3/5', color: '#F59E0B' }].map((b, i) => (
-                    <span key={i} style={{ fontSize: '11px', fontWeight: 600, color: b.color, background: b.color === '#10B981' ? '#F0FDF4' : '#FFFBEB', border: `1px solid ${b.color === '#10B981' ? '#BBF7D0' : '#FCD34D'}`, borderRadius: '100px', padding: '3px 10px' }}>{b.label}</span>
+              {/* Priorités condensées */}
+              <div style={{ padding: '12px 24px 18px', borderTop: '1px solid #f0f0f0', background: '#fafafa' }}>
+                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#aaa', marginBottom: '8px' }}>3 priorités · reçues par email</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  {[
+                    { label: 'Refaire la bannière', color: '#EF4444' },
+                    { label: 'Réécrire le titre du profil', color: '#F59E0B' },
+                    { label: 'Activer la sélection de posts', color: '#EF4444' },
+                  ].map((p, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
+                      <span style={{ fontSize: '11px', color: '#333', fontWeight: 500 }}>{p.label}</span>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -655,73 +641,6 @@ export default function HomePage() {
             </div>
 
           </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════
-          TEMOIGNAGES
-      ═══════════════════════════════ */}
-      <section className="section-padding" style={{ background: '#fff', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '64px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.15, color: '#0f1117', marginBottom: '12px' }}>
-              Leur avis,{' '}
-              <span style={{ color: '#9ca3af' }}>sans filtre.</span>
-            </h2>
-            <p style={{ fontSize: '15px', color: '#6b7280', fontWeight: 400 }}>Des experts B2B qui ont voulu savoir où ils en étaient.</p>
-          </div>
-
-          <div className="grid-temoignages" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-            {TEMOIGNAGES.map((t, i) => {
-              const isHovered = hoveredCard === i
-              return (
-                <div
-                  key={i}
-                  onMouseEnter={() => setHoveredCard(i)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                  className={`reveal d${i + 1}`}
-                  style={{ background: isHovered ? '#f3f4f6' : '#fff', border: `1px solid ${isHovered ? '#d1d5db' : '#e5e7eb'}`, borderRadius: '20px', overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease', transform: isHovered ? 'translateY(-5px)' : 'translateY(0)', boxShadow: isHovered ? '0 20px 48px rgba(0,0,0,0.08)' : '0 1px 3px rgba(0,0,0,0.06)', cursor: 'default' }}>
-
-                  {/* Citation en premier — ce qui compte */}
-                  <div style={{ padding: '28px 28px 20px', flex: 1 }}>
-                    <div aria-hidden style={{ fontSize: '52px', fontWeight: 900, color: isHovered ? 'rgba(41,121,255,0.4)' : '#e5e7eb', lineHeight: 1, marginBottom: '2px', fontFamily: 'Georgia, serif', transition: 'color 0.25s' }}>"</div>
-                    <p style={{ color: '#374151', fontSize: '14px', lineHeight: 1.85, marginTop: '-10px' }}>
-                      {t.texte}
-                    </p>
-                  </div>
-
-                  {/* Séparateur */}
-                  <div style={{ height: '1px', background: '#f3f4f6', margin: '0 28px' }} />
-
-                  {/* Identité */}
-                  <div style={{ padding: '18px 28px 24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ position: 'relative', flexShrink: 0 }}>
-                      <img
-                        src={t.photo}
-                        alt={t.nom}
-                        width={44}
-                        height={44}
-                        style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', display: 'block', border: `2px solid ${isHovered ? 'rgba(41,121,255,0.6)' : '#e5e7eb'}`, transition: 'border-color 0.25s' }}
-                      />
-                      <div style={{ position: 'absolute', bottom: '-2px', right: '-2px', width: '16px', height: '16px', background: '#0A66C2', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>
-                        <svg width="8" height="8" viewBox="0 0 24 24" fill="#fff"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
-                      </div>
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <p style={{ fontWeight: 700, fontSize: '13px', color: '#0f1117', marginBottom: '2px' }}>{t.nom}</p>
-                      <p style={{ fontSize: '11px', color: '#9ca3af' }}>{t.poste}</p>
-                    </div>
-                    <div style={{ display: 'flex', gap: '1px', flexShrink: 0 }}>
-                      {[...Array(5)].map((_,j) => <svg key={j} width="10" height="10" viewBox="0 0 24 24" fill={isHovered ? '#FBBF24' : '#FCD34D'} style={{ transition: 'fill 0.25s' }}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}
-                    </div>
-                  </div>
-
-                </div>
-              )
-            })}
-          </div>
-
         </div>
       </section>
 
