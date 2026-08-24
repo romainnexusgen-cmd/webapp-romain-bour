@@ -444,6 +444,19 @@ export default function HomePage() {
           .hero-dashboard   { display: none !important; }
           .section-padding  { padding: 64px 24px !important; }
           .hero-cta-row     { flex-direction: column !important; align-items: flex-start !important; }
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .hero-mockup-col { display: none !important; }
+          .hero-section { padding: 48px 24px 56px !important; }
+          .stats-section { padding: 48px 24px !important; }
+          .grid-3-stats { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 640px) {
+          .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+          .hero-mockup-col { display: none !important; }
+          .hero-section { padding: 32px 20px 48px !important; min-height: auto !important; }
+          .stats-section { padding: 40px 20px !important; }
+          .grid-3-stats { grid-template-columns: 1fr !important; }
+          .hero-cta { white-space: nowrap !important; width: 100% !important; justify-content: center !important; box-sizing: border-box !important; }
         }
       `}</style>
 
@@ -451,7 +464,7 @@ export default function HomePage() {
       {/* ═══════════════════════════════════════
           HERO — 2 colonnes épuré
       ═══════════════════════════════════════ */}
-      <section style={{
+      <section className="hero-section" style={{
         minHeight: 'calc(100vh - 60px)',
         position: 'relative',
         display: 'flex', alignItems: 'center',
@@ -461,7 +474,7 @@ export default function HomePage() {
       }}>
 
         {/* ── LAYOUT 2 COLONNES ── */}
-        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: '64px', alignItems: 'center' }}>
+        <div className="hero-grid" style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: '64px', alignItems: 'center' }}>
 
           {/* ─── Colonne gauche : copywriting ─── */}
           <div>
@@ -495,7 +508,7 @@ export default function HomePage() {
           </div>
 
           {/* ─── Colonne droite : profil LinkedIn mockup + overlay résultat ─── */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '20px', paddingBottom: '20px' }}>
+          <div className="hero-mockup-col" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '20px', paddingBottom: '20px' }}>
             <div style={{ width: '100%', maxWidth: '480px', position: 'relative', animation: 'float 7s ease-in-out infinite' }}>
 
               {/* Conteneur fond neutre */}
@@ -588,7 +601,7 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           POURQUOI C'EST IMPORTANT
       ═══════════════════════════════ */}
-      <section style={{ background: '#0f1117', padding: '72px 56px', position: 'relative', zIndex: 1 }}>
+      <section className="stats-section" style={{ background: '#0f1117', padding: '72px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '56px' }}>
@@ -602,7 +615,7 @@ export default function HomePage() {
           </div>
 
           {/* 3 stat cards */}
-          <div className="reveal d1" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', marginBottom: '1px' }}>
+          <div className="reveal d1 grid-3-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', marginBottom: '1px' }}>
             {[
               {
                 stat: '#1',
