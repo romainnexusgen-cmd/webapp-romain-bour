@@ -484,7 +484,7 @@ export default function HomePage() {
               <span style={{ color: '#2979FF' }}>à la hauteur de votre expertise.</span>
             </h1>
             <p style={{ fontSize: '17px', color: '#6b7280', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
-              Votre profil LinkedIn vous fait perdre des opportunités. Découvrez exactement lesquelles, en 5 minutes.
+              Votre profil LinkedIn vous fait perdre des opportunités. Découvrez exactement ce qui bloque, en 5 minutes.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '36px' }}>
               {['Votre score sur 100 avec le détail par critère', 'Les 3 points qui freinent le plus votre visibilité', 'Des recommandations concrètes reçues par email'].map((item, i) => (
@@ -499,10 +499,30 @@ export default function HomePage() {
             <a href="#formulaire" className="hero-cta" style={{ fontSize: '16px', padding: '15px 32px', marginBottom: '24px', display: 'inline-flex' }}>
               Analyser mon profil gratuitement →
             </a>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '20px' }}>
-              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22C55E', animation: 'blink 2.5s infinite' }} />
-              <span style={{ fontSize: '13px', color: '#9ca3af' }}>
-                <span style={{ color: '#374151', fontWeight: 600 }}>+700 experts</span> ont déjà leur score
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '20px' }}>
+              {/* Avatar group */}
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {[
+                  { initials: 'ML', bg: '#1D4ED8' },
+                  { initials: 'SR', bg: '#7C3AED' },
+                  { initials: 'AT', bg: '#0891B2' },
+                  { initials: 'PD', bg: '#059669' },
+                  { initials: 'CB', bg: '#DC2626' },
+                ].map((a, i) => (
+                  <div key={i} style={{
+                    width: '28px', height: '28px', borderRadius: '50%',
+                    background: a.bg,
+                    border: '2px solid #f9f8f6',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '9px', fontWeight: 800, color: '#fff', letterSpacing: '0.02em',
+                    marginLeft: i === 0 ? 0 : '-8px',
+                    position: 'relative', zIndex: 5 - i,
+                    flexShrink: 0,
+                  }}>{a.initials}</div>
+                ))}
+              </div>
+              <span style={{ fontSize: '13px', color: '#374151', fontWeight: 500 }}>
+                <span style={{ fontWeight: 700 }}>+700 experts</span> ont déjà leur score
               </span>
             </div>
           </div>
