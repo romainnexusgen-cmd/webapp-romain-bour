@@ -486,7 +486,7 @@ export default function HomePage() {
               Démarquez-vous avec un profil LinkedIn{' '}
               <span style={{ color: '#2979FF' }}>à la hauteur de votre expertise.</span>
             </h1>
-            <p style={{ fontSize: '17px', color: '#6b7280', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
+            <p style={{ fontSize: '17px', color: '#0f1117', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
               Votre profil LinkedIn vous fait perdre des opportunités. Découvrez exactement ce qui bloque, en 5 minutes.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '36px' }}>
@@ -495,7 +495,7 @@ export default function HomePage() {
                   <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(41,121,255,0.1)', border: '1px solid rgba(41,121,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#2979FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
-                  <span style={{ fontSize: '14px', color: '#374151', fontWeight: 500 }}>{item}</span>
+                  <span style={{ fontSize: '14px', color: '#0f1117', fontWeight: 500 }}>{item}</span>
                 </div>
               ))}
             </div>
@@ -700,7 +700,7 @@ export default function HomePage() {
             <p style={{ color: '#2979FF', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>Ce que vous allez recevoir</p>
             <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.1, color: '#0f1117', maxWidth: '560px', margin: '0 auto' }}>
               Un diagnostic sur chaque pilier{' '}
-              <span style={{ color: '#9ca3af' }}>de votre profil LinkedIn.</span>
+              <span style={{ color: '#0f1117' }}>de votre profil LinkedIn.</span>
             </h2>
           </div>
 
@@ -734,7 +734,7 @@ export default function HomePage() {
                 </div>
                 {CRITERES.map((c, i) => (
                   <div key={i} style={{ padding: '11px 24px', borderBottom: i < CRITERES.length - 1 ? '1px solid #f9fafb' : 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '12px', color: '#374151', fontWeight: 500, width: '130px', flexShrink: 0 }}>{c.label}</span>
+                    <span style={{ fontSize: '12px', color: '#0f1117', fontWeight: 500, width: '130px', flexShrink: 0 }}>{c.label}</span>
                     <div style={{ flex: 1, height: '4px', background: '#f3f4f6', borderRadius: '2px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: barsVisible ? `${c.pct}%` : '0%', background: c.color, borderRadius: '2px', transition: `width 1.2s cubic-bezier(0.16,1,0.3,1) ${i * 0.07}s` }} />
                     </div>
@@ -752,7 +752,7 @@ export default function HomePage() {
                   <span style={{ fontWeight: 700, fontSize: '13px', color: '#0f1117' }}>Bannière</span>
                   <span style={{ fontSize: '9px', fontWeight: 700, color: '#EF4444', background: '#FEE2E2', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>À retravailler · 7/20</span>
                 </div>
-                <p style={{ fontSize: '12px', color: '#6b7280', lineHeight: 1.6 }}>Votre bannière ne communique aucun message sur votre expertise. Un visiteur ne comprend pas en une seconde ce que vous faites.</p>
+                <p style={{ fontSize: '12px', color: '#0f1117', lineHeight: 1.6 }}>Votre bannière ne communique aucun message sur votre expertise. Un visiteur ne comprend pas en une seconde ce que vous faites.</p>
               </div>
               <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '8px', padding: '10px 14px', flexShrink: 0, maxWidth: '280px' }}>
                 <p style={{ fontSize: '11px', color: '#1D4ED8', fontWeight: 600, lineHeight: 1.5 }}>Créez une bannière qui exprime votre positionnement en 3 secondes.</p>
@@ -781,9 +781,9 @@ export default function HomePage() {
               <span style={{ color: '#1D4ED8', fontSize: '11px', fontWeight: 600 }}>Gratuit · Résultat en 5 minutes</span>
             </div>
             <h2 style={{ fontSize: '38px', fontWeight: 900, color: '#0f1117', letterSpacing: '-1.2px', lineHeight: 1.1, marginBottom: '14px' }}>
-              Où en êtes-vous<br /><span style={{ color: '#9ca3af' }}>vraiment ?</span>
+              Où en êtes-vous<br /><span style={{ color: '#0f1117' }}>vraiment ?</span>
             </h2>
-            <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: 1.75 }}>
+            <p style={{ color: '#0f1117', fontSize: '15px', lineHeight: 1.75 }}>
               Collez votre lien LinkedIn. Recevez votre score et vos 3 priorités par email, en moins de 5 minutes.
             </p>
           </div>
@@ -826,7 +826,7 @@ export default function HomePage() {
               {/* Consent */}
               <label style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', textAlign: 'left', marginTop: '4px' }}>
                 <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: '3px', accentColor: '#2979FF', flexShrink: 0, cursor: 'pointer' }} />
-                <span style={{ color: '#6b7280', fontSize: '11px', lineHeight: 1.65 }}>J&apos;accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.</span>
+                <span style={{ color: '#0f1117', fontSize: '11px', lineHeight: 1.65 }}>J&apos;accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.</span>
               </label>
 
               {error && (
