@@ -457,6 +457,9 @@ export default function HomePage() {
           .stats-section { padding: 40px 20px !important; }
           .grid-3-stats { grid-template-columns: 1fr !important; }
           .hero-cta { white-space: nowrap !important; width: 100% !important; justify-content: center !important; box-sizing: border-box !important; }
+          .score-grid { grid-template-columns: 1fr !important; }
+          .score-grid > div:first-child { border-right: none !important; border-bottom: 1px solid #f3f4f6; }
+          .section-padding { padding: 48px 20px !important; }
         }
       `}</style>
 
@@ -705,7 +708,7 @@ export default function HomePage() {
           <div ref={scoreRef} className="reveal" style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}>
 
             {/* Section principale : score + critères */}
-            <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr' }}>
+            <div className="score-grid" style={{ display: 'grid', gridTemplateColumns: '220px 1fr' }}>
 
               {/* Gauche : score */}
               <div style={{ padding: '28px 24px', borderRight: '1px solid #f3f4f6', background: '#f9f8f6', display: 'flex', flexDirection: 'column', gap: '20px' }}>
