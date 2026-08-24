@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY
     if (!key) return NextResponse.json({ ok: false, error: 'missing key' }, { status: 500 })
 
-    const supabase = createClient('https://zgbymaqorbmpmbhbfiya.supabase.co', key)
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, key)
 
     /* Save qualification answers */
     const { data: audit } = await supabase
