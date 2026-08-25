@@ -86,8 +86,7 @@ export default function HomePage() {
     setError('')
     setLoading(true)
     try {
-      const fd = new FormData(); fd.append('lien', profileLink); fd.append('email', email)
-      await fetch(WEBHOOK_URL, { method: 'POST', body: fd })
+      await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, lien: profileLink }) })
       setSubmitted(true)
     } catch {
       setError('Une erreur est survenue. Réessaie dans quelques secondes.')
