@@ -48,7 +48,8 @@ export async function POST(req: NextRequest) {
       const name = audit ? `${audit.first_name} ${audit.last_name}` : 'Lead'
       const score = audit?.global_total_points ?? '?'
       const intent = q3 === 'accompagne' ? '🔥 Veut être accompagné' : '📚 Veut comprendre seul'
-      await fetch('https://api.brevo.com/v3/smtp/email', {
+      console.log('[qualify] sending brevo notif to romain, lead email:', lead.email, 'score:', score, 'q3:', q3)
+      const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
         headers: {
           'api-key': brevoKey,
@@ -78,7 +79,9 @@ export async function POST(req: NextRequest) {
             </div>
           `,
         }),
-      }).catch(() => {})
+      })
+      const brevoBody = await brevoRes.json().catch(() => ({}))
+      console.log('[qualify] brevo status:', brevoRes.status, 'body:', JSON.stringify(brevoBody))
     }
 
     return NextResponse.json({ ok: true })
