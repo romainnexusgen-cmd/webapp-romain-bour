@@ -111,9 +111,10 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           .gate-mask, .sec-card-gate-mask, .gated-zone .gate-mask { display: none !important; }
           .hero { min-height: auto; padding: 32px 24px 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           .wrap { padding: 20px 16px; gap: 12px; }
-          .gated-zone.locked .gate-content { filter: none; opacity: 1; pointer-events: auto; }
-          .sec-card-gated.locked .sec-card-body { filter: none; opacity: 1; pointer-events: auto; }
-          .sec-card-gated.locked, .gated-zone.locked { overflow: visible; }
+          .gated-zone.locked, .sec-card-gated.locked { display: none !important; }
+          .gated-zone.unlocked .gate-content { filter: none; opacity: 1; }
+          .sec-card-gated.unlocked .sec-card-body { filter: none; opacity: 1; }
+          .sec-card-gated.unlocked, .gated-zone.unlocked { overflow: visible; }
           .crit-body { max-height: none !important; overflow: visible !important; }
           .qw-body { max-height: none !important; overflow: visible !important; }
           .qw, .recap, .sec-card, .cta, .result-cta-call, .result-cta-newsletter {
@@ -1499,16 +1500,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
             document.body.style.overflow = 'hidden';
           });
 
-          /* PDF button → unlock all then print */
+          /* PDF button → print only already-unlocked content */
           var pdfBtn = document.getElementById('pdf-btn');
           if (pdfBtn) pdfBtn.addEventListener('click', function() {
-            /* Reveal all gated content before printing */
-            document.querySelectorAll('.gated-zone').forEach(function(z) {
-              z.classList.remove('locked'); z.classList.add('unlocked');
-            });
-            document.querySelectorAll('.sec-card-gated').forEach(function(z) {
-              z.classList.remove('locked'); z.classList.add('unlocked');
-            });
             document.querySelectorAll('.crit-body').forEach(function(b) {
               b.style.maxHeight = 'none';
             });
