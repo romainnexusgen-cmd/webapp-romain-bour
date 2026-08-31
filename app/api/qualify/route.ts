@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       .from('linkedin_audits')
       .update({ qualification_q1: q1, qualification_q2: q2, qualification_q3: q3 })
       .eq('id', auditId)
-      .select('first_name, last_name, global_total_points')
+      .select('first_name, last_name, global_total_points, global_total_maximum')
       .single()
 
     /* Fetch lead email */
@@ -46,7 +46,9 @@ export async function POST(req: NextRequest) {
     const brevoKey = process.env.BREVO_API_KEY
     if (brevoKey && lead?.email) {
       const name = audit ? `${audit.first_name} ${audit.last_name}` : 'Lead'
-      const score = audit?.global_total_points ?? '?'
+      const rawPts = Number(audit?.global_total_points) || 0
+      const rawMax = Number(audit?.global_total_maximum) || 100
+      const score = rawMax > 0 ? Math.round((rawPts / rawMax) * 100) : rawPts
       const intent = q3 === 'accompagne' ? '🔥 Veut être accompagné' : '📚 Veut comprendre seul'
       console.log('[qualify] sending brevo notif to romain, lead email:', lead.email, 'score:', score, 'q3:', q3)
       const brevoRes = await fetch('https://api.brevo.com/v3/smtp/email', {
