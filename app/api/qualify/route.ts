@@ -84,6 +84,27 @@ export async function POST(req: NextRequest) {
       console.log('[qualify] brevo status:', brevoRes.status, 'body:', JSON.stringify(brevoBody))
     }
 
+    /* Add contact to the appropriate Brevo nurturing list */
+    if (brevoKey && lead?.email) {
+      const listId = q3 === 'accompagne'
+        ? process.env.BREVO_LIST_ACCOMPAGNE
+        : process.env.BREVO_LIST_SEUL
+      if (listId) {
+        const firstName = audit?.first_name ?? ''
+        const lastName = audit?.last_name ?? ''
+        await fetch('https://api.brevo.com/v3/contacts', {
+          method: 'POST',
+          headers: { 'api-key': brevoKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: lead.email,
+            attributes: { PRENOM: firstName, NOM: lastName },
+            listIds: [parseInt(listId)],
+            updateEnabled: true,
+          }),
+        }).catch(() => {})
+      }
+    }
+
     return NextResponse.json({ ok: true })
   } catch {
     return NextResponse.json({ ok: false }, { status: 500 })
