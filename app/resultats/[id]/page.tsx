@@ -1343,7 +1343,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               <p className="result-eyebrow">Prochaine étape</p>
               <h2 className="result-h">Construisons votre plan<br />d'action ensemble.</h2>
               <p className="result-sub">
-                30 minutes pour identifier vos leviers prioritaires, clarifier votre positionnement
+                45 minutes pour identifier vos leviers prioritaires, clarifier votre positionnement
                 et repartir avec un plan d'action concret pour votre profil LinkedIn.
               </p>
               <a className="result-btn-call" href="https://calendly.com/romain-visibility/callmemaybe" target="_blank" rel="noreferrer">
