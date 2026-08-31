@@ -57,7 +57,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
   const { id } = await params
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
   const { data, error } = await supabase.from('linkedin_audits').select('*').eq('id', id).single()
   if (error || !data) return notFound()
