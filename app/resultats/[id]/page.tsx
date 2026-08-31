@@ -46,7 +46,7 @@ function getCriteres(data: Record<string, unknown>, key: string): Critere[] {
       titre:       data[`${key}_critere_${i}_titre`] as string,
       pts:         Number(data[`${key}_critere_${i}_points_obtenus`]) || 0,
       max:         Number(data[`${key}_critere_${i}_points_maximum`]) || 0,
-      explication: data[`${key}_critere_${i}_explication`] as string || '',
+      explication: (data[`${key}_critere_${i}_explication`] as string || '').replace(/\s*—\s*/g, ' '),
     })
     i++
   }
