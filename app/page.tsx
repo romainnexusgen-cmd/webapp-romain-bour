@@ -17,7 +17,7 @@ const CRITERES = [
 ]
 
 function UrlTypingAnimation() {
-  const full = 'linkedin.com/in/votre-profil'
+  const full = 'https://linkedin.com/in/votre-profil'
   const [displayed, setDisplayed] = useState('')
   const [phase, setPhase] = useState<'typing' | 'pause' | 'erasing'>('typing')
 
@@ -815,6 +815,9 @@ export default function HomePage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px', paddingLeft: '4px' }}>
                   <span style={{ fontSize: '11px', color: '#9ca3af' }}>Ex :</span>
                   <UrlTypingAnimation />
+                </div>
+                <div style={{ marginTop: '4px', paddingLeft: '4px', fontSize: '11px', color: '#EF4444', fontWeight: 500 }}>
+                  ⚠️ Copiez l'URL complète depuis votre navigateur (avec le https://)
                 </div>
               </div>
 
