@@ -89,8 +89,8 @@ export async function POST(req: NextRequest) {
     /* Add contact to the appropriate Brevo nurturing list */
     if (brevoKey && lead?.email) {
       const listId = q3 === 'accompagne'
-        ? process.env.BREVO_LIST_ACCOMPAGNE
-        : process.env.BREVO_LIST_SEUL
+        ? (process.env.BREVO_LIST_ACCOMPAGNE ?? null)
+        : 16
       if (listId) {
         const firstName = audit?.first_name ?? ''
         const lastName = audit?.last_name ?? ''
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             email: lead.email,
             attributes: { PRENOM: firstName, NOM: lastName },
-            listIds: [parseInt(listId)],
+            listIds: [typeof listId === 'string' ? parseInt(listId) : listId],
             updateEnabled: true,
           }),
         }).catch(() => {})
