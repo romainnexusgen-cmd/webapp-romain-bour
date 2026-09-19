@@ -62,6 +62,17 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
   const { data, error } = await supabase.from('linkedin_audits').select('*').eq('id', id).single()
   if (error || !data) return notFound()
 
+  // Track first open
+  if (!data.opened_at) {
+    supabase
+      .from('linkedin_audits')
+      .update({ opened_at: new Date().toISOString() })
+      .eq('id', id)
+      .is('opened_at', null)
+      .then(() => {})
+      .catch(() => {})
+  }
+
   const gScore = Number(data.global_total_points) || 0
   const gMax   = Number(data.global_total_maximum) || 100
   const gPct   = Math.round((gScore / gMax) * 100)
@@ -782,6 +793,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           var TARGET = ${gPct};
           var COLOR  = '${t.color}';
           var AUDIT_ID = '${auditId}';
+          var CALENDLY_URL = '/api/track/calendly?id=' + AUDIT_ID;
           var LOCK_KEY = 'optin_unlocked_' + AUDIT_ID;
           var ANS_KEY  = 'optin_ans3_' + AUDIT_ID;
 
@@ -989,7 +1001,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
             closeModal();
             /* Accompagné → ouvre Calendly immédiatement */
             if (ans3 === 'accompagne') {
-              window.open('https://calendly.com/romain-visibility/callmemaybe', '_blank');
+              window.open(CALENDLY_URL, '_blank');
             }
             unlockContent(ans3, ans3 !== 'accompagne');
           }
@@ -1346,7 +1358,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                 45 minutes pour identifier vos leviers prioritaires, clarifier votre positionnement
                 et repartir avec un plan d'action concret pour votre profil LinkedIn.
               </p>
-              <a className="result-btn-call" href="https://calendly.com/romain-visibility/callmemaybe" target="_blank" rel="noreferrer">
+              <a className="result-btn-call" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
                 Réserver mon appel gratuit
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M2 7h10M8 3l4 4-4 4"/>

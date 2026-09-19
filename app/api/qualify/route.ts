@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     /* Save qualification answers */
     const { data: audit } = await supabase
       .from('linkedin_audits')
-      .update({ qualification_q1: q1, qualification_q2: q2, qualification_q3: q3 })
+      .update({ qualification_q1: q1, qualification_q2: q2, qualification_q3: q3, qualify_completed_at: new Date().toISOString() })
       .eq('id', auditId)
       .select('first_name, last_name, global_total_points, global_total_maximum')
       .single()
