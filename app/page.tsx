@@ -7,13 +7,13 @@ const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL || ''
 
 const CRITERES = [
   { label: 'Photo de profil',    score: 12, max: 15, pct: 80,  color: '#10B981', bg: '#DCFCE7', tc: '#15803D', tag: 'Bon',            icon: '📸' },
-  { label: 'Bannière',           score: 7,  max: 20, pct: 35,  color: '#EF4444', bg: '#FEE2E2', tc: '#DC2626', tag: 'À retravailler', icon: '🖼️' },
-  { label: 'Titre du profil',    score: 11, max: 20, pct: 55,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '✏️' },
+  { label: 'Bannière',           score: 6,  max: 15, pct: 40,  color: '#EF4444', bg: '#FEE2E2', tc: '#DC2626', tag: 'À retravailler', icon: '🖼️' },
+  { label: 'Titre du profil',    score: 8,  max: 15, pct: 53,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '✏️' },
   { label: 'Section À propos',   score: 9,  max: 15, pct: 60,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '👤' },
-  { label: 'Sélection de posts', score: 4,  max: 10, pct: 40,  color: '#EF4444', bg: '#FEE2E2', tc: '#DC2626', tag: 'À retravailler', icon: '📌' },
+  { label: 'Sélection de posts', score: 5,  max: 15, pct: 33,  color: '#EF4444', bg: '#FEE2E2', tc: '#DC2626', tag: 'À retravailler', icon: '📌' },
   { label: 'Contenu publié',     score: 5,  max: 10, pct: 50,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '📝' },
   { label: 'Expériences',        score: 3,  max: 5,  pct: 60,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '💼' },
-  { label: 'Crédibilité',        score: 16, max: 20, pct: 80,  color: '#10B981', bg: '#DCFCE7', tc: '#15803D', tag: 'Bon',            icon: '⭐' },
+  { label: 'Crédibilité',        score: 8,  max: 10, pct: 80,  color: '#10B981', bg: '#DCFCE7', tc: '#15803D', tag: 'Bon',            icon: '⭐' },
 ]
 
 function UrlTypingAnimation() {
@@ -89,7 +89,9 @@ export default function HomePage() {
     setError('')
     setLoading(true)
     try {
-      await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, lien }) })
+      if (!WEBHOOK_URL) throw new Error('missing webhook')
+      const res = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, lien }) })
+      if (!res.ok) throw new Error(`webhook ${res.status}`)
       setSubmitted(true)
     } catch {
       setError('Une erreur est survenue. Réessaie dans quelques secondes.')
@@ -456,7 +458,7 @@ export default function HomePage() {
         @media (max-width: 640px) {
           .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
           .hero-mockup-col { display: none !important; }
-          .hero-section { padding: 32px 20px 48px !important; min-height: auto !important; }
+          .hero-section { padding: 92px 20px 48px !important; min-height: auto !important; }
           .stats-section { padding: 40px 20px !important; }
           .grid-3-stats { grid-template-columns: 1fr !important; }
           .hero-cta { white-space: nowrap !important; width: 100% !important; justify-content: center !important; box-sizing: border-box !important; }

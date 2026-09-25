@@ -64,17 +64,18 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
   // Track first open
   if (!data.opened_at) {
-    supabase
+    await supabase
       .from('linkedin_audits')
       .update({ opened_at: new Date().toISOString() })
       .eq('id', id)
       .is('opened_at', null)
-      .then(() => {})
-      .catch(() => {})
   }
 
-  const gScore = Number(data.global_total_points) || 0
-  const gMax   = Number(data.global_total_maximum) || 100
+  // Fixed scale: the AI-returned maximums vary between runs, so they are ignored.
+  const sectionPts = (key: string, max: number) =>
+    Math.min(Math.max(Number(data[`${key}_total_points`]) || 0, 0), max)
+  const gScore = SECTIONS.reduce((sum, s) => sum + sectionPts(s.key, s.max), 0)
+  const gMax   = SECTIONS.reduce((sum, s) => sum + s.max, 0)
   const gPct   = Math.round((gScore / gMax) * 100)
   const t      = tier(gPct)
 
@@ -266,6 +267,28 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
         /* ── LAYOUT ── */
         .wrap { max-width: 720px; margin: 0 auto; padding: 36px 16px 40px; display: flex; flex-direction: column; gap: 16px; }
+
+        /* ── EARLY CTA ── */
+        .early-cta {
+          display: flex; align-items: center; gap: 16px;
+          background: white; border: 1.5px solid #DBEAFE; border-radius: 16px;
+          padding: 18px 20px;
+        }
+        .early-cta-img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .early-cta-txt { flex: 1; min-width: 0; }
+        .early-cta-title { font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 4px; }
+        .early-cta-sub { font-size: 13px; color: #64748B; line-height: 1.5; }
+        .early-cta-btn {
+          flex-shrink: 0; background: #1D4ED8; color: white; font-weight: 700; font-size: 14px;
+          padding: 12px 18px; border-radius: 10px; text-decoration: none; white-space: nowrap;
+        }
+        .early-cta-btn:hover { background: #1E40AF; }
+        .result-nl-call { display: block; margin-top: 14px; font-size: 13px; color: #1D4ED8; font-weight: 600; text-decoration: none; }
+        @media (max-width: 600px) {
+          .early-cta { flex-direction: column; align-items: flex-start; }
+          .early-cta-btn { width: 100%; text-align: center; }
+        }
+        @media print { .early-cta, .result-nl-call { display: none !important; } }
 
         /* ── QUICK WINS ── */
         .qw {
@@ -792,7 +815,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         (function() {
           var TARGET = ${gPct};
           var COLOR  = '${t.color}';
-          var AUDIT_ID = '${auditId}';
+          var AUDIT_ID = ${JSON.stringify(auditId).replace(/</g, '\\u003c')};
           var CALENDLY_URL = '/api/track/calendly?id=' + AUDIT_ID;
           var LOCK_KEY = 'optin_unlocked_' + AUDIT_ID;
           var ANS_KEY  = 'optin_ans3_' + AUDIT_ID;
@@ -999,11 +1022,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               body: JSON.stringify({ auditId: AUDIT_ID, q1: answers.q1, q2: answers.q2, q3: answers.q3 })
             }).catch(function() {});
             closeModal();
-            /* Accompagné → ouvre Calendly immédiatement */
-            if (ans3 === 'accompagne') {
-              window.open(CALENDLY_URL, '_blank');
-            }
-            unlockContent(ans3, ans3 !== 'accompagne');
+            unlockContent(ans3, true);
           }
 
           function unlockContent(ans3, animate) {
@@ -1135,7 +1154,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                 {quickWins[0].explication && (
                   <div className="qw-body">
                     <div className="qw-body-inner">
-                      <div className="qw-body-text" style={{ color: t.color }}>{quickWins[0].explication}</div>
+                      <div className="qw-body-text">{quickWins[0].explication}</div>
                     </div>
                   </div>
                 )}
@@ -1164,7 +1183,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                       {w.explication && (
                         <div className="qw-body">
                           <div className="qw-body-inner">
-                            <div className="qw-body-text" style={{ color: t.color }}>{w.explication}</div>
+                            <div className="qw-body-text">{w.explication}</div>
                           </div>
                         </div>
                       )}
@@ -1185,6 +1204,18 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           </div>
         )}
 
+        {/* ── EARLY CALL CTA (visible to everyone) ── */}
+        <div className="early-cta">
+          <img className="early-cta-img" src="/romain-face.jpeg" alt="Romain Bour" />
+          <div className="early-cta-txt">
+            <p className="early-cta-title">Vous voulez qu'on corrige ces priorités ensemble&nbsp;?</p>
+            <p className="early-cta-sub">20 minutes en visio avec Romain pour passer votre profil en revue. Gratuit, sans engagement.</p>
+          </div>
+          <a className="early-cta-btn" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
+            Réserver un créneau
+          </a>
+        </div>
+
         {/* ── RECAP ── */}
         <div className="recap">
           <div className="recap-hd">
@@ -1193,8 +1224,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           </div>
           <div className="recap-list">
             {SECTIONS.map((s) => {
-              const pts = Number(data[`${s.key}_total_points`]) || 0
-              const max = Number(data[`${s.key}_total_maximum`]) || s.max
+              const max = s.max
+              const pts = sectionPts(s.key, max)
               const c = scoreColor(pts / max)
               const pct = Math.round((pts / max) * 100)
               return (
@@ -1223,8 +1254,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
         {/* ── SECTION DETAIL CARDS — all gated ── */}
         {SECTIONS.map((s) => {
-          const pts = Number(data[`${s.key}_total_points`]) || 0
-          const max = Number(data[`${s.key}_total_maximum`]) || s.max
+          const max = s.max
+          const pts = sectionPts(s.key, max)
           const c = scoreColor(pts / max)
           const pct = Math.round((pts / max) * 100)
           const criteres = getCriteres(data, s.key)
@@ -1387,6 +1418,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                   <path d="M2 7h10M8 3l4 4-4 4"/>
                 </svg>
               </a>
+              <a className="result-nl-call" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
+                Ou prenez 20 min avec Romain pour en parler →
+              </a>
             </div>
           </div>
         </div>
@@ -1507,9 +1541,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           /* Generic CTA → open modal */
           var btn = document.getElementById('generic-cta-btn');
           if (btn) btn.addEventListener('click', function() {
-            var modalBg = document.getElementById('modal-bg');
-            if (modalBg) modalBg.classList.add('open');
-            document.body.style.overflow = 'hidden';
+            var opener = document.getElementById('sticky-bar-btn');
+            if (opener) opener.click();
           });
 
           /* PDF button → print only already-unlocked content */
