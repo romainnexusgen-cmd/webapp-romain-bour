@@ -70,7 +70,7 @@ export default async function AdminPage() {
   const { data: legacyRaw } = await supabase
     .from('legacy_leads')
     .select('nom, intitule, tag_activite, note, derniere_utilisation, check_result, pays, email, lien_profil, lien_resultat')
-    .order('derniere_utilisation', { ascending: false })
+    .order('derniere_utilisation', { ascending: false, nullsFirst: false })
     .limit(2000)
   const legacy = (legacyRaw ?? []) as Legacy[]
   const newEmails = new Set(rows.map(r => r.email?.toLowerCase()).filter(Boolean))
