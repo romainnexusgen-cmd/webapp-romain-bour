@@ -1209,7 +1209,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           <img className="early-cta-img" src="/romain-face.jpeg" alt="Romain Bour" />
           <div className="early-cta-txt">
             <p className="early-cta-title">Vous voulez qu'on corrige ces priorités ensemble&nbsp;?</p>
-            <p className="early-cta-sub">45 minutes en visio avec Romain pour passer votre profil en revue. Gratuit, sans engagement.</p>
+            <p className="early-cta-sub">30 minutes en visio avec Romain pour passer votre profil en revue. Gratuit, sans engagement.</p>
           </div>
           <a className="early-cta-btn" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
             Réserver un créneau
@@ -1386,7 +1386,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               <p className="result-eyebrow">Prochaine étape</p>
               <h2 className="result-h">Construisons votre plan<br />d'action ensemble.</h2>
               <p className="result-sub">
-                45 minutes pour identifier vos leviers prioritaires, clarifier votre positionnement
+                30 minutes pour identifier vos leviers prioritaires, clarifier votre positionnement
                 et repartir avec un plan d'action concret pour votre profil LinkedIn.
               </p>
               <a className="result-btn-call" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
@@ -1419,7 +1419,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                 </svg>
               </a>
               <a className="result-nl-call" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
-                Ou prenez 45 min avec Romain pour en parler →
+                Ou prenez 30 min avec Romain pour en parler →
               </a>
             </div>
           </div>

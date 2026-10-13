@@ -19,5 +19,5 @@ export async function GET(req: NextRequest) {
     } catch {}
   }
 
-  return NextResponse.redirect('https://calendly.com/romain-visibility/callmemaybe')
+  return NextResponse.redirect('https://rdv.romainbour.com/?source=optinia')
 }
