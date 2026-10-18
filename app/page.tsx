@@ -6,14 +6,14 @@ const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL || ''
 
 
 const CRITERES = [
-  { label: 'Photo de profil',    score: 12, max: 15, pct: 80,  color: '#10B981', bg: '#DCFCE7', tc: '#15803D', tag: 'Bon',            icon: '📸' },
-  { label: 'Bannière',           score: 6,  max: 15, pct: 40,  color: '#EF4444', bg: '#FEE2E2', tc: '#DC2626', tag: 'À retravailler', icon: '🖼️' },
-  { label: 'Titre du profil',    score: 8,  max: 15, pct: 53,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '✏️' },
-  { label: 'Section À propos',   score: 9,  max: 15, pct: 60,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '👤' },
-  { label: 'Sélection de posts', score: 5,  max: 15, pct: 33,  color: '#EF4444', bg: '#FEE2E2', tc: '#DC2626', tag: 'À retravailler', icon: '📌' },
-  { label: 'Contenu publié',     score: 5,  max: 10, pct: 50,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '📝' },
-  { label: 'Expériences',        score: 3,  max: 5,  pct: 60,  color: '#F59E0B', bg: '#FEF9C3', tc: '#A16207', tag: 'Moyen',          icon: '💼' },
-  { label: 'Crédibilité',        score: 8,  max: 10, pct: 80,  color: '#10B981', bg: '#DCFCE7', tc: '#15803D', tag: 'Bon',            icon: '⭐' },
+  { label: 'Photo de profil',    score: 12, max: 15, pct: 80,  color: '#5B8A6B', bg: '#EAF2EC', tc: '#4A7358', tag: 'Bon',            icon: '📸' },
+  { label: 'Bannière',           score: 6,  max: 15, pct: 40,  color: '#D9654A', bg: '#FBE9E1', tc: '#C4543B', tag: 'À retravailler', icon: '🖼️' },
+  { label: 'Titre du profil',    score: 8,  max: 15, pct: 53,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: 'Moyen',          icon: '✏️' },
+  { label: 'Section À propos',   score: 9,  max: 15, pct: 60,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: 'Moyen',          icon: '👤' },
+  { label: 'Sélection de posts', score: 5,  max: 15, pct: 33,  color: '#D9654A', bg: '#FBE9E1', tc: '#C4543B', tag: 'À retravailler', icon: '📌' },
+  { label: 'Contenu publié',     score: 5,  max: 10, pct: 50,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: 'Moyen',          icon: '📝' },
+  { label: 'Expériences',        score: 3,  max: 5,  pct: 60,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: 'Moyen',          icon: '💼' },
+  { label: 'Crédibilité',        score: 8,  max: 10, pct: 80,  color: '#5B8A6B', bg: '#EAF2EC', tc: '#4A7358', tag: 'Bon',            icon: '⭐' },
 ]
 
 function UrlTypingAnimation() {
@@ -42,7 +42,7 @@ function UrlTypingAnimation() {
   }, [displayed, phase])
 
   return (
-    <span style={{ fontSize: '12px', color: '#6b7280', fontFamily: 'monospace', flex: 1 }}>
+    <span style={{ fontSize: '12px', color: '#71687A', fontFamily: 'monospace', flex: 1 }}>
       {displayed}<span style={{ opacity: phase === 'erasing' ? 0 : 1, animation: 'blink 1s infinite' }}>|</span>
     </span>
   )
@@ -207,13 +207,13 @@ export default function HomePage() {
 
   if (submitted) {
     return (
-      <div style={{ minHeight: '100vh', background: '#f9f8f6', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: '#FFFBF6', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'DM Sans, sans-serif' }}>
         <div style={{ textAlign: 'center', maxWidth: '380px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#EFF6FF', border: '1px solid #BFDBFE', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#2979FF', fontWeight: 700, fontSize: '18px' }}>✓</div>
-          <h2 style={{ color: '#0f1117', fontSize: '22px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>C'est en route.</h2>
-          <p style={{ color: '#6b7280', fontSize: '15px', lineHeight: 1.7 }}>Votre rapport arrive à <span style={{ color: '#0f1117', fontWeight: 600 }}>{email}</span> dans moins de 5 minutes.</p>
-          <p style={{ color: '#9ca3af', fontSize: '13px', lineHeight: 1.7, marginTop: '16px', padding: '14px 16px', background: '#f3f4f6', borderRadius: '10px', textAlign: 'left' }}>
-            Si vous ne le voyez pas dans votre boite principale, vérifiez l'onglet <strong style={{ color: '#6b7280' }}>Promotions</strong> ainsi que vos <strong style={{ color: '#6b7280' }}>spams</strong>.
+          <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FBE9E1', border: '1px solid #F2B9A4', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#D9654A', fontWeight: 700, fontSize: '18px' }}>✓</div>
+          <h2 style={{ color: '#2B2335', fontSize: '22px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>C'est en route.</h2>
+          <p style={{ color: '#71687A', fontSize: '15px', lineHeight: 1.7 }}>Votre rapport arrive à <span style={{ color: '#2B2335', fontWeight: 600 }}>{email}</span> dans moins de 5 minutes.</p>
+          <p style={{ color: '#9A91A3', fontSize: '13px', lineHeight: 1.7, marginTop: '16px', padding: '14px 16px', background: '#FBF4EC', borderRadius: '10px', textAlign: 'left' }}>
+            Si vous ne le voyez pas dans votre boite principale, vérifiez l'onglet <strong style={{ color: '#71687A' }}>Promotions</strong> ainsi que vos <strong style={{ color: '#71687A' }}>spams</strong>.
           </p>
         </div>
       </div>
@@ -230,8 +230,8 @@ export default function HomePage() {
         </a>
         <div className="nav-badge-nav" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22C55E', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
-            <span style={{ color: '#9ca3af', fontSize: '11px', fontWeight: 500 }}>+700 profils analysés</span>
+            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#5B8A6B', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
+            <span style={{ color: '#9A91A3', fontSize: '11px', fontWeight: 500 }}>+700 profils analysés</span>
           </div>
           <a href="#formulaire" className="nav-cta-small">Analyser mon profil →</a>
         </div>
@@ -241,9 +241,9 @@ export default function HomePage() {
       <canvas ref={canvasRef} aria-hidden style={{ display: 'none' }} />
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background: #f9f8f6; color: #0f1117; }
+        body { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; background: #FFFBF6; color: #2B2335; }
 
         .nav-bar {
           position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -252,31 +252,31 @@ export default function HomePage() {
           background: rgba(249,248,246,0.88);
           backdrop-filter: blur(20px) saturate(180%);
           -webkit-backdrop-filter: blur(20px) saturate(180%);
-          border-bottom: 1px solid rgba(0,0,0,0.08);
+          border-bottom: 1px solid rgba(43,35,53,0.08);
         }
         .nav-logo {
           display: flex; align-items: center; gap: 10px; text-decoration: none;
         }
         .nav-logo-mark {
           width: 30px; height: 30px; border-radius: 8px;
-          background: linear-gradient(135deg, #1D4ED8 0%, #2979FF 60%, #60A5FA 100%);
+          background: linear-gradient(135deg, #C4543B 0%, #D9654A 60%, #F2B9A4 100%);
           display: flex; align-items: center; justify-content: center;
           font-size: 14px; font-weight: 900; color: #fff; letter-spacing: -0.5px;
-          font-family: 'Inter', sans-serif;
+          font-family: 'DM Sans', sans-serif;
         }
         .nav-logo-text {
-          font-size: 16px; font-weight: 800; letter-spacing: -0.5px; color: #0f1117;
+          font-size: 16px; font-weight: 800; letter-spacing: -0.5px; color: #2B2335;
         }
-        .nav-logo-text span { color: #2979FF; }
+        .nav-logo-text span { color: #D9654A; }
         .nav-cta-small {
           display: inline-flex; align-items: center; gap: 6px;
-          background: #0f1117; border: none;
+          background: #2B2335; border: none;
           color: #fff; font-weight: 700; font-size: 13px;
           padding: 8px 18px; border-radius: 8px; text-decoration: none;
-          font-family: 'Inter', sans-serif;
+          font-family: 'DM Sans', sans-serif;
           transition: background 0.15s, opacity 0.15s;
         }
-        .nav-cta-small:hover { background: #2979FF; }
+        .nav-cta-small:hover { background: #D9654A; }
         @media (max-width: 640px) { .nav-bar { padding: 0 20px; } .nav-badge-nav { display: none !important; } }
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(40px); }
@@ -287,8 +287,8 @@ export default function HomePage() {
           50%       { transform: translateY(-8px); }
         }
         @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(41,121,255,0); }
-          50%       { box-shadow: 0 0 32px 8px rgba(41,121,255,0.15); }
+          0%, 100% { box-shadow: 0 0 0 0 rgba(217,101,74,0); }
+          50%       { box-shadow: 0 0 32px 8px rgba(217,101,74,0.15); }
         }
         .reveal { opacity: 0; }
         .reveal.in { animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
@@ -328,19 +328,19 @@ export default function HomePage() {
           z-index: 20; pointer-events: none;
           background: linear-gradient(180deg,
             transparent 0%,
-            rgba(41,121,255,0.04) 15%,
-            rgba(41,121,255,0.13) 40%,
-            rgba(41,121,255,0.20) 50%,
-            rgba(41,121,255,0.13) 60%,
-            rgba(41,121,255,0.04) 85%,
+            rgba(217,101,74,0.04) 15%,
+            rgba(217,101,74,0.13) 40%,
+            rgba(217,101,74,0.20) 50%,
+            rgba(217,101,74,0.13) 60%,
+            rgba(217,101,74,0.04) 85%,
             transparent 100%
           );
-          border-top: 2px solid rgba(41,121,255,0.75);
+          border-top: 2px solid rgba(217,101,74,0.75);
           box-shadow:
             0 0 0 1px rgba(255,255,255,0.08) inset,
-            0 -2px 0 rgba(41,121,255,0.3),
-            0 0 60px rgba(41,121,255,0.5),
-            0 0 160px rgba(41,121,255,0.18);
+            0 -2px 0 rgba(217,101,74,0.3),
+            0 0 60px rgba(217,101,74,0.5),
+            0 0 160px rgba(217,101,74,0.18);
           animation: scan-descend 3.3s cubic-bezier(0.4,0,0.55,1) forwards;
         }
         /* Ligne fine au bord avant de la bande */
@@ -349,7 +349,7 @@ export default function HomePage() {
           position: absolute; top: -1px; left: 0; right: 0; height: 2px;
           background: linear-gradient(90deg,
             transparent 0%, rgba(255,255,255,0.4) 8%,
-            #60A5FA 25%, #fff 50%, #60A5FA 75%,
+            #F2B9A4 25%, #fff 50%, #F2B9A4 75%,
             rgba(255,255,255,0.4) 92%, transparent 100%
           );
           filter: blur(0.5px);
@@ -405,33 +405,33 @@ export default function HomePage() {
         .score-bar { animation: bar-in 1.4s cubic-bezier(0.16,1,0.3,1) forwards; }
 
         .field {
-          width: 100%; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
-          padding: 12px 15px; font-size: 14px; font-family: 'Inter', sans-serif;
-          color: #0f1117; outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+          width: 100%; background: #fff; border: 1px solid #EEE4D8; border-radius: 10px;
+          padding: 12px 15px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+          color: #2B2335; outline: none; transition: border-color 0.15s, box-shadow 0.15s;
         }
-        .field::placeholder { color: #9ca3af; }
-        .field:focus { border-color: #2979FF; box-shadow: 0 0 0 3px rgba(41,121,255,0.1); }
+        .field::placeholder { color: #9A91A3; }
+        .field:focus { border-color: #D9654A; box-shadow: 0 0 0 3px rgba(217,101,74,0.1); }
 
         .submit {
-          width: 100%; background: #2979FF; color: #fff; font-weight: 700; font-size: 15px;
-          font-family: 'Inter', sans-serif; padding: 14px; border-radius: 10px; border: none;
+          width: 100%; background: #D9654A; color: #fff; font-weight: 700; font-size: 15px;
+          font-family: 'DM Sans', sans-serif; padding: 14px; border-radius: 10px; border: none;
           cursor: pointer; transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
-          box-shadow: 0 4px 18px rgba(41,121,255,0.35);
+          box-shadow: 0 4px 18px rgba(217,101,74,0.35);
         }
-        .submit:hover:not(:disabled) { background: #1a68ff; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(41,121,255,0.48); }
+        .submit:hover:not(:disabled) { background: #D9654A; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(217,101,74,0.48); }
         .submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .hero-cta {
           display: inline-flex; align-items: center; gap: 8px;
-          background: #2979FF; color: #fff; font-weight: 700; font-size: 15px;
-          font-family: 'Inter', sans-serif; padding: 14px 28px; border-radius: 10px; border: none;
+          background: #D9654A; color: #fff; font-weight: 700; font-size: 15px;
+          font-family: 'DM Sans', sans-serif; padding: 14px 28px; border-radius: 10px; border: none;
           cursor: pointer; text-decoration: none;
           transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
-          box-shadow: 0 4px 20px rgba(41,121,255,0.4);
+          box-shadow: 0 4px 20px rgba(217,101,74,0.4);
         }
-        .hero-cta:hover { background: #1a68ff; transform: translateY(-1px); box-shadow: 0 8px 32px rgba(41,121,255,0.5); }
+        .hero-cta:hover { background: #D9654A; transform: translateY(-1px); box-shadow: 0 8px 32px rgba(217,101,74,0.5); }
 
-        .tog { padding: 7px 15px; border-radius: 7px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; border: none; transition: all 0.15s; }
+        .tog { padding: 7px 15px; border-radius: 7px; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: all 0.15s; }
 
         @media (max-width: 960px) {
           .hero-inner  { flex-direction: column !important; }
@@ -463,9 +463,17 @@ export default function HomePage() {
           .grid-3-stats { grid-template-columns: 1fr !important; }
           .hero-cta { white-space: nowrap !important; width: 100% !important; justify-content: center !important; box-sizing: border-box !important; }
           .score-grid { grid-template-columns: 1fr !important; }
-          .score-grid > div:first-child { border-right: none !important; border-bottom: 1px solid #f3f4f6; }
+          .score-grid > div:first-child { border-right: none !important; border-bottom: 1px solid #FBF4EC; }
           .section-padding { padding: 48px 20px !important; }
         }
+      
+        /* ── Charte Romain Bour : chaleureuse, fine, humaine ── */
+        body { background: #FFFBF6 !important; color: #2B2335; }
+        * { font-family: 'DM Sans', system-ui, sans-serif; }
+        h1, h2, h3 { font-family: 'Newsreader', Georgia, serif !important; font-weight: 400 !important; letter-spacing: -0.015em !important; }
+        h1 em, h2 em, h3 em { font-style: italic; color: #D9654A; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+        .hero-cta, .nav-cta-small, button[type="submit"] { border-radius: 999px !important; box-shadow: none !important; }
+        .hero-cta:hover, button[type="submit"]:hover { background: #C4543B !important; }
       `}</style>
 
 
@@ -478,7 +486,7 @@ export default function HomePage() {
         display: 'flex', alignItems: 'center',
         padding: '80px 40px',
         zIndex: 1,
-        fontFamily: 'Inter, sans-serif',
+        fontFamily: 'DM Sans, sans-serif',
       }}>
 
         {/* ── LAYOUT 2 COLONNES ── */}
@@ -486,21 +494,20 @@ export default function HomePage() {
 
           {/* ─── Colonne gauche : copywriting ─── */}
           <div>
-            <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#2979FF', marginBottom: '20px' }}>Audit LinkedIn gratuit</p>
-            <h1 style={{ fontSize: 'clamp(32px, 3.5vw, 52px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: '#0f1117', marginBottom: '20px' }}>
-              Démarquez-vous avec un profil LinkedIn{' '}
-              <span style={{ color: '#2979FF' }}>à la hauteur de votre expertise.</span>
+            <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#D9654A', marginBottom: '20px' }}>Audit LinkedIn gratuit</p>
+            <h1 style={{ fontSize: 'clamp(32px, 3.5vw, 52px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: '#2B2335', marginBottom: '20px' }}>
+              Démarquez-vous avec un profil LinkedIn à la hauteur de votre <em>expertise</em>.
             </h1>
-            <p style={{ fontSize: '17px', color: '#0f1117', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
+            <p style={{ fontSize: '17px', color: '#2B2335', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
               Votre profil LinkedIn vous fait perdre des opportunités. Découvrez exactement ce qui bloque, en 5 minutes.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '36px' }}>
               {['Votre score sur 100 avec le détail par critère', 'Les 3 points qui freinent le plus votre visibilité', 'Des recommandations concrètes reçues par email'].map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(41,121,255,0.1)', border: '1px solid rgba(41,121,255,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#2979FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(217,101,74,0.1)', border: '1px solid rgba(217,101,74,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#D9654A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
-                  <span style={{ fontSize: '14px', color: '#0f1117', fontWeight: 500 }}>{item}</span>
+                  <span style={{ fontSize: '14px', color: '#2B2335', fontWeight: 500 }}>{item}</span>
                 </div>
               ))}
             </div>
@@ -511,16 +518,16 @@ export default function HomePage() {
               {/* Avatar group */}
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 {[
-                  { initials: 'ML', bg: '#1D4ED8' },
-                  { initials: 'SR', bg: '#7C3AED' },
-                  { initials: 'AT', bg: '#0891B2' },
-                  { initials: 'PD', bg: '#059669' },
-                  { initials: 'CB', bg: '#DC2626' },
+                  { initials: 'ML', bg: '#C4543B' },
+                  { initials: 'SR', bg: '#D9654A' },
+                  { initials: 'AT', bg: '#A9C6E3' },
+                  { initials: 'PD', bg: '#4A7358' },
+                  { initials: 'CB', bg: '#C4543B' },
                 ].map((a, i) => (
                   <div key={i} style={{
                     width: '28px', height: '28px', borderRadius: '50%',
                     background: a.bg,
-                    border: '2px solid #f9f8f6',
+                    border: '2px solid #FFFBF6',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: '9px', fontWeight: 800, color: '#fff', letterSpacing: '0.02em',
                     marginLeft: i === 0 ? 0 : '-8px',
@@ -529,7 +536,7 @@ export default function HomePage() {
                   }}>{a.initials}</div>
                 ))}
               </div>
-              <span style={{ fontSize: '13px', color: '#374151', fontWeight: 500 }}>
+              <span style={{ fontSize: '13px', color: '#2B2335', fontWeight: 500 }}>
                 <span style={{ fontWeight: 700 }}>+700 experts</span> ont déjà leur score
               </span>
             </div>
@@ -540,13 +547,13 @@ export default function HomePage() {
             <div style={{ width: '100%', maxWidth: '480px', position: 'relative', animation: 'float 7s ease-in-out infinite' }}>
 
               {/* Conteneur fond neutre */}
-              <div style={{ background: 'linear-gradient(140deg, #F5F4F0 0%, #EDEAE4 100%)', borderRadius: '20px', padding: '20px', boxShadow: '0 24px 60px rgba(0,0,0,0.10)' }}>
+              <div style={{ background: 'linear-gradient(140deg, #FBF4EC 0%, #EEE4D8 100%)', borderRadius: '20px', padding: '20px', boxShadow: '0 24px 60px rgba(43,35,53,0.10)' }}>
 
                 {/* Mockup profil professionnel — style original, pas LinkedIn */}
-                <div style={{ background: '#fff', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.10)', fontFamily: 'Inter, sans-serif' }}>
+                <div style={{ background: '#fff', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 12px rgba(43,35,53,0.10)', fontFamily: 'DM Sans, sans-serif' }}>
 
                   {/* Bannière abstraite — palette originale */}
-                  <div style={{ height: '88px', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)', position: 'relative' }}>
+                  <div style={{ height: '88px', background: 'linear-gradient(135deg, #2B2335 0%, #3A2F47 50%, #4A3A55 100%)', position: 'relative' }}>
                     {/* Formes géométriques abstraites */}
                     <div style={{ position: 'absolute', top: '12px', right: '20px', width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
                     <div style={{ position: 'absolute', bottom: '8px', right: '60px', width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
@@ -555,34 +562,34 @@ export default function HomePage() {
                   {/* Zone profil */}
                   <div style={{ padding: '0 20px 16px', position: 'relative' }}>
                     <div style={{ marginTop: '-32px', marginBottom: '8px' }}>
-                      <div style={{ width: '68px', height: '68px', borderRadius: '50%', background: 'linear-gradient(145deg, #374151, #1f2937)', border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 800, color: '#fff' }}>S</div>
+                      <div style={{ width: '68px', height: '68px', borderRadius: '50%', background: 'linear-gradient(145deg, #2B2335, #2B2335)', border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 800, color: '#fff' }}>S</div>
                     </div>
-                    <p style={{ fontWeight: 700, fontSize: '16px', color: '#0f1117', marginBottom: '3px' }}>Sophie Martin</p>
-                    <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '12px', lineHeight: 1.4 }}>Consultante RH · Experte formation · Paris</p>
+                    <p style={{ fontWeight: 700, fontSize: '16px', color: '#2B2335', marginBottom: '3px' }}>Sophie Martin</p>
+                    <p style={{ fontSize: '12px', color: '#71687A', marginBottom: '12px', lineHeight: 1.4 }}>Consultante RH · Experte formation · Paris</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <div style={{ height: '7px', background: '#f3f4f6', borderRadius: '3px', width: '88%' }} />
-                      <div style={{ height: '7px', background: '#f3f4f6', borderRadius: '3px', width: '72%' }} />
+                      <div style={{ height: '7px', background: '#FBF4EC', borderRadius: '3px', width: '88%' }} />
+                      <div style={{ height: '7px', background: '#FBF4EC', borderRadius: '3px', width: '72%' }} />
                     </div>
                   </div>
 
                   {/* Section À propos simulée */}
-                  <div style={{ borderTop: '6px solid #f3f4f6', padding: '14px 20px' }}>
-                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1117', marginBottom: '10px' }}>À propos</p>
+                  <div style={{ borderTop: '6px solid #FBF4EC', padding: '14px 20px' }}>
+                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#2B2335', marginBottom: '10px' }}>À propos</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '96%' }} />
-                      <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '82%' }} />
-                      <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '90%' }} />
+                      <div style={{ height: '6px', background: '#FBF4EC', borderRadius: '3px', width: '96%' }} />
+                      <div style={{ height: '6px', background: '#FBF4EC', borderRadius: '3px', width: '82%' }} />
+                      <div style={{ height: '6px', background: '#FBF4EC', borderRadius: '3px', width: '90%' }} />
                     </div>
                   </div>
 
                   {/* Section Expériences simulée */}
-                  <div style={{ borderTop: '6px solid #f3f4f6', padding: '14px 20px 16px' }}>
-                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#0f1117', marginBottom: '10px' }}>Expériences</p>
+                  <div style={{ borderTop: '6px solid #FBF4EC', padding: '14px 20px 16px' }}>
+                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#2B2335', marginBottom: '10px' }}>Expériences</p>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                      <div style={{ width: '36px', height: '36px', background: '#e5e7eb', borderRadius: '6px', flexShrink: 0 }} />
+                      <div style={{ width: '36px', height: '36px', background: '#EEE4D8', borderRadius: '6px', flexShrink: 0 }} />
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '4px' }}>
-                        <div style={{ height: '7px', background: '#f3f4f6', borderRadius: '3px', width: '70%' }} />
-                        <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '3px', width: '55%' }} />
+                        <div style={{ height: '7px', background: '#FBF4EC', borderRadius: '3px', width: '70%' }} />
+                        <div style={{ height: '6px', background: '#FBF4EC', borderRadius: '3px', width: '55%' }} />
                       </div>
                     </div>
                   </div>
@@ -592,29 +599,29 @@ export default function HomePage() {
               {/* Overlay résultat audit — flotte en bas à droite */}
               <div style={{
                 position: 'absolute', bottom: '-14px', right: '-14px',
-                background: '#fff', border: '1px solid #e5e7eb',
+                background: '#fff', border: '1px solid #EEE4D8',
                 borderRadius: '16px', padding: '16px 18px',
-                boxShadow: '0 12px 40px rgba(0,0,0,0.14)',
+                boxShadow: '0 12px 40px rgba(43,35,53,0.14)',
                 width: '200px',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'DM Sans, sans-serif',
               }}>
-                <p style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: '8px' }}>Résultat de l&apos;analyse</p>
+                <p style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9A91A3', marginBottom: '8px' }}>Résultat de l&apos;analyse</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '40px', fontWeight: 900, color: '#2979FF', letterSpacing: '-2px', lineHeight: 1 }}>67</span>
-                  <span style={{ fontSize: '15px', fontWeight: 600, color: '#d1d5db' }}>/100</span>
+                  <span style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '42px', fontWeight: 400, color: '#D9654A', letterSpacing: '-1px', lineHeight: 1 }}>67</span>
+                  <span style={{ fontSize: '15px', fontWeight: 600, color: '#E2D4C3' }}>/100</span>
                 </div>
-                <div style={{ height: '4px', background: '#f3f4f6', borderRadius: '100px', overflow: 'hidden', marginBottom: '12px' }}>
-                  <div style={{ height: '100%', width: '67%', background: 'linear-gradient(90deg, #1565FF, #2979FF)', borderRadius: '100px' }} />
+                <div style={{ height: '4px', background: '#FBF4EC', borderRadius: '100px', overflow: 'hidden', marginBottom: '12px' }}>
+                  <div style={{ height: '100%', width: '67%', background: 'linear-gradient(90deg, #D9654A, #D9654A)', borderRadius: '100px' }} />
                 </div>
-                <p style={{ fontSize: '10px', fontWeight: 600, color: '#374151', marginBottom: '6px' }}>3 priorités identifiées</p>
+                <p style={{ fontSize: '10px', fontWeight: 600, color: '#2B2335', marginBottom: '6px' }}>3 priorités identifiées</p>
                 {[
-                  { label: 'Bannière', color: '#EF4444' },
-                  { label: 'Titre du profil', color: '#F59E0B' },
-                  { label: 'Sélection de posts', color: '#EF4444' },
+                  { label: 'Bannière', color: '#D9654A' },
+                  { label: 'Titre du profil', color: '#E9B65C' },
+                  { label: 'Sélection de posts', color: '#D9654A' },
                 ].map((p, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: i < 2 ? '5px' : 0 }}>
                     <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
-                    <span style={{ fontSize: '11px', color: '#374151' }}>{p.label}</span>
+                    <span style={{ fontSize: '11px', color: '#2B2335' }}>{p.label}</span>
                   </div>
                 ))}
               </div>
@@ -629,13 +636,12 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           POURQUOI C'EST IMPORTANT
       ═══════════════════════════════ */}
-      <section className="stats-section" style={{ background: '#0f1117', padding: '72px 56px', position: 'relative', zIndex: 1 }}>
+      <section className="stats-section" style={{ background: '#2B2335', padding: '72px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '56px' }}>
             <h2 style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.15, color: '#fff', maxWidth: '640px', margin: '0 auto' }}>
-              Votre profil LinkedIn est votre{' '}
-              <span style={{ color: '#2979FF' }}>première impression en ligne.</span>
+              Votre profil LinkedIn est votre première <em>impression</em> en ligne.
             </h2>
             <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.45)', marginTop: '16px', maxWidth: '520px', margin: '16px auto 0', lineHeight: 1.7 }}>
               Quand vous rencontrez quelqu'un, la première chose qu'il fait, c'est vous chercher sur Google. Votre profil LinkedIn arrive en premier résultat. Toujours.
@@ -664,9 +670,9 @@ export default function HomePage() {
                 source: '* LinkedIn, 2026',
               },
             ].map((item, i) => (
-              <div key={i} style={{ background: '#161b27', padding: '32px 28px' }}>
-                <p style={{ fontSize: '44px', fontWeight: 900, color: '#fff', letterSpacing: '-2px', lineHeight: 1, marginBottom: '6px' }}>{item.stat}</p>
-                <p style={{ fontSize: '11px', fontWeight: 700, color: '#2979FF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>{item.title}</p>
+              <div key={i} style={{ background: '#2B2335', padding: '32px 28px' }}>
+                <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '48px', fontWeight: 300, color: '#fff', letterSpacing: '-1px', lineHeight: 1, marginBottom: '6px' }}>{item.stat}</p>
+                <p style={{ fontSize: '11px', fontWeight: 700, color: '#D9654A', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>{item.title}</p>
                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.50)', lineHeight: 1.7, marginBottom: '12px' }}>{item.label}</p>
                 <p style={{ fontSize: '10px', color: 'rgba(255,255,255,0.18)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{item.source}</p>
               </div>
@@ -674,10 +680,10 @@ export default function HomePage() {
           </div>
 
           {/* Audience card — who's on LinkedIn */}
-          <div className="reveal d2" style={{ background: '#161b27', borderRadius: '16px', padding: '32px 36px', marginTop: '1px' }}>
+          <div className="reveal d2" style={{ background: '#2B2335', borderRadius: '16px', padding: '32px 36px', marginTop: '1px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '40px', flexWrap: 'wrap' }}>
               <div style={{ flexShrink: 0 }}>
-                <p style={{ fontSize: '44px', fontWeight: 900, color: '#fff', letterSpacing: '-2px', lineHeight: 1, marginBottom: '4px' }}>38M</p>
+                <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '48px', fontWeight: 300, color: '#fff', letterSpacing: '-1px', lineHeight: 1, marginBottom: '4px' }}>38M</p>
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>membres en France</p>
                 <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>80 % de la population active</p>
               </div>
@@ -702,45 +708,44 @@ export default function HomePage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
           <div className="reveal" style={{ marginBottom: '64px', textAlign: 'center' }}>
-            <p style={{ color: '#2979FF', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>Ce que vous allez recevoir</p>
-            <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.1, color: '#0f1117', maxWidth: '560px', margin: '0 auto' }}>
-              Un diagnostic sur chaque pilier{' '}
-              <span style={{ color: '#0f1117' }}>de votre profil LinkedIn.</span>
+            <p style={{ color: '#D9654A', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>Ce que vous allez recevoir</p>
+            <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.1, color: '#2B2335', maxWidth: '560px', margin: '0 auto' }}>
+              Un diagnostic sur chaque <em>pilier</em> de votre profil LinkedIn.
             </h2>
           </div>
 
           {/* Grand card unifié */}
-          <div ref={scoreRef} className="reveal" style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}>
+          <div ref={scoreRef} className="reveal" style={{ background: '#fff', border: '1px solid #EEE4D8', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 32px rgba(43,35,53,0.06)' }}>
 
             {/* Section principale : score + critères */}
             <div className="score-grid" style={{ display: 'grid', gridTemplateColumns: '220px 1fr' }}>
 
               {/* Gauche : score */}
-              <div style={{ padding: '28px 24px', borderRight: '1px solid #f3f4f6', background: '#f9f8f6', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af' }}>Score global</p>
+              <div style={{ padding: '28px 24px', borderRight: '1px solid #FBF4EC', background: '#FFFBF6', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9A91A3' }}>Score global</p>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px', marginBottom: '10px' }}>
-                    <span style={{ fontSize: '64px', fontWeight: 900, color: '#0f1117', lineHeight: 1, letterSpacing: '-3px', fontVariantNumeric: 'tabular-nums' }}>{displayScore}</span>
-                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#d1d5db' }}>/100</span>
+                    <span style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '68px', fontWeight: 300, color: '#2B2335', lineHeight: 1, letterSpacing: '-1.5px', fontVariantNumeric: 'tabular-nums' }}>{displayScore}</span>
+                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#E2D4C3' }}>/100</span>
                   </div>
-                  <div style={{ height: '5px', background: '#e5e7eb', borderRadius: '100px', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: barsVisible ? `${total}%` : '0%', background: 'linear-gradient(90deg, #1565FF, #2979FF)', borderRadius: '100px', transition: 'width 1.6s cubic-bezier(0.16,1,0.3,1)' }} />
+                  <div style={{ height: '5px', background: '#EEE4D8', borderRadius: '100px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: barsVisible ? `${total}%` : '0%', background: 'linear-gradient(90deg, #D9654A, #D9654A)', borderRadius: '100px', transition: 'width 1.6s cubic-bezier(0.16,1,0.3,1)' }} />
                   </div>
                 </div>
-                <div style={{ padding: '10px 12px', background: '#FEFCE8', border: '1px solid #FDE047', borderRadius: '8px' }}>
-                  <p style={{ fontSize: '11px', color: '#713F12', fontWeight: 600, lineHeight: 1.4 }}>Profil à fort potentiel · 3 axes prioritaires</p>
+                <div style={{ padding: '10px 12px', background: '#FBF1DC', border: '1px solid #E9B65C', borderRadius: '8px' }}>
+                  <p style={{ fontSize: '11px', color: '#6E4F1C', fontWeight: 600, lineHeight: 1.4 }}>Profil à fort potentiel · 3 axes prioritaires</p>
                 </div>
               </div>
 
               {/* Droite : 8 critères */}
               <div>
-                <div style={{ padding: '16px 24px', borderBottom: '1px solid #f3f4f6' }}>
-                  <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af' }}>Les 8 critères analysés</p>
+                <div style={{ padding: '16px 24px', borderBottom: '1px solid #FBF4EC' }}>
+                  <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9A91A3' }}>Les 8 critères analysés</p>
                 </div>
                 {CRITERES.map((c, i) => (
-                  <div key={i} style={{ padding: '11px 24px', borderBottom: i < CRITERES.length - 1 ? '1px solid #f9fafb' : 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '12px', color: '#0f1117', fontWeight: 500, width: '130px', flexShrink: 0 }}>{c.label}</span>
-                    <div style={{ flex: 1, height: '4px', background: '#f3f4f6', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div key={i} style={{ padding: '11px 24px', borderBottom: i < CRITERES.length - 1 ? '1px solid #FBF4EC' : 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{ fontSize: '12px', color: '#2B2335', fontWeight: 500, width: '130px', flexShrink: 0 }}>{c.label}</span>
+                    <div style={{ flex: 1, height: '4px', background: '#FBF4EC', borderRadius: '2px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: barsVisible ? `${c.pct}%` : '0%', background: c.color, borderRadius: '2px', transition: `width 1.2s cubic-bezier(0.16,1,0.3,1) ${i * 0.07}s` }} />
                     </div>
                     <span style={{ fontSize: '9px', fontWeight: 700, color: c.tc, background: c.bg, padding: '2px 7px', borderRadius: '4px', flexShrink: 0 }}>{c.tag}</span>
@@ -751,22 +756,22 @@ export default function HomePage() {
             </div>
 
             {/* Bas : exemple d'analyse */}
-            <div style={{ padding: '20px 28px', background: '#FEF2F2', borderTop: '1px solid #FECACA', display: 'flex', alignItems: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
+            <div style={{ padding: '20px 28px', background: '#FBE9E1', borderTop: '1px solid #F2B9A4', display: 'flex', alignItems: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
               <div style={{ flex: 1, minWidth: '200px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
-                  <span style={{ fontWeight: 700, fontSize: '13px', color: '#0f1117' }}>Bannière</span>
-                  <span style={{ fontSize: '9px', fontWeight: 700, color: '#EF4444', background: '#FEE2E2', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>À retravailler · 7/20</span>
+                  <span style={{ fontWeight: 700, fontSize: '13px', color: '#2B2335' }}>Bannière</span>
+                  <span style={{ fontSize: '9px', fontWeight: 700, color: '#D9654A', background: '#FBE9E1', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>À retravailler · 7/20</span>
                 </div>
-                <p style={{ fontSize: '12px', color: '#0f1117', lineHeight: 1.6 }}>Votre bannière ne communique aucun message sur votre expertise. Un visiteur ne comprend pas en une seconde ce que vous faites.</p>
+                <p style={{ fontSize: '12px', color: '#2B2335', lineHeight: 1.6 }}>Votre bannière ne communique aucun message sur votre expertise. Un visiteur ne comprend pas en une seconde ce que vous faites.</p>
               </div>
-              <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '8px', padding: '10px 14px', flexShrink: 0, maxWidth: '280px' }}>
-                <p style={{ fontSize: '11px', color: '#1D4ED8', fontWeight: 600, lineHeight: 1.5 }}>Créez une bannière qui exprime votre positionnement en 3 secondes.</p>
+              <div style={{ background: '#FBE9E1', border: '1px solid #F2B9A4', borderRadius: '8px', padding: '10px 14px', flexShrink: 0, maxWidth: '280px' }}>
+                <p style={{ fontSize: '11px', color: '#C4543B', fontWeight: 600, lineHeight: 1.5 }}>Créez une bannière qui exprime votre positionnement en 3 secondes.</p>
               </div>
             </div>
 
             {/* Footer */}
-            <div style={{ padding: '12px 28px', borderTop: '1px solid #f3f4f6', background: '#fff' }}>
-              <p style={{ fontSize: '11px', color: '#9ca3af' }}>Recommandations concrètes pour chaque critère, reçues directement par email</p>
+            <div style={{ padding: '12px 28px', borderTop: '1px solid #FBF4EC', background: '#fff' }}>
+              <p style={{ fontSize: '11px', color: '#9A91A3' }}>Recommandations concrètes pour chaque critère, reçues directement par email</p>
             </div>
 
           </div>
@@ -776,19 +781,19 @@ export default function HomePage() {
       {/* ═══════════════════════════════
           FORMULAIRE
       ═══════════════════════════════ */}
-      <section id="formulaire" className="section-padding" style={{ background: '#f9f8f6', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
+      <section id="formulaire" className="section-padding" style={{ background: '#FFFBF6', padding: '96px 56px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center' }}>
 
           {/* Header centré */}
           <div className="reveal" style={{ marginBottom: '48px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '5px 14px', background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '9999px', marginBottom: '20px' }}>
-              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22C55E', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
-              <span style={{ color: '#1D4ED8', fontSize: '11px', fontWeight: 600 }}>Gratuit · Résultat en 5 minutes</span>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '5px 14px', background: '#FBE9E1', border: '1px solid #F2B9A4', borderRadius: '9999px', marginBottom: '20px' }}>
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#5B8A6B', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
+              <span style={{ color: '#C4543B', fontSize: '11px', fontWeight: 600 }}>Gratuit · Résultat en 5 minutes</span>
             </div>
-            <h2 style={{ fontSize: '38px', fontWeight: 900, color: '#0f1117', letterSpacing: '-1.2px', lineHeight: 1.1, marginBottom: '14px' }}>
-              Où en êtes-vous<br /><span style={{ color: '#0f1117' }}>vraiment ?</span>
+            <h2 style={{ fontSize: '38px', fontWeight: 900, color: '#2B2335', letterSpacing: '-1.2px', lineHeight: 1.1, marginBottom: '14px' }}>
+              Où en êtes-vous <em>vraiment</em> ?
             </h2>
-            <p style={{ color: '#0f1117', fontSize: '15px', lineHeight: 1.75 }}>
+            <p style={{ color: '#2B2335', fontSize: '15px', lineHeight: 1.75 }}>
               Collez votre lien LinkedIn. Recevez votre score et vos 3 priorités par email, en moins de 5 minutes.
             </p>
           </div>
@@ -796,10 +801,10 @@ export default function HomePage() {
           {/* Carte formulaire */}
           <div className="reveal d1" style={{
             background: '#fff',
-            border: '1px solid #e5e7eb',
+            border: '1px solid #EEE4D8',
             borderRadius: '24px',
             padding: '40px 36px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.06)',
+            boxShadow: '0 8px 32px rgba(43,35,53,0.06)',
             position: 'relative',
             overflow: 'hidden',
           }}>
@@ -815,10 +820,10 @@ export default function HomePage() {
                   <input className="field" type="text" placeholder="Collez votre lien LinkedIn ici" value={profileLink} onChange={e => setProfileLink(e.target.value)} style={{ paddingLeft: '40px' }} />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px', paddingLeft: '4px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Ex :</span>
+                  <span style={{ fontSize: '11px', color: '#9A91A3' }}>Ex :</span>
                   <UrlTypingAnimation />
                 </div>
-                <div style={{ marginTop: '4px', paddingLeft: '4px', fontSize: '11px', color: '#EF4444', fontWeight: 500 }}>
+                <div style={{ marginTop: '4px', paddingLeft: '4px', fontSize: '11px', color: '#D9654A', fontWeight: 500 }}>
                   ⚠️ Copiez l'URL complète depuis votre navigateur (avec le https://)
                 </div>
               </div>
@@ -826,21 +831,21 @@ export default function HomePage() {
               {/* Champ email */}
               <div style={{ position: 'relative' }}>
                 <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9A91A3" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 </div>
                 <input className="field" type="email" placeholder="votre@email.com" value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: '40px' }} />
               </div>
 
               {/* Consent */}
               <label style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', textAlign: 'left', marginTop: '4px' }}>
-                <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: '3px', accentColor: '#2979FF', flexShrink: 0, cursor: 'pointer' }} />
-                <span style={{ color: '#0f1117', fontSize: '11px', lineHeight: 1.65 }}>J&apos;accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.</span>
+                <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: '3px', accentColor: '#D9654A', flexShrink: 0, cursor: 'pointer' }} />
+                <span style={{ color: '#2B2335', fontSize: '11px', lineHeight: 1.65 }}>J&apos;accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.</span>
               </label>
 
               {error && (
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '8px', padding: '10px 12px' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                  <p style={{ color: '#EF4444', fontSize: '12px', fontWeight: 500 }}>{error}</p>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D9654A" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <p style={{ color: '#D9654A', fontSize: '12px', fontWeight: 500 }}>{error}</p>
                 </div>
               )}
 
@@ -855,30 +860,30 @@ export default function HomePage() {
             </form>
 
             {/* Réassurance */}
-            <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #f3f4f6', textAlign: 'center' }}>
-              <p style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 500 }}>Aucun accès à votre compte · Résultat en 5 min · 100% gratuit</p>
+            <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #FBF4EC', textAlign: 'center' }}>
+              <p style={{ fontSize: '11px', color: '#9A91A3', fontWeight: 500 }}>Aucun accès à votre compte · Résultat en 5 min · 100% gratuit</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer style={{ background: '#fff', borderTop: '1px solid rgba(0,0,0,0.08)', padding: '28px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+      <footer style={{ background: '#fff', borderTop: '1px solid rgba(43,35,53,0.08)', padding: '28px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: 'linear-gradient(135deg,#1D4ED8,#2979FF)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900, color: '#fff' }}>O</div>
-            <span style={{ fontSize: '13px', fontWeight: 800, color: '#374151', letterSpacing: '-0.3px' }}>optin<span style={{ color: '#2979FF' }}>.ia</span></span>
+            <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: 'linear-gradient(135deg,#C4543B,#D9654A)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 900, color: '#fff' }}>O</div>
+            <span style={{ fontSize: '13px', fontWeight: 800, color: '#2B2335', letterSpacing: '-0.3px' }}>optin<span style={{ color: '#D9654A' }}>.ia</span></span>
           </div>
-          <span style={{ width: '1px', height: '16px', background: '#e5e7eb' }} />
+          <span style={{ width: '1px', height: '16px', background: '#EEE4D8' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-            <img src="/romain-face.jpeg" alt="Romain Bour" style={{ width: '26px', height: '26px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #e5e7eb' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+            <img src="/romain-face.jpeg" alt="Romain Bour" style={{ width: '26px', height: '26px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #EEE4D8' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
             <div>
-              <p style={{ fontWeight: 600, fontSize: '11px', color: '#6b7280', lineHeight: 1 }}>Créé par <span style={{ color: '#0f1117', fontWeight: 700 }}>Romain Bour</span></p>
-              <p style={{ fontSize: '10px', color: '#9ca3af', marginTop: '2px' }}>Expert Branding B2B · +90 dirigeants</p>
+              <p style={{ fontWeight: 600, fontSize: '11px', color: '#71687A', lineHeight: 1 }}>Créé par <span style={{ color: '#2B2335', fontWeight: 700 }}>Romain Bour</span></p>
+              <p style={{ fontSize: '10px', color: '#9A91A3', marginTop: '2px' }}>Expert Branding B2B · +90 dirigeants</p>
             </div>
           </div>
         </div>
-        <a href="https://www.linkedin.com/in/romainbour/" target="_blank" style={{ color: '#9ca3af', fontSize: '12px', textDecoration: 'none', fontWeight: 500, transition: 'color 0.15s' }} onMouseEnter={e => (e.currentTarget.style.color = '#0f1117')} onMouseLeave={e => (e.currentTarget.style.color = '#9ca3af')}>LinkedIn →</a>
+        <a href="https://www.linkedin.com/in/romainbour/" target="_blank" style={{ color: '#9A91A3', fontSize: '12px', textDecoration: 'none', fontWeight: 500, transition: 'color 0.15s' }} onMouseEnter={e => (e.currentTarget.style.color = '#2B2335')} onMouseLeave={e => (e.currentTarget.style.color = '#9A91A3')}>LinkedIn →</a>
       </footer>
     </>
   )
