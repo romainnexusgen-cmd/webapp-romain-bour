@@ -7,7 +7,24 @@ function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
 }
 
-function userEmail(lien: string) {
+function userEmail(lien: string, lang: 'fr' | 'en') {
+  if (lang === 'en') return `<!DOCTYPE html><html lang="en"><body style="margin:0;background:#FFFBF6;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FFFBF6;"><tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FFFFFF;border:1px solid #EEE4D8;border-radius:18px;overflow:hidden;">
+<tr><td style="background:#2B2335;padding:30px 32px;">
+<p style="margin:0 0 10px;font-family:${SANS};font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#F2B9A4;">&mdash;&nbsp; LinkedIn Analysis</p>
+<h1 style="margin:0;font-family:${SERIF};font-weight:400;font-size:28px;line-height:1.25;color:#FFFBF6;">We couldn't <i style="color:#E58A72;">read</i> your profile</h1>
+</td></tr>
+<tr><td style="padding:28px 32px;font-family:${SANS};font-size:16px;line-height:1.65;color:#2B2335;">
+<p style="margin:0 0 14px;">Hi there,</p>
+<p style="margin:0 0 14px;">The LinkedIn link you sent doesn't lead to a public profile:</p>
+<p style="margin:0 0 18px;padding:12px 14px;background:#FBF4EC;border:1px solid #EEE4D8;border-radius:10px;font-size:14px;color:#71687A;word-break:break-all;">${escapeHtml(lien)}</p>
+<p style="margin:0 0 22px;">The easiest fix: open your LinkedIn profile on a computer, copy the address from your browser bar (it looks like <b>linkedin.com/in/your-name</b>) and run the analysis again. It only takes 2 minutes.</p>
+<table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:#D9654A;border-radius:999px;">
+<a href="https://optinia.romainbour.com/?lang=en" style="display:inline-block;padding:14px 28px;font-family:${SANS};font-size:15px;font-weight:600;color:#FFFFFF;text-decoration:none;border-radius:999px;">Run my analysis again &rarr;</a>
+</td></tr></table>
+<p style="margin:22px 0 0;font-size:14px;color:#71687A;">Any trouble? Just reply to this email.<br>Romain</p>
+</td></tr></table></td></tr></table></body></html>`
   return `<!DOCTYPE html><html lang="fr"><body style="margin:0;background:#FFFBF6;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#FFFBF6;"><tr><td align="center" style="padding:32px 16px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FFFFFF;border:1px solid #EEE4D8;border-radius:18px;overflow:hidden;">
@@ -35,7 +52,8 @@ export async function POST(req: NextRequest) {
   const key = process.env.BREVO_API_KEY
   if (!key) return NextResponse.json({ error: 'missing brevo key' }, { status: 500 })
 
-  const { email, lien, reason } = await req.json().catch(() => ({}))
+  const { email, lien, reason, lang } = await req.json().catch(() => ({}))
+  const userLang: 'fr' | 'en' = lang === 'en' ? 'en' : 'fr'
   if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: 'invalid email' }, { status: 400 })
   }
@@ -52,8 +70,8 @@ export async function POST(req: NextRequest) {
     sender: { name: 'Romain Bour', email: 'contact@romainbour.com' },
     replyTo: { email: 'romain.nexusgen@gmail.com' },
     to: [{ email }],
-    subject: "On n'a pas pu lire ton profil LinkedIn",
-    htmlContent: userEmail(safeLien),
+    subject: userLang === 'en' ? "We couldn't read your LinkedIn profile" : "On n'a pas pu lire ton profil LinkedIn",
+    htmlContent: userEmail(safeLien, userLang),
   })
 
   const alertRes = await send({
@@ -64,7 +82,8 @@ export async function POST(req: NextRequest) {
       <p><b>Un audit Optin.ia n'a pas pu lire le profil.</b> La personne a reçu un email pour corriger son lien.</p>
       <p>Email : <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a><br>
       Lien envoyé : ${escapeHtml(safeLien)}<br>
-      Raison : ${escapeHtml(safeReason)}</p></div>`,
+      Raison : ${escapeHtml(safeReason)}<br>
+      Langue : ${userLang === 'en' ? 'Anglais' : 'Français'}</p></div>`,
   })
 
   return NextResponse.json({ user: userRes.status, alert: alertRes.status })

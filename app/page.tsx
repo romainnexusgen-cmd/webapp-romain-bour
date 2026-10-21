@@ -5,19 +5,167 @@ import { useState, useEffect, useRef } from 'react'
 const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL || ''
 
 
+type Lang = 'fr' | 'en'
+
 const CRITERES = [
-  { label: 'Photo de profil',    score: 12, max: 15, pct: 80,  color: '#5B8A6B', bg: '#EAF2EC', tc: '#4A7358', tag: 'Bon',            icon: '📸' },
-  { label: 'Bannière',           score: 6,  max: 15, pct: 40,  color: '#D9654A', bg: '#FBE9E1', tc: '#C4543B', tag: 'À retravailler', icon: '🖼️' },
-  { label: 'Titre du profil',    score: 8,  max: 15, pct: 53,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: 'Moyen',          icon: '✏️' },
-  { label: 'Section À propos',   score: 9,  max: 15, pct: 60,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: 'Moyen',          icon: '👤' },
-  { label: 'Sélection de posts', score: 5,  max: 15, pct: 33,  color: '#D9654A', bg: '#FBE9E1', tc: '#C4543B', tag: 'À retravailler', icon: '📌' },
-  { label: 'Contenu publié',     score: 5,  max: 10, pct: 50,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: 'Moyen',          icon: '📝' },
-  { label: 'Expériences',        score: 3,  max: 5,  pct: 60,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: 'Moyen',          icon: '💼' },
-  { label: 'Crédibilité',        score: 8,  max: 10, pct: 80,  color: '#5B8A6B', bg: '#EAF2EC', tc: '#4A7358', tag: 'Bon',            icon: '⭐' },
+  { label: { fr: 'Photo de profil', en: 'Profile photo' },          score: 12, max: 15, pct: 80,  color: '#5B8A6B', bg: '#EAF2EC', tc: '#4A7358', tag: { fr: 'Bon', en: 'Good' },                  icon: '📸' },
+  { label: { fr: 'Bannière', en: 'Banner' },                        score: 6,  max: 15, pct: 40,  color: '#D9654A', bg: '#FBE9E1', tc: '#C4543B', tag: { fr: 'À retravailler', en: 'Needs work' }, icon: '🖼️' },
+  { label: { fr: 'Titre du profil', en: 'Headline' },               score: 8,  max: 15, pct: 53,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: { fr: 'Moyen', en: 'Average' },             icon: '✏️' },
+  { label: { fr: 'Section À propos', en: 'About section' },         score: 9,  max: 15, pct: 60,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: { fr: 'Moyen', en: 'Average' },             icon: '👤' },
+  { label: { fr: 'Sélection de posts', en: 'Featured posts' },      score: 5,  max: 15, pct: 33,  color: '#D9654A', bg: '#FBE9E1', tc: '#C4543B', tag: { fr: 'À retravailler', en: 'Needs work' }, icon: '📌' },
+  { label: { fr: 'Contenu publié', en: 'Published content' },       score: 5,  max: 10, pct: 50,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: { fr: 'Moyen', en: 'Average' },             icon: '📝' },
+  { label: { fr: 'Expériences', en: 'Experience' },                 score: 3,  max: 5,  pct: 60,  color: '#E9B65C', bg: '#FBF1DC', tc: '#A9792A', tag: { fr: 'Moyen', en: 'Average' },             icon: '💼' },
+  { label: { fr: 'Crédibilité', en: 'Credibility' },                score: 8,  max: 10, pct: 80,  color: '#5B8A6B', bg: '#EAF2EC', tc: '#4A7358', tag: { fr: 'Bon', en: 'Good' },                  icon: '⭐' },
 ]
 
-function UrlTypingAnimation() {
-  const full = 'https://linkedin.com/in/votre-profil'
+const T = {
+  fr: {
+    errConsent: "Merci d'accepter de recevoir votre analyse par mail.",
+    errLink: 'Merci de renseigner votre lien LinkedIn.',
+    errEmail: 'Merci de renseigner votre adresse email.',
+    errGeneric: 'Une erreur est survenue. Réessaie dans quelques secondes.',
+    doneTitle: "C'est en route.",
+    doneLine1: 'Votre rapport arrive à ',
+    doneLine2: ' dans moins de 5 minutes.',
+    doneSpam1: "Si vous ne le voyez pas dans votre boite principale, vérifiez l'onglet ",
+    doneSpamPromo: 'Promotions',
+    doneSpam2: ' ainsi que vos ',
+    doneSpamSpam: 'spams',
+    navCount: '+700 profils analysés',
+    navCta: 'Analyser mon profil →',
+    eyebrow: 'Audit LinkedIn gratuit',
+    heroBefore: 'Démarquez-vous avec un profil LinkedIn à la hauteur de votre ',
+    heroEm: 'expertise',
+    heroAfter: '.',
+    heroSub: 'Votre profil LinkedIn vous fait perdre des opportunités. Découvrez exactement ce qui bloque, en 5 minutes.',
+    heroBullets: ['Votre score sur 100 avec le détail par critère', 'Les 3 points qui freinent le plus votre visibilité', 'Des recommandations concrètes reçues par email'],
+    heroCta: 'Analyser mon profil gratuitement →',
+    socialStrong: '+700 experts',
+    socialRest: ' ont déjà leur score',
+    mockRole: 'Consultante RH · Experte formation · Paris',
+    mockAbout: 'À propos',
+    mockExp: 'Expériences',
+    mockResult: "Résultat de l'analyse",
+    mockPriorities: '3 priorités identifiées',
+    mockPrioList: ['Bannière', 'Titre du profil', 'Sélection de posts'],
+    statsBefore: 'Votre profil LinkedIn est votre première ',
+    statsEm: 'impression',
+    statsAfter: ' en ligne.',
+    statsSub: "Quand vous rencontrez quelqu'un, la première chose qu'il fait, c'est vous chercher sur Google. Votre profil LinkedIn arrive en premier résultat. Toujours.",
+    stats: [
+      { stat: '#1', title: 'Résultat Google', label: 'Avant chaque rendez-vous, chaque mise en relation, chaque opportunité : les gens cherchent votre nom. Votre profil LinkedIn arrive en premier résultat. Toujours.*', source: '* BrightEdge Research, 2024' },
+      { stat: '+30%', title: 'De vues en plus', label: 'Un profil LinkedIn complet et optimisé génère 30 % de vues supplémentaires chaque semaine, sans rien changer à votre activité.*', source: '* LinkedIn Official Data, 2026' },
+      { stat: '89%', title: 'Des décideurs y sont', label: 'Cadres, dirigeants, acheteurs, recruteurs, partenaires potentiels : 9 professionnels à responsabilités sur 10 sont actifs sur LinkedIn.*', source: '* LinkedIn, 2026' },
+    ],
+    audStat: '38M',
+    audLabel: 'membres en France',
+    audSub: '80 % de la population active',
+    audIntro: 'Votre cible est là, quelle que soit votre activité :',
+    audTags: ['Consultants', 'Coachs', 'Avocats', 'Dirigeants', 'Formateurs', 'Ingénieurs', 'RH & Recruteurs', 'Commerciaux', 'Experts-comptables', 'Médecins', 'Architectes', 'Thérapeutes', 'Freelances', 'Entrepreneurs'],
+    reportEyebrow: 'Ce que vous allez recevoir',
+    reportBefore: 'Un diagnostic sur chaque ',
+    reportEm: 'pilier',
+    reportAfter: ' de votre profil LinkedIn.',
+    scoreGlobal: 'Score global',
+    scoreBadge: 'Profil à fort potentiel · 3 axes prioritaires',
+    criteriaTitle: 'Les 8 critères analysés',
+    exTitle: 'Bannière',
+    exTag: 'À retravailler · 7/20',
+    exText: 'Votre bannière ne communique aucun message sur votre expertise. Un visiteur ne comprend pas en une seconde ce que vous faites.',
+    exTip: 'Créez une bannière qui exprime votre positionnement en 3 secondes.',
+    reportFooter: 'Recommandations concrètes pour chaque critère, reçues directement par email',
+    formBadge: 'Gratuit · Résultat en 5 minutes',
+    formBefore: 'Où en êtes-vous ',
+    formEm: 'vraiment',
+    formAfter: ' ?',
+    formSub: 'Collez votre lien LinkedIn. Recevez votre score et vos 3 priorités par email, en moins de 5 minutes.',
+    phLink: 'Collez votre lien LinkedIn ici',
+    exLabel: 'Ex :',
+    exUrl: 'https://linkedin.com/in/votre-profil',
+    urlWarn: "⚠️ Copiez l'URL complète depuis votre navigateur (avec le https://)",
+    phEmail: 'votre@email.com',
+    consent: "J'accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.",
+    loading: 'Analyse en cours…',
+    submit: 'Analyser mon profil LinkedIn →',
+    reassure: 'Aucun accès à votre compte · Résultat en 5 min · 100% gratuit',
+    createdBy: 'Créé par ',
+    footerRole: 'Expert Branding B2B · +90 dirigeants',
+  },
+  en: {
+    errConsent: 'Please agree to receive your analysis by email.',
+    errLink: 'Please add your LinkedIn profile link.',
+    errEmail: 'Please add your email address.',
+    errGeneric: 'Something went wrong. Please try again in a few seconds.',
+    doneTitle: "It's on its way.",
+    doneLine1: 'Your report will land at ',
+    doneLine2: ' in less than 5 minutes.',
+    doneSpam1: "Can't see it in your main inbox? Check your ",
+    doneSpamPromo: 'Promotions',
+    doneSpam2: ' tab and your ',
+    doneSpamSpam: 'spam folder',
+    navCount: '700+ profiles analysed',
+    navCta: 'Analyse my profile →',
+    eyebrow: 'Free LinkedIn audit',
+    heroBefore: 'Stand out with a LinkedIn profile that lives up to your ',
+    heroEm: 'expertise',
+    heroAfter: '.',
+    heroSub: "Your LinkedIn profile is costing you opportunities. Find out exactly what's holding it back, in 5 minutes.",
+    heroBullets: ['Your score out of 100, broken down criterion by criterion', 'The 3 things holding your visibility back the most', 'Concrete recommendations sent straight to your inbox'],
+    heroCta: 'Analyse my profile for free →',
+    socialStrong: '700+ experts',
+    socialRest: ' already have their score',
+    mockRole: 'HR Consultant · Learning & Development Expert · London',
+    mockAbout: 'About',
+    mockExp: 'Experience',
+    mockResult: 'Analysis result',
+    mockPriorities: '3 priorities identified',
+    mockPrioList: ['Banner', 'Headline', 'Featured posts'],
+    statsBefore: 'Your LinkedIn profile is your first ',
+    statsEm: 'impression',
+    statsAfter: ' online.',
+    statsSub: 'When you meet someone, the first thing they do is Google you. Your LinkedIn profile comes up first. Every time.',
+    stats: [
+      { stat: '#1', title: 'Google result', label: 'Before every meeting, every introduction, every opportunity, people look up your name. Your LinkedIn profile comes up first. Every time.*', source: '* BrightEdge Research, 2024' },
+      { stat: '+30%', title: 'More profile views', label: 'A complete, well-optimised LinkedIn profile gets 30% more views every week, without changing anything else about your work.*', source: '* LinkedIn Official Data, 2026' },
+      { stat: '89%', title: 'Of decision-makers', label: 'Executives, business owners, buyers, recruiters, potential partners: 9 out of 10 senior professionals are active on LinkedIn.*', source: '* LinkedIn, 2026' },
+    ],
+    audStat: '1B+',
+    audLabel: 'members worldwide',
+    audSub: 'in more than 200 countries',
+    audIntro: 'Your audience is there, whatever you do:',
+    audTags: ['Consultants', 'Coaches', 'Lawyers', 'Executives', 'Trainers', 'Engineers', 'HR & Recruiters', 'Sales', 'Accountants', 'Doctors', 'Architects', 'Therapists', 'Freelancers', 'Entrepreneurs'],
+    reportEyebrow: "What you'll receive",
+    reportBefore: 'A diagnosis of every ',
+    reportEm: 'pillar',
+    reportAfter: ' of your LinkedIn profile.',
+    scoreGlobal: 'Overall score',
+    scoreBadge: 'High-potential profile · 3 priority areas',
+    criteriaTitle: 'The 8 criteria we analyse',
+    exTitle: 'Banner',
+    exTag: 'Needs work · 7/20',
+    exText: "Your banner says nothing about your expertise. A visitor can't tell at a glance what you do.",
+    exTip: 'Create a banner that gets your positioning across in 3 seconds.',
+    reportFooter: 'Concrete recommendations for every criterion, sent straight to your inbox',
+    formBadge: 'Free · Results in 5 minutes',
+    formBefore: 'Where do you ',
+    formEm: 'really',
+    formAfter: ' stand?',
+    formSub: 'Paste your LinkedIn link. Get your score and your top 3 priorities by email in less than 5 minutes.',
+    phLink: 'Paste your LinkedIn link here',
+    exLabel: 'e.g.',
+    exUrl: 'https://linkedin.com/in/your-profile',
+    urlWarn: '⚠️ Copy the full URL from your browser (including https://)',
+    phEmail: 'you@email.com',
+    consent: 'I agree to receive my analysis and content about LinkedIn visibility.',
+    loading: 'Analysing…',
+    submit: 'Analyse my LinkedIn profile →',
+    reassure: 'No access to your account · Results in 5 min · 100% free',
+    createdBy: 'Created by ',
+    footerRole: 'B2B Personal Branding Expert · 90+ business leaders coached',
+  },
+} as const
+
+function UrlTypingAnimation({ full }: { full: string }) {
   const [displayed, setDisplayed] = useState('')
   const [phase, setPhase] = useState<'typing' | 'pause' | 'erasing'>('typing')
 
@@ -39,7 +187,7 @@ function UrlTypingAnimation() {
       }
     }
     return () => clearTimeout(timeout)
-  }, [displayed, phase])
+  }, [displayed, phase, full])
 
   return (
     <span style={{ fontSize: '12px', color: '#71687A', fontFamily: 'monospace', flex: 1 }}>
@@ -61,6 +209,32 @@ export default function HomePage() {
   const [scanPhase, setScanPhase] = useState(0)
   const [overlayScore, setOverlayScore] = useState(0)
   const scanTimers = useRef<ReturnType<typeof setTimeout>[]>([])
+  const [lang, setLang] = useState<Lang>('fr')
+  const t = T[lang]
+
+  useEffect(() => {
+    const param = new URLSearchParams(window.location.search).get('lang')
+    let initial: Lang
+    if (param === 'en' || param === 'fr') {
+      initial = param
+    } else {
+      let stored: string | null = null
+      try { stored = window.localStorage.getItem('optinia_lang') } catch {}
+      if (stored === 'en' || stored === 'fr') initial = stored
+      else initial = (navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en'
+    }
+    setLang(initial)
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
+
+  const chooseLang = (l: Lang) => {
+    setLang(l)
+    setError('')
+    try { window.localStorage.setItem('optinia_lang', l) } catch {}
+  }
 
   // Count-up 0→67 when score reveal starts
   useEffect(() => {
@@ -80,9 +254,9 @@ export default function HomePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!consent) { setError("Merci d'accepter de recevoir votre analyse par mail."); return }
-    if (!profileLink) { setError('Merci de renseigner votre lien LinkedIn.'); return }
-    if (!email) { setError('Merci de renseigner votre adresse email.'); return }
+    if (!consent) { setError(t.errConsent); return }
+    if (!profileLink) { setError(t.errLink); return }
+    if (!email) { setError(t.errEmail); return }
     // Normalise le lien : ajoute https:// si absent
     let lien = profileLink.trim()
     if (!/^https?:\/\//i.test(lien)) lien = 'https://' + lien
@@ -90,11 +264,11 @@ export default function HomePage() {
     setLoading(true)
     try {
       if (!WEBHOOK_URL) throw new Error('missing webhook')
-      const res = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, lien }) })
+      const res = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, lien, lang }) })
       if (!res.ok) throw new Error(`webhook ${res.status}`)
       setSubmitted(true)
     } catch {
-      setError('Une erreur est survenue. Réessaie dans quelques secondes.')
+      setError(t.errGeneric)
     } finally {
       setLoading(false)
     }
@@ -210,10 +384,10 @@ export default function HomePage() {
       <div style={{ minHeight: '100vh', background: '#FFFBF6', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'DM Sans, sans-serif' }}>
         <div style={{ textAlign: 'center', maxWidth: '380px' }}>
           <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#FBE9E1', border: '1px solid #F2B9A4', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: '#D9654A', fontWeight: 700, fontSize: '18px' }}>✓</div>
-          <h2 style={{ color: '#2B2335', fontSize: '22px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>C'est en route.</h2>
-          <p style={{ color: '#71687A', fontSize: '15px', lineHeight: 1.7 }}>Votre rapport arrive à <span style={{ color: '#2B2335', fontWeight: 600 }}>{email}</span> dans moins de 5 minutes.</p>
+          <h2 style={{ color: '#2B2335', fontSize: '22px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>{t.doneTitle}</h2>
+          <p style={{ color: '#71687A', fontSize: '15px', lineHeight: 1.7 }}>{t.doneLine1}<span style={{ color: '#2B2335', fontWeight: 600 }}>{email}</span>{t.doneLine2}</p>
           <p style={{ color: '#9A91A3', fontSize: '13px', lineHeight: 1.7, marginTop: '16px', padding: '14px 16px', background: '#FBF4EC', borderRadius: '10px', textAlign: 'left' }}>
-            Si vous ne le voyez pas dans votre boite principale, vérifiez l'onglet <strong style={{ color: '#71687A' }}>Promotions</strong> ainsi que vos <strong style={{ color: '#71687A' }}>spams</strong>.
+            {t.doneSpam1}<strong style={{ color: '#71687A' }}>{t.doneSpamPromo}</strong>{t.doneSpam2}<strong style={{ color: '#71687A' }}>{t.doneSpamSpam}</strong>.
           </p>
         </div>
       </div>
@@ -228,12 +402,19 @@ export default function HomePage() {
           <div className="nav-logo-mark">O</div>
           <span className="nav-logo-text">optin<span>.ia</span></span>
         </a>
-        <div className="nav-badge-nav" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#5B8A6B', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
-            <span style={{ color: '#9A91A3', fontSize: '11px', fontWeight: 500 }}>+700 profils analysés</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div className="nav-badge-nav" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#5B8A6B', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
+              <span style={{ color: '#9A91A3', fontSize: '11px', fontWeight: 500 }}>{t.navCount}</span>
+            </div>
+            <a href="#formulaire" className="nav-cta-small">{t.navCta}</a>
           </div>
-          <a href="#formulaire" className="nav-cta-small">Analyser mon profil →</a>
+          <div className="lang-toggle" role="group" aria-label="Language">
+            {(['fr', 'en'] as const).map(l => (
+              <button key={l} type="button" onClick={() => chooseLang(l)} aria-pressed={lang === l} className={lang === l ? 'on' : ''}>{l.toUpperCase()}</button>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -277,6 +458,10 @@ export default function HomePage() {
           transition: background 0.15s, opacity 0.15s;
         }
         .nav-cta-small:hover { background: #D9654A; }
+        .lang-toggle { display: inline-flex; align-items: center; padding: 3px; border: 1px solid #EEE4D8; border-radius: 999px; background: #fff; }
+        .lang-toggle button { border: none; background: transparent; color: #9A91A3; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 4px 10px; border-radius: 999px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; }
+        .lang-toggle button.on { background: #2B2335; color: #fff; }
+        .lang-toggle button:not(.on):hover { color: #2B2335; }
         @media (max-width: 640px) { .nav-bar { padding: 0 20px; } .nav-badge-nav { display: none !important; } }
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(40px); }
@@ -494,15 +679,15 @@ export default function HomePage() {
 
           {/* ─── Colonne gauche : copywriting ─── */}
           <div>
-            <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#D9654A', marginBottom: '20px' }}>Audit LinkedIn gratuit</p>
+            <p style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#D9654A', marginBottom: '20px' }}>{t.eyebrow}</p>
             <h1 style={{ fontSize: 'clamp(32px, 3.5vw, 52px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: '#2B2335', marginBottom: '20px' }}>
-              Démarquez-vous avec un profil LinkedIn à la hauteur de votre <em>expertise</em>.
+              {t.heroBefore}<em>{t.heroEm}</em>{t.heroAfter}
             </h1>
             <p style={{ fontSize: '17px', color: '#2B2335', lineHeight: 1.7, marginBottom: '32px', maxWidth: '440px' }}>
-              Votre profil LinkedIn vous fait perdre des opportunités. Découvrez exactement ce qui bloque, en 5 minutes.
+              {t.heroSub}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '36px' }}>
-              {['Votre score sur 100 avec le détail par critère', 'Les 3 points qui freinent le plus votre visibilité', 'Des recommandations concrètes reçues par email'].map((item, i) => (
+              {t.heroBullets.map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div style={{ width: '18px', height: '18px', borderRadius: '50%', background: 'rgba(217,101,74,0.1)', border: '1px solid rgba(217,101,74,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#D9654A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -512,7 +697,7 @@ export default function HomePage() {
               ))}
             </div>
             <a href="#formulaire" className="hero-cta" style={{ fontSize: '16px', padding: '15px 32px', marginBottom: '24px', display: 'inline-flex' }}>
-              Analyser mon profil gratuitement →
+              {t.heroCta}
             </a>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '20px' }}>
               {/* Avatar group */}
@@ -537,7 +722,7 @@ export default function HomePage() {
                 ))}
               </div>
               <span style={{ fontSize: '13px', color: '#2B2335', fontWeight: 500 }}>
-                <span style={{ fontWeight: 700 }}>+700 experts</span> ont déjà leur score
+                <span style={{ fontWeight: 700 }}>{t.socialStrong}</span>{t.socialRest}
               </span>
             </div>
           </div>
@@ -565,7 +750,7 @@ export default function HomePage() {
                       <div style={{ width: '68px', height: '68px', borderRadius: '50%', background: 'linear-gradient(145deg, #2B2335, #2B2335)', border: '3px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 800, color: '#fff' }}>S</div>
                     </div>
                     <p style={{ fontWeight: 700, fontSize: '16px', color: '#2B2335', marginBottom: '3px' }}>Sophie Martin</p>
-                    <p style={{ fontSize: '12px', color: '#71687A', marginBottom: '12px', lineHeight: 1.4 }}>Consultante RH · Experte formation · Paris</p>
+                    <p style={{ fontSize: '12px', color: '#71687A', marginBottom: '12px', lineHeight: 1.4 }}>{t.mockRole}</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       <div style={{ height: '7px', background: '#FBF4EC', borderRadius: '3px', width: '88%' }} />
                       <div style={{ height: '7px', background: '#FBF4EC', borderRadius: '3px', width: '72%' }} />
@@ -574,7 +759,7 @@ export default function HomePage() {
 
                   {/* Section À propos simulée */}
                   <div style={{ borderTop: '6px solid #FBF4EC', padding: '14px 20px' }}>
-                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#2B2335', marginBottom: '10px' }}>À propos</p>
+                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#2B2335', marginBottom: '10px' }}>{t.mockAbout}</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       <div style={{ height: '6px', background: '#FBF4EC', borderRadius: '3px', width: '96%' }} />
                       <div style={{ height: '6px', background: '#FBF4EC', borderRadius: '3px', width: '82%' }} />
@@ -584,7 +769,7 @@ export default function HomePage() {
 
                   {/* Section Expériences simulée */}
                   <div style={{ borderTop: '6px solid #FBF4EC', padding: '14px 20px 16px' }}>
-                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#2B2335', marginBottom: '10px' }}>Expériences</p>
+                    <p style={{ fontSize: '13px', fontWeight: 700, color: '#2B2335', marginBottom: '10px' }}>{t.mockExp}</p>
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                       <div style={{ width: '36px', height: '36px', background: '#EEE4D8', borderRadius: '6px', flexShrink: 0 }} />
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '4px' }}>
@@ -605,7 +790,7 @@ export default function HomePage() {
                 width: '200px',
                 fontFamily: 'DM Sans, sans-serif',
               }}>
-                <p style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9A91A3', marginBottom: '8px' }}>Résultat de l&apos;analyse</p>
+                <p style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9A91A3', marginBottom: '8px' }}>{t.mockResult}</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px', marginBottom: '6px' }}>
                   <span style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '42px', fontWeight: 400, color: '#D9654A', letterSpacing: '-1px', lineHeight: 1 }}>67</span>
                   <span style={{ fontSize: '15px', fontWeight: 600, color: '#E2D4C3' }}>/100</span>
@@ -613,12 +798,8 @@ export default function HomePage() {
                 <div style={{ height: '4px', background: '#FBF4EC', borderRadius: '100px', overflow: 'hidden', marginBottom: '12px' }}>
                   <div style={{ height: '100%', width: '67%', background: 'linear-gradient(90deg, #D9654A, #D9654A)', borderRadius: '100px' }} />
                 </div>
-                <p style={{ fontSize: '10px', fontWeight: 600, color: '#2B2335', marginBottom: '6px' }}>3 priorités identifiées</p>
-                {[
-                  { label: 'Bannière', color: '#D9654A' },
-                  { label: 'Titre du profil', color: '#E9B65C' },
-                  { label: 'Sélection de posts', color: '#D9654A' },
-                ].map((p, i) => (
+                <p style={{ fontSize: '10px', fontWeight: 600, color: '#2B2335', marginBottom: '6px' }}>{t.mockPriorities}</p>
+                {['#D9654A', '#E9B65C', '#D9654A'].map((color, i) => ({ label: t.mockPrioList[i], color })).map((p, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: i < 2 ? '5px' : 0 }}>
                     <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: p.color, flexShrink: 0 }} />
                     <span style={{ fontSize: '11px', color: '#2B2335' }}>{p.label}</span>
@@ -641,35 +822,16 @@ export default function HomePage() {
 
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '56px' }}>
             <h2 style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-1px', lineHeight: 1.15, color: '#fff', maxWidth: '640px', margin: '0 auto' }}>
-              Votre profil LinkedIn est votre première <em>impression</em> en ligne.
+              {t.statsBefore}<em>{t.statsEm}</em>{t.statsAfter}
             </h2>
             <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.45)', marginTop: '16px', maxWidth: '520px', margin: '16px auto 0', lineHeight: 1.7 }}>
-              Quand vous rencontrez quelqu'un, la première chose qu'il fait, c'est vous chercher sur Google. Votre profil LinkedIn arrive en premier résultat. Toujours.
+              {t.statsSub}
             </p>
           </div>
 
           {/* 3 stat cards */}
           <div className="reveal d1 grid-3-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.08)', borderRadius: '16px', overflow: 'hidden', marginBottom: '1px' }}>
-            {[
-              {
-                stat: '#1',
-                title: 'Résultat Google',
-                label: 'Avant chaque rendez-vous, chaque mise en relation, chaque opportunité : les gens cherchent votre nom. Votre profil LinkedIn arrive en premier résultat. Toujours.*',
-                source: '* BrightEdge Research, 2024',
-              },
-              {
-                stat: '+30%',
-                title: 'De vues en plus',
-                label: 'Un profil LinkedIn complet et optimisé génère 30 % de vues supplémentaires chaque semaine, sans rien changer à votre activité.*',
-                source: '* LinkedIn Official Data, 2026',
-              },
-              {
-                stat: '89%',
-                title: 'Des décideurs y sont',
-                label: 'Cadres, dirigeants, acheteurs, recruteurs, partenaires potentiels : 9 professionnels à responsabilités sur 10 sont actifs sur LinkedIn.*',
-                source: '* LinkedIn, 2026',
-              },
-            ].map((item, i) => (
+            {t.stats.map((item, i) => (
               <div key={i} style={{ background: '#2B2335', padding: '32px 28px' }}>
                 <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '48px', fontWeight: 300, color: '#fff', letterSpacing: '-1px', lineHeight: 1, marginBottom: '6px' }}>{item.stat}</p>
                 <p style={{ fontSize: '11px', fontWeight: 700, color: '#D9654A', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>{item.title}</p>
@@ -683,14 +845,14 @@ export default function HomePage() {
           <div className="reveal d2" style={{ background: '#2B2335', borderRadius: '16px', padding: '32px 36px', marginTop: '1px' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '40px', flexWrap: 'wrap' }}>
               <div style={{ flexShrink: 0 }}>
-                <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '48px', fontWeight: 300, color: '#fff', letterSpacing: '-1px', lineHeight: 1, marginBottom: '4px' }}>38M</p>
-                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>membres en France</p>
-                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>80 % de la population active</p>
+                <p style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '48px', fontWeight: 300, color: '#fff', letterSpacing: '-1px', lineHeight: 1, marginBottom: '4px' }}>{t.audStat}</p>
+                <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{t.audLabel}</p>
+                <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)', marginTop: '6px' }}>{t.audSub}</p>
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '14px', fontWeight: 500 }}>Votre cible est là, quelle que soit votre activité :</p>
+                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '14px', fontWeight: 500 }}>{t.audIntro}</p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {['Consultants', 'Coachs', 'Avocats', 'Dirigeants', 'Formateurs', 'Ingénieurs', 'RH & Recruteurs', 'Commerciaux', 'Experts-comptables', 'Médecins', 'Architectes', 'Thérapeutes', 'Freelances', 'Entrepreneurs'].map((tag) => (
+                  {t.audTags.map((tag) => (
                     <span key={tag} style={{ display: 'inline-block', padding: '5px 12px', borderRadius: '100px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>{tag}</span>
                   ))}
                 </div>
@@ -708,9 +870,9 @@ export default function HomePage() {
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
           <div className="reveal" style={{ marginBottom: '64px', textAlign: 'center' }}>
-            <p style={{ color: '#D9654A', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>Ce que vous allez recevoir</p>
+            <p style={{ color: '#D9654A', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>{t.reportEyebrow}</p>
             <h2 style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-1.2px', lineHeight: 1.1, color: '#2B2335', maxWidth: '560px', margin: '0 auto' }}>
-              Un diagnostic sur chaque <em>pilier</em> de votre profil LinkedIn.
+              {t.reportBefore}<em>{t.reportEm}</em>{t.reportAfter}
             </h2>
           </div>
 
@@ -722,7 +884,7 @@ export default function HomePage() {
 
               {/* Gauche : score */}
               <div style={{ padding: '28px 24px', borderRight: '1px solid #FBF4EC', background: '#FFFBF6', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9A91A3' }}>Score global</p>
+                <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9A91A3' }}>{t.scoreGlobal}</p>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '3px', marginBottom: '10px' }}>
                     <span style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: '68px', fontWeight: 300, color: '#2B2335', lineHeight: 1, letterSpacing: '-1.5px', fontVariantNumeric: 'tabular-nums' }}>{displayScore}</span>
@@ -733,22 +895,22 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div style={{ padding: '10px 12px', background: '#FBF1DC', border: '1px solid #E9B65C', borderRadius: '8px' }}>
-                  <p style={{ fontSize: '11px', color: '#6E4F1C', fontWeight: 600, lineHeight: 1.4 }}>Profil à fort potentiel · 3 axes prioritaires</p>
+                  <p style={{ fontSize: '11px', color: '#6E4F1C', fontWeight: 600, lineHeight: 1.4 }}>{t.scoreBadge}</p>
                 </div>
               </div>
 
               {/* Droite : 8 critères */}
               <div>
                 <div style={{ padding: '16px 24px', borderBottom: '1px solid #FBF4EC' }}>
-                  <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9A91A3' }}>Les 8 critères analysés</p>
+                  <p style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9A91A3' }}>{t.criteriaTitle}</p>
                 </div>
                 {CRITERES.map((c, i) => (
                   <div key={i} style={{ padding: '11px 24px', borderBottom: i < CRITERES.length - 1 ? '1px solid #FBF4EC' : 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '12px', color: '#2B2335', fontWeight: 500, width: '130px', flexShrink: 0 }}>{c.label}</span>
+                    <span style={{ fontSize: '12px', color: '#2B2335', fontWeight: 500, width: '130px', flexShrink: 0 }}>{c.label[lang]}</span>
                     <div style={{ flex: 1, height: '4px', background: '#FBF4EC', borderRadius: '2px', overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: barsVisible ? `${c.pct}%` : '0%', background: c.color, borderRadius: '2px', transition: `width 1.2s cubic-bezier(0.16,1,0.3,1) ${i * 0.07}s` }} />
                     </div>
-                    <span style={{ fontSize: '9px', fontWeight: 700, color: c.tc, background: c.bg, padding: '2px 7px', borderRadius: '4px', flexShrink: 0 }}>{c.tag}</span>
+                    <span style={{ fontSize: '9px', fontWeight: 700, color: c.tc, background: c.bg, padding: '2px 7px', borderRadius: '4px', flexShrink: 0 }}>{c.tag[lang]}</span>
                     <span style={{ fontSize: '11px', fontWeight: 700, color: c.color, width: '32px', textAlign: 'right', flexShrink: 0 }}>{c.score}/{c.max}</span>
                   </div>
                 ))}
@@ -759,19 +921,19 @@ export default function HomePage() {
             <div style={{ padding: '20px 28px', background: '#FBE9E1', borderTop: '1px solid #F2B9A4', display: 'flex', alignItems: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
               <div style={{ flex: 1, minWidth: '200px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
-                  <span style={{ fontWeight: 700, fontSize: '13px', color: '#2B2335' }}>Bannière</span>
-                  <span style={{ fontSize: '9px', fontWeight: 700, color: '#D9654A', background: '#FBE9E1', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>À retravailler · 7/20</span>
+                  <span style={{ fontWeight: 700, fontSize: '13px', color: '#2B2335' }}>{t.exTitle}</span>
+                  <span style={{ fontSize: '9px', fontWeight: 700, color: '#D9654A', background: '#FBE9E1', padding: '2px 7px', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t.exTag}</span>
                 </div>
-                <p style={{ fontSize: '12px', color: '#2B2335', lineHeight: 1.6 }}>Votre bannière ne communique aucun message sur votre expertise. Un visiteur ne comprend pas en une seconde ce que vous faites.</p>
+                <p style={{ fontSize: '12px', color: '#2B2335', lineHeight: 1.6 }}>{t.exText}</p>
               </div>
               <div style={{ background: '#FBE9E1', border: '1px solid #F2B9A4', borderRadius: '8px', padding: '10px 14px', flexShrink: 0, maxWidth: '280px' }}>
-                <p style={{ fontSize: '11px', color: '#C4543B', fontWeight: 600, lineHeight: 1.5 }}>Créez une bannière qui exprime votre positionnement en 3 secondes.</p>
+                <p style={{ fontSize: '11px', color: '#C4543B', fontWeight: 600, lineHeight: 1.5 }}>{t.exTip}</p>
               </div>
             </div>
 
             {/* Footer */}
             <div style={{ padding: '12px 28px', borderTop: '1px solid #FBF4EC', background: '#fff' }}>
-              <p style={{ fontSize: '11px', color: '#9A91A3' }}>Recommandations concrètes pour chaque critère, reçues directement par email</p>
+              <p style={{ fontSize: '11px', color: '#9A91A3' }}>{t.reportFooter}</p>
             </div>
 
           </div>
@@ -788,13 +950,13 @@ export default function HomePage() {
           <div className="reveal" style={{ marginBottom: '48px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', padding: '5px 14px', background: '#FBE9E1', border: '1px solid #F2B9A4', borderRadius: '9999px', marginBottom: '20px' }}>
               <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#5B8A6B', display: 'inline-block', animation: 'blink 2.5s infinite' }} />
-              <span style={{ color: '#C4543B', fontSize: '11px', fontWeight: 600 }}>Gratuit · Résultat en 5 minutes</span>
+              <span style={{ color: '#C4543B', fontSize: '11px', fontWeight: 600 }}>{t.formBadge}</span>
             </div>
             <h2 style={{ fontSize: '38px', fontWeight: 900, color: '#2B2335', letterSpacing: '-1.2px', lineHeight: 1.1, marginBottom: '14px' }}>
-              Où en êtes-vous <em>vraiment</em> ?
+              {t.formBefore}<em>{t.formEm}</em>{t.formAfter}
             </h2>
             <p style={{ color: '#2B2335', fontSize: '15px', lineHeight: 1.75 }}>
-              Collez votre lien LinkedIn. Recevez votre score et vos 3 priorités par email, en moins de 5 minutes.
+              {t.formSub}
             </p>
           </div>
 
@@ -817,14 +979,14 @@ export default function HomePage() {
                   <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                   </div>
-                  <input className="field" type="text" placeholder="Collez votre lien LinkedIn ici" value={profileLink} onChange={e => setProfileLink(e.target.value)} style={{ paddingLeft: '40px' }} />
+                  <input className="field" type="text" placeholder={t.phLink} value={profileLink} onChange={e => setProfileLink(e.target.value)} style={{ paddingLeft: '40px' }} />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px', paddingLeft: '4px' }}>
-                  <span style={{ fontSize: '11px', color: '#9A91A3' }}>Ex :</span>
-                  <UrlTypingAnimation />
+                  <span style={{ fontSize: '11px', color: '#9A91A3' }}>{t.exLabel}</span>
+                  <UrlTypingAnimation full={t.exUrl} />
                 </div>
                 <div style={{ marginTop: '4px', paddingLeft: '4px', fontSize: '11px', color: '#D9654A', fontWeight: 500 }}>
-                  ⚠️ Copiez l'URL complète depuis votre navigateur (avec le https://)
+                  {t.urlWarn}
                 </div>
               </div>
 
@@ -833,13 +995,13 @@ export default function HomePage() {
                 <div style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9A91A3" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 </div>
-                <input className="field" type="email" placeholder="votre@email.com" value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: '40px' }} />
+                <input className="field" type="email" placeholder={t.phEmail} value={email} onChange={e => setEmail(e.target.value)} style={{ paddingLeft: '40px' }} />
               </div>
 
               {/* Consent */}
               <label style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', cursor: 'pointer', textAlign: 'left', marginTop: '4px' }}>
                 <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: '3px', accentColor: '#D9654A', flexShrink: 0, cursor: 'pointer' }} />
-                <span style={{ color: '#2B2335', fontSize: '11px', lineHeight: 1.65 }}>J&apos;accepte de recevoir mon analyse et des contenus sur la visibilité LinkedIn.</span>
+                <span style={{ color: '#2B2335', fontSize: '11px', lineHeight: 1.65 }}>{t.consent}</span>
               </label>
 
               {error && (
@@ -853,15 +1015,15 @@ export default function HomePage() {
                 {loading ? (
                   <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'spin 1s linear infinite' }}><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-                    Analyse en cours…
+                    {t.loading}
                   </span>
-                ) : 'Analyser mon profil LinkedIn →'}
+                ) : t.submit}
               </button>
             </form>
 
             {/* Réassurance */}
             <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #FBF4EC', textAlign: 'center' }}>
-              <p style={{ fontSize: '11px', color: '#9A91A3', fontWeight: 500 }}>Aucun accès à votre compte · Résultat en 5 min · 100% gratuit</p>
+              <p style={{ fontSize: '11px', color: '#9A91A3', fontWeight: 500 }}>{t.reassure}</p>
             </div>
           </div>
         </div>
@@ -878,8 +1040,8 @@ export default function HomePage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
             <img src="/romain-face.jpeg" alt="Romain Bour" style={{ width: '26px', height: '26px', borderRadius: '50%', objectFit: 'cover', border: '1px solid #EEE4D8' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
             <div>
-              <p style={{ fontWeight: 600, fontSize: '11px', color: '#71687A', lineHeight: 1 }}>Créé par <span style={{ color: '#2B2335', fontWeight: 700 }}>Romain Bour</span></p>
-              <p style={{ fontSize: '10px', color: '#9A91A3', marginTop: '2px' }}>Expert Branding B2B · +90 dirigeants</p>
+              <p style={{ fontWeight: 600, fontSize: '11px', color: '#71687A', lineHeight: 1 }}>{t.createdBy}<span style={{ color: '#2B2335', fontWeight: 700 }}>Romain Bour</span></p>
+              <p style={{ fontSize: '10px', color: '#9A91A3', marginTop: '2px' }}>{t.footerRole}</p>
             </div>
           </div>
         </div>

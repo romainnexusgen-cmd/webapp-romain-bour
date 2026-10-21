@@ -32,8 +32,9 @@ export async function POST(req: NextRequest) {
       .from('linkedin_audits')
       .update({ qualification_q1: q1, qualification_q2: q2, qualification_q3: q3, qualify_completed_at: new Date().toISOString() })
       .eq('id', auditId)
-      .select('first_name, last_name, global_total_points, global_total_maximum')
+      .select('*')
       .single()
+    const isEn = audit?.lang === 'en'
 
     /* Fetch lead email */
     const { data: lead } = await supabase
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           sender: { name: 'Optin.ia', email: 'romain.nexusgen@gmail.com' },
           to: [{ email: 'romain.nexusgen@gmail.com', name: 'Romain Bour' }],
-          subject: `${intent} — ${name} (${score}/100)`,
+          subject: `${isEn ? '🇬🇧 ' : ''}${intent} — ${name} (${score}/100)`,
           htmlContent: `
             <div style="font-family:Inter,sans-serif;max-width:520px;margin:0 auto;padding:32px 24px;color:#0F172A">
               <h2 style="font-size:20px;font-weight:800;margin-bottom:16px">Nouveau lead qualifié</h2>
@@ -71,6 +72,7 @@ export async function POST(req: NextRequest) {
                 <tr><td style="padding:8px 0;color:#64748B;font-size:14px">Frein</td><td style="font-size:14px">${Q1_LABELS[q1] ?? q1}</td></tr>
                 <tr><td style="padding:8px 0;color:#64748B;font-size:14px">Objectif</td><td style="font-size:14px">${Q2_LABELS[q2] ?? q2}</td></tr>
                 <tr><td style="padding:8px 0;color:#64748B;font-size:14px">Intention</td><td style="font-weight:700;font-size:14px">${Q3_LABELS[q3] ?? q3}</td></tr>
+                ${isEn ? '<tr><td style="padding:8px 0;color:#64748B;font-size:14px">Langue</td><td style="font-weight:700;font-size:14px">Anglais</td></tr>' : ''}
               </table>
               <div style="margin-top:24px">
                 <a href="https://webapp-romain-bour-seven.vercel.app/resultats/${auditId}"
@@ -88,9 +90,11 @@ export async function POST(req: NextRequest) {
 
     /* Add contact to the appropriate Brevo nurturing list */
     if (brevoKey && lead?.email) {
-      const listId = q3 === 'accompagne'
-        ? (process.env.BREVO_LIST_ACCOMPAGNE ?? null)
-        : 16
+      const listId = isEn
+        ? (process.env.BREVO_LIST_EN ?? null)
+        : q3 === 'accompagne'
+          ? (process.env.BREVO_LIST_ACCOMPAGNE ?? null)
+          : 16
       if (listId) {
         const firstName = audit?.first_name ?? ''
         const lastName = audit?.last_name ?? ''
@@ -99,7 +103,7 @@ export async function POST(req: NextRequest) {
           headers: { 'api-key': brevoKey, 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: lead.email,
-            attributes: { PRENOM: firstName, NOM: lastName },
+            attributes: isEn ? { PRENOM: firstName, NOM: lastName, LANG: 'en' } : { PRENOM: firstName, NOM: lastName },
             listIds: [typeof listId === 'string' ? parseInt(listId) : listId],
             updateEnabled: true,
           }),

@@ -1,11 +1,135 @@
 import { createClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation'
 
-function tier(pct: number) {
-  if (pct >= 70) return { label: 'Profil solide',              color: '#5B8A6B', bg: '#EAF2EC', border: '#BCD4C2' }
-  if (pct >= 50) return { label: 'Profil à améliorer',         color: '#A9792A', bg: '#FBF1DC', border: '#E9B65C' }
-  if (pct >= 30) return { label: 'Profil en dessous du seuil', color: '#D9654A', bg: '#FBE9E1', border: '#F2B9A4' }
-  return               { label: 'Profil à reconstruire',       color: '#C4543B', bg: '#FBE9E1', border: '#F2B9A4' }
+type Lang = 'fr' | 'en'
+
+const L = {
+  fr: {
+    tiers: ['Profil solide', 'Profil à améliorer', 'Profil en dessous du seuil', 'Profil à reconstruire'],
+    sections: {
+      photo:       { label: 'Photo de profil',              desc: 'Première impression visuelle' },
+      banner:      { label: 'Bannière',                     desc: 'Image de couverture' },
+      headline:    { label: 'Titre du profil',              desc: 'Accroche et positionnement' },
+      about:       { label: 'Section À propos',             desc: 'Pitch et storytelling' },
+      selection:   { label: 'Espace Sélection',             desc: 'Mise en avant des services' },
+      contenu:     { label: 'Contenu',                      desc: 'Stratégie éditoriale' },
+      experiences: { label: 'Expériences professionnelles', desc: 'Parcours et crédibilité' },
+      cred:        { label: 'Crédibilité & preuves',        desc: 'Recommandations et social proof' },
+    },
+    locale: 'fr-FR',
+    navTag: 'Analyse LinkedIn',
+    analysisOf: 'Analyse du ',
+    qwLabel: "Plan d'action",
+    qwTitle: 'Vos priorités de progression',
+    qwSub: 'Cliquez sur chaque point pour voir les détails',
+    unlockMore: (n: number) => `Débloquer ${n} priorité${n > 1 ? 's' : ''} supplémentaire${n > 1 ? 's' : ''}`,
+    earlyTitle: "Vous voulez qu'on corrige ces priorités ensemble ?",
+    earlySub: '30 minutes en visio avec Romain pour passer votre profil en revue. Gratuit, sans engagement.',
+    earlyBtn: 'Réserver un créneau',
+    recapLabel: "Vue d'ensemble",
+    recapTitle: 'Score par catégorie',
+    altBanner: 'Bannière',
+    altPhoto: 'Photo de profil',
+    see: 'Voir',
+    gateFull: "Voir l'analyse complète",
+    gateHint: 'Réponds à 3 questions pour débloquer',
+    ctaEyebrow: 'Analyse complète',
+    ctaH1: 'Vous savez où vous en êtes.',
+    ctaH2: 'Voyons comment débloquer la suite.',
+    ctaSub: 'Répondez à 3 questions rapides pour accéder à votre analyse complète et recevoir les recommandations adaptées à votre situation.',
+    ctaBtn: 'Voir mon analyse complète',
+    callEyebrow: 'Prochaine étape',
+    callH1: 'Construisons votre plan',
+    callH2: "d'action ensemble.",
+    callSub: "30 minutes pour identifier vos leviers prioritaires, clarifier votre positionnement et repartir avec un plan d'action concret pour votre profil LinkedIn.",
+    callBtn: 'Réserver mon appel gratuit',
+    nlTitle: 'Rejoins la newsletter.',
+    nlSub: 'Chaque semaine, les stratégies concrètes pour faire de votre profil LinkedIn un vrai levier de business, sans devenir influenceur. Vous serez parmi les premiers à recevoir le premier numéro.',
+    followLi: 'Suivre sur LinkedIn',
+    nlCall: 'Ou prenez 30 min avec Romain pour en parler →',
+    pdfHint: 'Garde une trace de ton analyse pour y revenir sans la refaire.',
+    pdfBtn: 'Télécharger mon analyse (PDF)',
+    pfSub: 'Expert branding LinkedIn pour dirigeants B2B',
+    pfLink: 'Suivre sur LinkedIn →',
+    stickyStrong: 'Votre analyse complète vous attend.',
+    stickyRest: ' Répondez à 3 questions rapides.',
+    stickyBtn: 'Voir mon analyse',
+    close: 'Fermer',
+    qLabel: (n: number) => `Question ${n} sur 3`,
+    q1: 'Ce qui freine le plus votre visibilité LinkedIn en ce moment ?',
+    q1o: { methode: 'Pas de méthode claire', message: 'Message flou ou trop généraliste', temps: 'Manque de temps', convert: 'Je poste mais rien ne convertit' },
+    q2: 'Votre objectif prioritaire sur LinkedIn ?',
+    q2o: { leads: 'Générer des leads qualifiés', autorite: 'Développer mon autorité', 'les-deux': 'Les deux à la fois' },
+    q3: 'Ce que vous recherchez pour avancer ?',
+    q3o: { seul: 'Comprendre et progresser seul', accompagne: 'Être accompagné pour aller plus vite' },
+  },
+  en: {
+    tiers: ['Strong profile', 'Room for improvement', 'Below the bar', 'Needs a rebuild'],
+    sections: {
+      photo:       { label: 'Profile photo',         desc: 'Your first visual impression' },
+      banner:      { label: 'Banner',                desc: 'Cover image' },
+      headline:    { label: 'Headline',              desc: 'Hook and positioning' },
+      about:       { label: 'About section',         desc: 'Pitch and storytelling' },
+      selection:   { label: 'Featured section',      desc: 'Showcasing your services' },
+      contenu:     { label: 'Content',               desc: 'Content strategy' },
+      experiences: { label: 'Work experience',       desc: 'Background and credibility' },
+      cred:        { label: 'Credibility & proof',   desc: 'Recommendations and social proof' },
+    },
+    locale: 'en-GB',
+    navTag: 'LinkedIn Analysis',
+    analysisOf: 'Analysis from ',
+    qwLabel: 'Action plan',
+    qwTitle: 'Your top priorities',
+    qwSub: 'Click on each point to see the details',
+    unlockMore: (n: number) => `Unlock ${n} more priorit${n > 1 ? 'ies' : 'y'}`,
+    earlyTitle: 'Want to fix these priorities together?',
+    earlySub: 'A 30-minute video call with Romain to go through your profile. Free, no strings attached.',
+    earlyBtn: 'Book a slot',
+    recapLabel: 'Overview',
+    recapTitle: 'Score by category',
+    altBanner: 'Banner',
+    altPhoto: 'Profile photo',
+    see: 'View',
+    gateFull: 'See the full analysis',
+    gateHint: 'Answer 3 questions to unlock',
+    ctaEyebrow: 'Full analysis',
+    ctaH1: 'Now you know where you stand.',
+    ctaH2: "Let's unlock what comes next.",
+    ctaSub: 'Answer 3 quick questions to access your full analysis and get recommendations tailored to your situation.',
+    ctaBtn: 'See my full analysis',
+    callEyebrow: 'Next step',
+    callH1: "Let's build your action",
+    callH2: 'plan together.',
+    callSub: '30 minutes to pinpoint your top levers, sharpen your positioning and walk away with a concrete action plan for your LinkedIn profile.',
+    callBtn: 'Book my free call',
+    nlTitle: 'Stay in the loop.',
+    nlSub: 'Every week, Romain shares concrete strategies to turn your LinkedIn profile into a real business driver, without becoming an influencer. Follow him on LinkedIn so you don’t miss a thing.',
+    followLi: 'Follow on LinkedIn',
+    nlCall: 'Or take 30 minutes with Romain to talk it through →',
+    pdfHint: 'Keep a copy of your analysis so you can come back to it anytime.',
+    pdfBtn: 'Download my analysis (PDF)',
+    pfSub: 'LinkedIn personal branding expert for B2B leaders',
+    pfLink: 'Follow on LinkedIn →',
+    stickyStrong: 'Your full analysis is waiting.',
+    stickyRest: ' Answer 3 quick questions.',
+    stickyBtn: 'See my analysis',
+    close: 'Close',
+    qLabel: (n: number) => `Question ${n} of 3`,
+    q1: "What's holding back your LinkedIn visibility the most right now?",
+    q1o: { methode: 'No clear method', message: 'My message is vague or too generic', temps: 'Not enough time', convert: "I post, but nothing converts" },
+    q2: 'Your top goal on LinkedIn?',
+    q2o: { leads: 'Generate qualified leads', autorite: 'Build my authority', 'les-deux': 'Both at once' },
+    q3: 'What would help you move forward?',
+    q3o: { seul: 'Learn and improve on my own', accompagne: 'Get support to move faster' },
+  },
+}
+
+function tier(pct: number, lang: Lang) {
+  const labels = L[lang].tiers
+  if (pct >= 70) return { label: labels[0], color: '#5B8A6B', bg: '#EAF2EC', border: '#BCD4C2' }
+  if (pct >= 50) return { label: labels[1], color: '#A9792A', bg: '#FBF1DC', border: '#E9B65C' }
+  if (pct >= 30) return { label: labels[2], color: '#D9654A', bg: '#FBE9E1', border: '#F2B9A4' }
+  return               { label: labels[3], color: '#C4543B', bg: '#FBE9E1', border: '#F2B9A4' }
 }
 
 function scoreColor(ratio: number) {
@@ -16,16 +140,16 @@ function scoreColor(ratio: number) {
 
 interface Critere { titre: string; pts: number; max: number; explication: string }
 
-const SECTIONS = [
-  { label: 'Photo de profil',              key: 'photo',       max: 15, desc: 'Première impression visuelle' },
-  { label: 'Bannière',                     key: 'banner',      max: 15, desc: 'Image de couverture' },
-  { label: 'Titre du profil',              key: 'headline',    max: 15, desc: 'Accroche et positionnement' },
-  { label: 'Section À propos',             key: 'about',       max: 15, desc: 'Pitch et storytelling' },
-  { label: 'Espace Sélection',             key: 'selection',   max: 15, desc: 'Mise en avant des services' },
-  { label: 'Contenu',                      key: 'contenu',     max: 10, desc: 'Stratégie éditoriale' },
-  { label: 'Expériences professionnelles', key: 'experiences', max: 5,  desc: 'Parcours et crédibilité' },
-  { label: 'Crédibilité & preuves',        key: 'cred',        max: 10, desc: 'Recommandations et social proof' },
-]
+const SECTION_DEFS = [
+  { key: 'photo',       max: 15 },
+  { key: 'banner',      max: 15 },
+  { key: 'headline',    max: 15 },
+  { key: 'about',       max: 15 },
+  { key: 'selection',   max: 15 },
+  { key: 'contenu',     max: 10 },
+  { key: 'experiences', max: 5  },
+  { key: 'cred',        max: 10 },
+] as const
 
 const ICONS: Record<string, string> = {
   photo:       `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3.5" width="14" height="10" rx="2"/><circle cx="8" cy="8.5" r="2.3"/><path d="M5.5 3.5l.9-2h3.2l.9 2"/></svg>`,
@@ -53,8 +177,9 @@ function getCriteres(data: Record<string, unknown>, key: string): Critere[] {
   return out
 }
 
-export default async function ResultatsPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ResultatsPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ lang?: string | string[] }> }) {
   const { id } = await params
+  const { lang: langParam } = await searchParams
   const demoFile = process.env.NODE_ENV === 'development' && id === 'demo' ? process.env.DEMO_AUDIT_FILE : undefined
   const supabase = demoFile ? null! : createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -74,13 +199,17 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
       .is('opened_at', null)
   }
 
+  const lang: Lang = langParam === 'en' || langParam === 'fr' ? langParam : data.lang === 'en' ? 'en' : 'fr'
+  const tr = L[lang]
+  const SECTIONS = SECTION_DEFS.map(s => ({ ...s, ...tr.sections[s.key] }))
+
   // Fixed scale: the AI-returned maximums vary between runs, so they are ignored.
   const sectionPts = (key: string, max: number) =>
     Math.min(Math.max(Number(data[`${key}_total_points`]) || 0, 0), max)
   const gScore = SECTIONS.reduce((sum, s) => sum + sectionPts(s.key, s.max), 0)
   const gMax   = SECTIONS.reduce((sum, s) => sum + s.max, 0)
   const gPct   = Math.round((gScore / gMax) * 100)
-  const t      = tier(gPct)
+  const t      = tier(gPct, lang)
 
   const allCriteres: (Critere & { section: string })[] = []
   for (const s of SECTIONS) {
@@ -836,6 +965,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
       {/* ── SCRIPTS ── */}
       <script dangerouslySetInnerHTML={{ __html: `
         (function() {
+          document.documentElement.lang = '${lang}';
           var TARGET = ${gPct};
           var COLOR  = '${t.color}';
           var AUDIT_ID = ${JSON.stringify(auditId).replace(/</g, '\\u003c')};
@@ -1102,11 +1232,11 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           <div className="nav-logo">R</div>
           <span className="nav-name">Romain Bour</span>
         </div>
-        <span className="nav-tag">Analyse LinkedIn</span>
+        <span className="nav-tag">{tr.navTag}</span>
       </nav>
 
       {/* ── HERO ── */}
-      <div className="hero">
+      <div className="hero" lang={lang}>
         <div className="hero-bg" />
         <div className="hero-dots" />
         <div className="hero-inner">
@@ -1115,7 +1245,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           )}
           <h1 className="hero-name">{data.first_name} {data.last_name}</h1>
           <p className="hero-date">
-            Analyse du {new Date(data.analyzed_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+            {tr.analysisOf}{new Date(data.analyzed_at).toLocaleDateString(tr.locale, { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
 
           <div className="score-num-row">
@@ -1145,16 +1275,16 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         </div>
       </div>
 
-      <div className="wrap">
+      <div className="wrap" lang={lang}>
 
         {/* ── QUICK WINS ── */}
         {quickWins.length > 0 && (
           <div className="qw">
             <div className="qw-hd">
               <div className="qw-hd-left">
-                <p className="qw-hd-label">Plan d'action</p>
-                <p className="qw-hd-title">Vos priorités de progression</p>
-                <p className="qw-hd-sub">Cliquez sur chaque point pour voir les détails</p>
+                <p className="qw-hd-label">{tr.qwLabel}</p>
+                <p className="qw-hd-title">{tr.qwTitle}</p>
+                <p className="qw-hd-sub">{tr.qwSub}</p>
               </div>
             </div>
 
@@ -1219,7 +1349,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                       <rect x="3" y="7" width="10" height="8" rx="2"/>
                       <path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>
                     </svg>
-                    Débloquer {quickWins.length - 1} priorité{quickWins.length - 1 > 1 ? 's' : ''} supplémentaire{quickWins.length - 1 > 1 ? 's' : ''}
+                    {tr.unlockMore(quickWins.length - 1)}
                   </div>
                 </div>
               </div>
@@ -1231,19 +1361,19 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         <div className="early-cta">
           <img className="early-cta-img" src="/romain-face.jpeg" alt="Romain Bour" />
           <div className="early-cta-txt">
-            <p className="early-cta-title">Vous voulez qu'on corrige ces priorités ensemble&nbsp;?</p>
-            <p className="early-cta-sub">30 minutes en visio avec Romain pour passer votre profil en revue. Gratuit, sans engagement.</p>
+            <p className="early-cta-title">{tr.earlyTitle}</p>
+            <p className="early-cta-sub">{tr.earlySub}</p>
           </div>
           <a className="early-cta-btn" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
-            Réserver un créneau
+            {tr.earlyBtn}
           </a>
         </div>
 
         {/* ── RECAP ── */}
         <div className="recap">
           <div className="recap-hd">
-            <p className="recap-hd-label">Vue d'ensemble</p>
-            <p className="recap-hd-title">Score par catégorie</p>
+            <p className="recap-hd-label">{tr.recapLabel}</p>
+            <p className="recap-hd-title">{tr.recapTitle}</p>
           </div>
           <div className="recap-list">
             {SECTIONS.map((s) => {
@@ -1302,10 +1432,10 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                     </span>
                   </div>
 
-                  {s.key === 'banner' && data.cover_url && <img className="sec-banner" src={data.cover_url} alt="Bannière" />}
+                  {s.key === 'banner' && data.cover_url && <img className="sec-banner" src={data.cover_url} alt={tr.altBanner} />}
                   {s.key === 'photo' && data.photo_url && (
                     <div className="sec-photo-row">
-                      <img className="sec-photo" src={data.photo_url} alt="Photo de profil" />
+                      <img className="sec-photo" src={data.photo_url} alt={tr.altPhoto} />
                     </div>
                   )}
 
@@ -1332,7 +1462,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                           <span className="crit-pts" style={{ color: cc.text }}>{cr.pts}/{cr.max}</span>
                           {cr.explication && (
                             <div className="crit-chev-wrap">
-                              <span className="crit-chev-label">Voir</span>
+                              <span className="crit-chev-label">{tr.see}</span>
                               <svg className="crit-chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                                 <path d="M4 6l4 4 4-4"/>
                               </svg>
@@ -1368,9 +1498,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                     <rect x="3" y="7" width="10" height="8" rx="2"/>
                     <path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>
                   </svg>
-                  Voir l'analyse complète
+                  {tr.gateFull}
                 </div>
-                <p className="sec-card-gate-hint">Réponds à 3 questions pour débloquer</p>
+                <p className="sec-card-gate-hint">{tr.gateHint}</p>
               </div>
             </div>
           )
@@ -1380,11 +1510,10 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         <div id="generic-cta" className="cta">
           <div className="cta-top-bar" />
           <div className="cta-body">
-            <p className="cta-eyebrow">Analyse complète</p>
-            <h2 className="cta-h">Vous savez où vous en êtes.<br />Voyons comment débloquer la suite.</h2>
+            <p className="cta-eyebrow">{tr.ctaEyebrow}</p>
+            <h2 className="cta-h">{tr.ctaH1}<br />{tr.ctaH2}</h2>
             <p className="cta-sub">
-              Répondez à 3 questions rapides pour accéder à votre analyse complète
-              et recevoir les recommandations adaptées à votre situation.
+              {tr.ctaSub}
             </p>
             <button
               className="cta-btn"
@@ -1392,7 +1521,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
               style={{ border: 'none', cursor: 'pointer' }}
               id="generic-cta-btn"
             >
-              Voir mon analyse complète
+              {tr.ctaBtn}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M2 7h10M8 3l4 4-4 4"/>
               </svg>
@@ -1406,14 +1535,13 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           <div id="result-call" className="result-cta-call" style={{ display: 'none' }}>
             <div className="result-cta-call-bar" />
             <div className="result-cta-call-body">
-              <p className="result-eyebrow">Prochaine étape</p>
-              <h2 className="result-h">Construisons votre plan<br />d'action ensemble.</h2>
+              <p className="result-eyebrow">{tr.callEyebrow}</p>
+              <h2 className="result-h">{tr.callH1}<br />{tr.callH2}</h2>
               <p className="result-sub">
-                30 minutes pour identifier vos leviers prioritaires, clarifier votre positionnement
-                et repartir avec un plan d'action concret pour votre profil LinkedIn.
+                {tr.callSub}
               </p>
               <a className="result-btn-call" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
-                Réserver mon appel gratuit
+                {tr.callBtn}
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M2 7h10M8 3l4 4-4 4"/>
                 </svg>
@@ -1430,19 +1558,18 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
                   <path d="M4 10l4.5 4.5 7.5-8"/>
                 </svg>
               </div>
-              <h2 className="result-nl-title">Rejoins la newsletter.</h2>
+              <h2 className="result-nl-title">{tr.nlTitle}</h2>
               <p className="result-nl-sub">
-                Chaque semaine, les stratégies concrètes pour faire de votre profil LinkedIn un vrai levier de business, sans devenir influenceur.
-                Vous serez parmi les premiers à recevoir le premier numéro.
+                {tr.nlSub}
               </p>
               <a className="result-btn-li" href="https://www.linkedin.com/in/romainbour/" target="_blank" rel="noreferrer">
-                Suivre sur LinkedIn
+                {tr.followLi}
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M2 7h10M8 3l4 4-4 4"/>
                 </svg>
               </a>
               <a className="result-nl-call" href={`/api/track/calendly?id=${auditId}`} target="_blank" rel="noreferrer">
-                Ou prenez 30 min avec Romain pour en parler →
+                {tr.nlCall}
               </a>
             </div>
           </div>
@@ -1450,12 +1577,12 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
         {/* ── PDF DOWNLOAD BAR ── */}
         <div className="pdf-bar">
-          <p className="pdf-hint">Garde une trace de ton analyse pour y revenir sans la refaire.</p>
+          <p className="pdf-hint">{tr.pdfHint}</p>
           <button className="pdf-btn" id="pdf-btn">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M8 2v9M5 8l3 3 3-3M2 13h12"/>
             </svg>
-            Télécharger mon analyse (PDF)
+            {tr.pdfBtn}
           </button>
         </div>
 
@@ -1464,8 +1591,8 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
           <img className="pf-img" src="/romain-face.jpeg" alt="Romain Bour" />
           <div>
             <p className="pf-name">Romain Bour</p>
-            <p className="pf-sub">Expert branding LinkedIn pour dirigeants B2B</p>
-            <a className="pf-link" href="https://www.linkedin.com/in/romainbour/" target="_blank" rel="noreferrer">Suivre sur LinkedIn →</a>
+            <p className="pf-sub">{tr.pfSub}</p>
+            <a className="pf-link" href="https://www.linkedin.com/in/romainbour/" target="_blank" rel="noreferrer">{tr.pfLink}</a>
           </div>
           <span className="pf-right">Optin.ia</span>
         </div>
@@ -1474,9 +1601,9 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
       {/* ── STICKY BAR ── */}
       <div id="sticky-bar">
-        <p className="sticky-bar-text"><strong>Votre analyse complète vous attend.</strong> Répondez à 3 questions rapides.</p>
+        <p className="sticky-bar-text"><strong>{tr.stickyStrong}</strong>{tr.stickyRest}</p>
         <button className="sticky-bar-btn" id="sticky-bar-btn">
-          Voir mon analyse
+          {tr.stickyBtn}
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <path d="M2 6.5h9M7 3l3.5 3.5L7 10"/>
           </svg>
@@ -1488,7 +1615,7 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
         <div className="modal-box">
           <div className="modal-handle" />
           <div className="modal-inner" style={{ position: 'relative' }}>
-            <button className="modal-close" id="modal-close" aria-label="Fermer">
+            <button className="modal-close" id="modal-close" aria-label={tr.close}>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M1 1l10 10M11 1L1 11"/>
               </svg>
@@ -1503,14 +1630,14 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
             {/* Step 1 */}
             <div id="q-step-1" className="q-step active">
-              <p className="q-label">Question 1 sur 3</p>
-              <h3 className="q-title">Ce qui freine le plus votre visibilité LinkedIn en ce moment ?</h3>
+              <p className="q-label">{tr.qLabel(1)}</p>
+              <h3 className="q-title">{tr.q1}</h3>
               <div className="q-opts">
                 {[
-                  { val: 'methode',   icon: '🗺️', label: 'Pas de méthode claire' },
-                  { val: 'message',   icon: '💬', label: 'Message flou ou trop généraliste' },
-                  { val: 'temps',     icon: '⏱️', label: 'Manque de temps' },
-                  { val: 'convert',   icon: '📉', label: 'Je poste mais rien ne convertit' },
+                  { val: 'methode',   icon: '🗺️', label: tr.q1o.methode },
+                  { val: 'message',   icon: '💬', label: tr.q1o.message },
+                  { val: 'temps',     icon: '⏱️', label: tr.q1o.temps },
+                  { val: 'convert',   icon: '📉', label: tr.q1o.convert },
                 ].map(o => (
                   <button key={o.val} className="q-opt" data-q="q1" data-val={o.val}>
                     <span className="q-opt-icon">{o.icon}</span>
@@ -1522,13 +1649,13 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
             {/* Step 2 */}
             <div id="q-step-2" className="q-step">
-              <p className="q-label">Question 2 sur 3</p>
-              <h3 className="q-title">Votre objectif prioritaire sur LinkedIn ?</h3>
+              <p className="q-label">{tr.qLabel(2)}</p>
+              <h3 className="q-title">{tr.q2}</h3>
               <div className="q-opts">
                 {[
-                  { val: 'leads',     icon: '🎯', label: 'Générer des leads qualifiés' },
-                  { val: 'autorite',  icon: '📣', label: 'Développer mon autorité' },
-                  { val: 'les-deux',  icon: '🚀', label: 'Les deux à la fois' },
+                  { val: 'leads',     icon: '🎯', label: tr.q2o.leads },
+                  { val: 'autorite',  icon: '📣', label: tr.q2o.autorite },
+                  { val: 'les-deux',  icon: '🚀', label: tr.q2o['les-deux'] },
                 ].map(o => (
                   <button key={o.val} className="q-opt" data-q="q2" data-val={o.val}>
                     <span className="q-opt-icon">{o.icon}</span>
@@ -1540,12 +1667,12 @@ export default async function ResultatsPage({ params }: { params: Promise<{ id: 
 
             {/* Step 3 */}
             <div id="q-step-3" className="q-step">
-              <p className="q-label">Question 3 sur 3</p>
-              <h3 className="q-title">Ce que vous recherchez pour avancer ?</h3>
+              <p className="q-label">{tr.qLabel(3)}</p>
+              <h3 className="q-title">{tr.q3}</h3>
               <div className="q-opts">
                 {[
-                  { val: 'seul',       icon: '📚', label: 'Comprendre et progresser seul' },
-                  { val: 'accompagne', icon: '🤝', label: 'Être accompagné pour aller plus vite' },
+                  { val: 'seul',       icon: '📚', label: tr.q3o.seul },
+                  { val: 'accompagne', icon: '🤝', label: tr.q3o.accompagne },
                 ].map(o => (
                   <button key={o.val} className="q-opt" data-q="q3" data-val={o.val}>
                     <span className="q-opt-icon">{o.icon}</span>
